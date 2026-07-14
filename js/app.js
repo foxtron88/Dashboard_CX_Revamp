@@ -102,18 +102,28 @@
     if (facilities.includes(currentFac)) facSelect.value = currentFac;
   }
 
-  // ── Apply Filters ──
   function applyFilters() {
     const bu = $('filterBU').value;
     const loc = $('filterLocation').value;
     const fac = $('filterFacility').value;
     const sent = $('filterSentiment').value;
+    const startDate = $('filterStartDate').value;
+    const endDate = $('filterEndDate').value;
 
     filteredData = allData.filter(r => {
       if (bu !== 'all' && r.source !== bu) return false;
       if (loc !== 'all' && r.location !== loc) return false;
       if (fac !== 'all' && (r.survey_name !== fac && r.facility_type !== fac)) return false;
       if (sent !== 'all' && (r.sentiment || 'Unknown') !== sent) return false;
+      
+      // Date filtering
+      if (startDate || endDate) {
+        if (!r.date) return false; // If row has no date but filter is active, hide it
+        const rowDate = new Date(r.date);
+        if (startDate && rowDate < new Date(startDate)) return false;
+        if (endDate && rowDate > new Date(endDate)) return false;
+      }
+      
       return true;
     });
 
@@ -127,6 +137,9 @@
     $('filterLocation').addEventListener('change', () => { updateDependentFilters(); applyFilters(); });
     $('filterFacility').addEventListener('change', applyFilters);
     $('filterSentiment').addEventListener('change', applyFilters);
+    $('filterStartDate').addEventListener('change', applyFilters);
+    $('filterEndDate').addEventListener('change', applyFilters);
+
     $('btnReset').addEventListener('click', () => {
       $('filterBU').value = 'all';
       updateDependentFilters();
@@ -134,6 +147,8 @@
       updateDependentFilters();
       $('filterFacility').value = 'all';
       $('filterSentiment').value = 'all';
+      $('filterStartDate').value = '';
+      $('filterEndDate').value = '';
       applyFilters();
     });
 
