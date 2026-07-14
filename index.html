@@ -82,6 +82,45 @@
       <div class="kpi-grid" id="kpiGrid">
         <!-- Populated by JS -->
       </div>
+      
+      <!-- CSAT Cascade Diagram -->
+      <div class="cascade-container animate-in delay-2" id="csatCascade">
+        <!-- Top Level: Overall -->
+        <div class="cascade-node main-node">
+          <div class="cascade-label">Overall CSAT</div>
+          <div class="cascade-value" id="cascadeOverall">—</div>
+        </div>
+        
+        <!-- Connecting lines -->
+        <div class="cascade-lines">
+          <div class="line-horizontal"></div>
+          <div class="line-vertical-left"></div>
+          <div class="line-vertical-center"></div>
+          <div class="line-vertical-right"></div>
+        </div>
+        
+        <!-- Bottom Level: Dimensions -->
+        <div class="cascade-branches">
+          <div class="cascade-node sub-node ppl-node">
+            <div class="cascade-icon">👥</div>
+            <div class="cascade-label">People (PPL)</div>
+            <div class="cascade-value" id="cascadePPL">—</div>
+            <div class="cascade-subtext">Staff & Service</div>
+          </div>
+          <div class="cascade-node sub-node prc-node">
+            <div class="cascade-icon">🔄</div>
+            <div class="cascade-label">Process (PRC)</div>
+            <div class="cascade-value" id="cascadePRC">—</div>
+            <div class="cascade-subtext">Cleanliness & Flow</div>
+          </div>
+          <div class="cascade-node sub-node prm-node">
+            <div class="cascade-icon">🏢</div>
+            <div class="cascade-label">Premises (PRM)</div>
+            <div class="cascade-value" id="cascadePRM">—</div>
+            <div class="cascade-subtext">Facility Quality</div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ═══ KEY INSIGHTS ═══ -->

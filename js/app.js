@@ -239,8 +239,16 @@
     `).join('');
 
     // Update badge
-    $('avgScoreBadge').textContent = `Avg: ${avgCSAT}`;
-    $('sentimentBadge').textContent = `${posPct}% positive`;
+    if ($('avgScoreBadge')) $('avgScoreBadge').textContent = `Avg: ${avgCSAT}`;
+    if ($('sentimentBadge')) $('sentimentBadge').textContent = `${posPct}% positive`;
+    
+    // Update Cascade Node Values
+    if ($('cascadeOverall')) {
+      $('cascadeOverall').textContent = avgCSAT;
+      $('cascadePPL').textContent = avgStaff;
+      $('cascadePRC').textContent = avgClean;
+      $('cascadePRM').textContent = avgFac;
+    }
   }
 
   // ── Insights ──

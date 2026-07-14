@@ -958,3 +958,141 @@ body::after {
   margin-bottom: var(--space-sm);
   opacity: 0.5;
 }
+
+/* ── CSAT Cascade Diagram ── */
+.cascade-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: var(--space-xl) 0;
+  padding: var(--space-xl) 0;
+}
+
+.cascade-node {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-align: center;
+  min-width: 220px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  transition: transform var(--transition-base);
+}
+.cascade-node:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.main-node {
+  border-top: 3px solid var(--accent-primary);
+  margin-bottom: 0;
+  z-index: 2;
+}
+
+.sub-node {
+  flex: 1;
+  max-width: 250px;
+}
+
+.ppl-node { border-top: 3px solid var(--accent-primary-light); }
+.prc-node { border-top: 3px solid var(--accent-warning); }
+.prm-node { border-top: 3px solid var(--accent-secondary); }
+
+.cascade-icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.cascade-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+.cascade-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+}
+
+.cascade-subtext {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ── Connecting Lines ── */
+.cascade-lines {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+.line-horizontal {
+  position: absolute;
+  top: 50%;
+  width: 80%; /* Connects the left and right drops */
+  height: 2px;
+  background: var(--glass-border);
+  z-index: 1;
+}
+
+.line-vertical-center {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: var(--glass-border);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.line-vertical-left,
+.line-vertical-right {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 50%;
+  background: var(--glass-border);
+  z-index: 1;
+}
+
+.line-vertical-left {
+  left: 10%;
+}
+
+.line-vertical-right {
+  right: 10%;
+}
+
+.cascade-branches {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xl);
+  width: 100%;
+  max-width: 900px;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .cascade-branches {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  .cascade-lines {
+    display: none;
+  }
+}
