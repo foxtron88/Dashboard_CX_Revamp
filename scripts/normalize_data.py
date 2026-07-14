@@ -235,11 +235,12 @@ def process_csv(filepath, source_folder):
 def main():
     all_records = []
     folders = ['API', 'IAS', 'IDM', 'IJH', 'ITDC', 'Sarinah']
+    RAW_DATA_DIR = os.path.join(DATA_DIR, 'Sensum_Raw')
 
     for folder in folders:
-        folder_path = os.path.join(DATA_DIR, folder)
+        folder_path = os.path.join(RAW_DATA_DIR, folder)
         if not os.path.exists(folder_path):
-            print(f"Skipping {folder} — directory not found")
+            print(f"Skipping {folder} — directory not found at {folder_path}")
             continue
 
         csv_files = [f for f in os.listdir(folder_path) if f.endswith('.csv')]
