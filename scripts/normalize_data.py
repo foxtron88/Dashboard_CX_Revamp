@@ -252,9 +252,22 @@ def main():
             print(f"  ✅ {csv_file}: {len(records)} records")
             all_records.extend(records)
 
+    # Deduplicate records
+    unique_records = []
+    seen = set()
+    for r in all_records:
+        # Exclude survey_name (filename) from deduplication key to catch duplicates across files
+        key_dict = {k: v for k, v in r.items() if k != 'survey_name'}
+        k = json.dumps(key_dict, sort_keys=True)
+        if k not in seen:
+            seen.add(k)
+            unique_records.append(r)
+
+    all_records = unique_records
+
     # Generate summary stats
     print(f"\n{'='*50}")
-    print(f"Total records: {len(all_records)}")
+    print(f"Total unique records: {len(all_records)}")
 
     # Count by source
     by_source = {}
