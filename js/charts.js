@@ -322,15 +322,36 @@ const CXCharts = (() => {
       dateMap[r.response_date].count++;
     });
 
-    const dates = Object.keys(dateMap).sort();
-    const averages = dates.map(d => +(dateMap[d].sum / dateMap[d].count).toFixed(2));
-    const counts = dates.map(d => dateMap[d].count);
+    const sortedDates = Object.keys(dateMap).sort();
+    if (sortedDates.length === 0) return;
 
-    // Format dates
-    const formattedDates = dates.map(d => {
-      const dt = new Date(d + 'T00:00:00');
-      return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-    });
+    // Pad dates to create a proper chronological X-axis
+    const startDate = new Date(sortedDates[0] + 'T00:00:00');
+    const endDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00');
+    
+    const dates = [];
+    const averages = [];
+    const counts = [];
+    const formattedDates = [];
+
+    for (let dt = new Date(startDate); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
+      // Handle local timezone shift by using local parts to construct YYYY-MM-DD
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      const dStr = `${y}-${m}-${d}`;
+      
+      dates.push(dStr);
+      formattedDates.push(dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
+      
+      if (dateMap[dStr]) {
+        averages.push(+(dateMap[dStr].sum / dateMap[dStr].count).toFixed(2));
+        counts.push(dateMap[dStr].count);
+      } else {
+        averages.push(null); // Null average breaks the line or spans gap
+        counts.push(0);      // 0 responses
+      }
+    }
 
     instances[canvasId] = new Chart(ctx, {
       type: 'line',
@@ -344,6 +365,7 @@ const CXCharts = (() => {
             backgroundColor: COLORS.primary + '15',
             fill: true,
             tension: 0.4,
+            spanGaps: true,
             pointRadius: dates.length > 30 ? 0 : 3,
             pointHoverRadius: 6,
             pointBackgroundColor: COLORS.primary,
@@ -357,6 +379,7 @@ const CXCharts = (() => {
             backgroundColor: 'transparent',
             borderDash: [5, 5],
             tension: 0.4,
+            spanGaps: true,
             pointRadius: 0,
             pointHoverRadius: 4,
             borderWidth: 1.5,
