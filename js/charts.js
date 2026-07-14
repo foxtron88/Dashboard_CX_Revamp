@@ -524,9 +524,7 @@ window.renderPerformanceCharts = function(performanceData) {
   // Clear existing
   container.innerHTML = '';
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  Object.entries(performanceData).forEach(([buName, data], index) => {
+  Object.entries(performanceData).forEach(([buName, buData], index) => {
     const cardId = `perf-chart-${index}`;
     
     // Create card element
@@ -535,7 +533,7 @@ window.renderPerformanceCharts = function(performanceData) {
     card.innerHTML = `
       <div class="chart-card-header">
         <h3 class="chart-card-title">${buName}</h3>
-        <span class="chart-card-badge">${data.label}</span>
+        <span class="chart-card-badge">${buData.label}</span>
       </div>
       <div class="chart-container" style="height: 250px;">
         <canvas id="${cardId}"></canvas>
@@ -545,15 +543,22 @@ window.renderPerformanceCharts = function(performanceData) {
 
     const ctx = document.getElementById(cardId);
     
-    // Map missing values to null for chart.js
-    const scores = data.scores.map(s => s === null ? null : s);
+    // Use a strict Month Year array starting from Jan 2025
+    const monthYearLabels = [
+      'Jan 2025', 'Feb 2025', 'Mar 2025', 'Apr 2025', 'May 2025', 'Jun 2025', 'Jul 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025',
+      'Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026', 'Oct 2026', 'Nov 2026', 'Dec 2026'
+    ];
+
+    const scores = buData.data.map(d => d.score);
+    // Truncate or extend labels to match scores length
+    const labels = monthYearLabels.slice(0, scores.length);
 
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: months,
+        labels: labels,
         datasets: [{
-          label: data.label,
+          label: buData.label,
           data: scores,
           borderColor: CXCharts.BU_COLORS[index % CXCharts.BU_COLORS.length],
           backgroundColor: CXCharts.BU_COLORS[index % CXCharts.BU_COLORS.length] + '22',

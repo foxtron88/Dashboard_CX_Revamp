@@ -1,104 +1,657 @@
 {
+  "API": {
+    "label": "Overall Satisfaction",
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": null
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": null
+      },
+      {
+        "date": "M12",
+        "score": null
+      },
+      {
+        "date": "M13",
+        "score": null
+      },
+      {
+        "date": "M14",
+        "score": null
+      },
+      {
+        "date": "M15",
+        "score": null
+      },
+      {
+        "date": "M16",
+        "score": 4.49
+      },
+      {
+        "date": "M17",
+        "score": 4.36
+      },
+      {
+        "date": "M18",
+        "score": 4.42
+      },
+      {
+        "date": "M19",
+        "score": 4.54
+      },
+      {
+        "date": "M20",
+        "score": 4.52
+      },
+      {
+        "date": "M21",
+        "score": 4.48
+      }
+    ]
+  },
   "ITDC": {
     "label": "CSAT - Overall",
-    "scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      4.75,
-      3.67,
-      4.67
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": null
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": 4.75
+      },
+      {
+        "date": "M12",
+        "score": 3.67
+      },
+      {
+        "date": "M13",
+        "score": 4.67
+      },
+      {
+        "date": "M14",
+        "score": 4.36
+      },
+      {
+        "date": "M15",
+        "score": 1
+      },
+      {
+        "date": "M16",
+        "score": 3
+      },
+      {
+        "date": "M17",
+        "score": 4.5
+      },
+      {
+        "date": "M18",
+        "score": 4.5
+      },
+      {
+        "date": "M19",
+        "score": 4
+      },
+      {
+        "date": "M20",
+        "score": 5
+      }
     ]
   },
   "IAS": {
     "label": "CSAT - Overall",
-    "scores": [
-      4.5,
-      null,
-      null,
-      4.55,
-      4.48,
-      4.74,
-      4.66,
-      4.62,
-      4.17,
-      4.71,
-      4.68,
-      4.76
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": 4.5
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": 4.55
+      },
+      {
+        "date": "M6",
+        "score": 4.48
+      },
+      {
+        "date": "M7",
+        "score": 4.74
+      },
+      {
+        "date": "M8",
+        "score": 4.66
+      },
+      {
+        "date": "M9",
+        "score": 4.62
+      },
+      {
+        "date": "M10",
+        "score": 4.17
+      },
+      {
+        "date": "M11",
+        "score": 4.71
+      },
+      {
+        "date": "M12",
+        "score": 4.68
+      },
+      {
+        "date": "M13",
+        "score": 4.76
+      },
+      {
+        "date": "M14",
+        "score": 4.71
+      },
+      {
+        "date": "M15",
+        "score": 4.62
+      },
+      {
+        "date": "M16",
+        "score": 4.69
+      },
+      {
+        "date": "M17",
+        "score": 4.73
+      },
+      {
+        "date": "M18",
+        "score": 4.77
+      },
+      {
+        "date": "M19",
+        "score": 4.78
+      },
+      {
+        "date": "M20",
+        "score": 4.74
+      },
+      {
+        "date": "M21",
+        "score": 4.8
+      }
     ]
   },
   "IDM - TMII": {
     "label": "CSAT - Overall",
-    "scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      4.56,
-      4.66
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": null
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": null
+      },
+      {
+        "date": "M12",
+        "score": 4.56
+      },
+      {
+        "date": "M13",
+        "score": 4.66
+      },
+      {
+        "date": "M14",
+        "score": 4.64
+      },
+      {
+        "date": "M15",
+        "score": 4.62
+      },
+      {
+        "date": "M16",
+        "score": null
+      },
+      {
+        "date": "M17",
+        "score": 4.74
+      },
+      {
+        "date": "M18",
+        "score": 4.72
+      },
+      {
+        "date": "M19",
+        "score": 4.78
+      },
+      {
+        "date": "M20",
+        "score": 4.75
+      },
+      {
+        "date": "M21",
+        "score": 4.68
+      },
+      {
+        "date": "M22",
+        "score": 4.7
+      },
+      {
+        "date": "M23",
+        "score": null
+      },
+      {
+        "date": "M24",
+        "score": null
+      },
+      {
+        "date": "M25",
+        "score": null
+      },
+      {
+        "date": "M26",
+        "score": null
+      },
+      {
+        "date": "M27",
+        "score": null
+      }
     ]
   },
   "HIN": {
     "label": "Kepuasan Menginap ",
-    "scores": [
-      4.5,
-      4.58,
-      4.58,
-      4.58,
-      4.58,
-      4.58,
-      4.58,
-      4.58,
-      4.58,
-      4.63,
-      4.64,
-      4.44
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": 4.5
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": 4.58
+      },
+      {
+        "date": "M12",
+        "score": 4.58
+      },
+      {
+        "date": "M13",
+        "score": 4.58
+      },
+      {
+        "date": "M14",
+        "score": 4.58
+      },
+      {
+        "date": "M15",
+        "score": 4.58
+      },
+      {
+        "date": "M16",
+        "score": 4.58
+      },
+      {
+        "date": "M17",
+        "score": 4.58
+      },
+      {
+        "date": "M18",
+        "score": 4.58
+      },
+      {
+        "date": "M19",
+        "score": 4.63
+      },
+      {
+        "date": "M20",
+        "score": 4.64
+      },
+      {
+        "date": "M21",
+        "score": 4.44
+      }
     ]
   },
   "IDM - TWC": {
     "label": "CSAT - Overall",
-    "scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      4.23,
-      4.57,
-      4.66
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": null
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": 4.23
+      },
+      {
+        "date": "M12",
+        "score": 4.57
+      },
+      {
+        "date": "M13",
+        "score": 4.66
+      },
+      {
+        "date": "M14",
+        "score": 4.59
+      },
+      {
+        "date": "M15",
+        "score": 4.51
+      },
+      {
+        "date": "M16",
+        "score": 4.71
+      },
+      {
+        "date": "M17",
+        "score": 4.71
+      },
+      {
+        "date": "M18",
+        "score": 3.17
+      },
+      {
+        "date": "M19",
+        "score": 3.84
+      },
+      {
+        "date": "M20",
+        "score": 4.18
+      },
+      {
+        "date": "M21",
+        "score": 4.37
+      },
+      {
+        "date": "M22",
+        "score": null
+      }
     ]
   },
   "Sarinah": {
     "label": "CSAT - Overall",
-    "scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      4.41
+    "data": [
+      {
+        "date": "M1",
+        "score": null
+      },
+      {
+        "date": "M2",
+        "score": null
+      },
+      {
+        "date": "M3",
+        "score": null
+      },
+      {
+        "date": "M4",
+        "score": null
+      },
+      {
+        "date": "M5",
+        "score": null
+      },
+      {
+        "date": "M6",
+        "score": null
+      },
+      {
+        "date": "M7",
+        "score": null
+      },
+      {
+        "date": "M8",
+        "score": null
+      },
+      {
+        "date": "M9",
+        "score": null
+      },
+      {
+        "date": "M10",
+        "score": null
+      },
+      {
+        "date": "M11",
+        "score": null
+      },
+      {
+        "date": "M12",
+        "score": null
+      },
+      {
+        "date": "M13",
+        "score": 4.41
+      },
+      {
+        "date": "M14",
+        "score": 3.25
+      },
+      {
+        "date": "M15",
+        "score": 3.83
+      },
+      {
+        "date": "M16",
+        "score": 4.41
+      },
+      {
+        "date": "M17",
+        "score": 4.25
+      },
+      {
+        "date": "M18",
+        "score": 3.9
+      },
+      {
+        "date": "M19",
+        "score": 3.75
+      },
+      {
+        "date": "M20",
+        "score": 4.28
+      },
+      {
+        "date": "M21",
+        "score": 4.5
+      },
+      {
+        "date": "M22",
+        "score": 4.18
+      },
+      {
+        "date": "M23",
+        "score": null
+      }
     ]
   }
 }

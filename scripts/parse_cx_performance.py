@@ -8,7 +8,7 @@ def looks_like_csat(val):
     if not isinstance(val, str):
         return False
     val = val.lower()
-    if 'csat - overall' in val or 'kepuasan menginap' in val:
+    if 'csat - overall' in val or 'kepuasan menginap' in val or 'overall satisfaction' in val:
         return True
     return False
 
@@ -17,10 +17,12 @@ def main():
     results = {}
 
     for f in files:
+        if '~$' in f: continue
         try:
             xl = pd.ExcelFile(f)
             bu_name = os.path.basename(f).replace('Template Data CX Performance - ', '').replace('.xlsx', '')
             found_csat = False
+            # print(f"Processing {bu_name}")
             
             for sheet in xl.sheet_names:
                 df = xl.parse(sheet)
@@ -31,26 +33,35 @@ def main():
                             row_vals = row.tolist()
                             col_idx = df.columns.get_loc(col)
                             subsequent_vals = row_vals[col_idx+1:]
-                            # Filter only numbers and handle NaN
-                            numbers = []
-                            for v in subsequent_vals:
+                            subsequent_cols = df.columns.tolist()[col_idx+1:]
+                            
+                            data_points = []
+                            for v, c in zip(subsequent_vals, subsequent_cols):
+                                val = None
                                 if isinstance(v, (int, float)):
-                                    if math.isnan(v):
-                                        numbers.append(None)
-                                    else:
-                                        numbers.append(round(v, 2))
+                                    if not math.isnan(v): val = round(v, 2)
                                 elif isinstance(v, str) and v.replace('.', '', 1).isdigit():
-                                    numbers.append(round(float(v), 2))
+                                    val = round(float(v), 2)
+                                
+                                # Format date column label nicely
+                                label = str(c)
+                                if isinstance(c, pd.Timestamp) or hasattr(c, 'strftime'):
+                                    label = c.strftime('%b %Y')
+                                elif 'Unnamed' in label:
+                                    label = f'M{len(data_points)+1}' # Fallback name
 
-                            if any(n is not None for n in numbers):
-                                # Save first 12 months
-                                # If they have zeroes, they might not have data for that month.
+                                # Even if val is None, we record the date to show a gap
+                                data_points.append({'date': label, 'score': val})
+
+                            if any(d['score'] is not None for d in data_points):
                                 results[bu_name] = {
                                     'label': str(cell_val),
-                                    'scores': numbers[:12]
+                                    'data': data_points
                                 }
                                 found_csat = True
                                 break
+                            else:
+                                print(f"Found {cell_val} in {bu_name} but no valid scores. data_points: {data_points}")
                     if found_csat: break
                 if found_csat: break
                 
