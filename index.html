@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Customer Experience Dashboard — Sensum Survey Analytics across API, IAS, IDM, IJH, ITDC, and Sarinah business units.">
+  <title>CX Dashboard — Sensum Analytics</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading CX Dashboard…</div>
+  </div>
+
+  <div class="dashboard-container" id="dashboardContainer" style="opacity: 0;">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="dashboard-header animate-in">
+      <div class="header-left">
+        <div class="logo-icon">CX</div>
+        <div>
+          <h1 class="header-title">Customer Experience Dashboard</h1>
+          <p class="header-subtitle">Sensum Survey Analytics — All Business Units</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-stat">
+          <div class="header-stat-value" id="headerTotalResponses">—</div>
+          <div class="header-stat-label">Total Responses</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-value" id="headerAvgCSAT">—</div>
+          <div class="header-stat-label">Avg CSAT</div>
+        </div>
+        <span class="last-updated" id="lastUpdated">Loading…</span>
+      </div>
+    </header>
+
+    <!-- ═══ FILTER BAR ═══ -->
+    <div class="filter-bar animate-in delay-1" id="filterBar">
+      <div class="filter-group">
+        <label class="filter-label" for="filterBU">Business Unit</label>
+        <select class="filter-select" id="filterBU">
+          <option value="all">All Units</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="filterLocation">Location</label>
+        <select class="filter-select" id="filterLocation">
+          <option value="all">All Locations</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="filterFacility">Facility Type</label>
+        <select class="filter-select" id="filterFacility">
+          <option value="all">All Facilities</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="filterSentiment">Sentiment</label>
+        <select class="filter-select" id="filterSentiment">
+          <option value="all">All Sentiments</option>
+          <option value="Positive">Positive</option>
+          <option value="Neutral">Neutral</option>
+          <option value="Negative">Negative</option>
+        </select>
+      </div>
+      <button class="btn-reset" id="btnReset" title="Reset all filters">↻ Reset</button>
+    </div>
+
+    <!-- ═══ KPI CARDS ═══ -->
+    <section id="kpiSection">
+      <div class="section-header animate-in delay-2">
+        <div class="section-icon">📊</div>
+        <h2 class="section-title">Executive Summary</h2>
+        <span class="section-subtitle" id="filteredCount"></span>
+      </div>
+      <div class="kpi-grid" id="kpiGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ═══ KEY INSIGHTS ═══ -->
+    <section class="insights-panel" id="insightsSection">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">💡</div>
+        <h2 class="section-title">Key Insights</h2>
+      </div>
+      <div class="insight-cards" id="insightCards">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ═══ CHARTS ROW 1: Satisfaction & Sentiment ═══ -->
+    <section id="chartsSection1">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">📈</div>
+        <h2 class="section-title">Satisfaction & Sentiment Analysis</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="glass-card chart-card animate-in delay-4">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">CSAT Score Distribution</h3>
+            <span class="chart-card-badge" id="avgScoreBadge">—</span>
+          </div>
+          <div class="chart-container"><canvas id="chartCSATDist"></canvas></div>
+        </div>
+        <div class="glass-card chart-card animate-in delay-5">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Sentiment Breakdown</h3>
+            <span class="chart-card-badge" id="sentimentBadge">—</span>
+          </div>
+          <div class="chart-container"><canvas id="chartSentiment"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CHARTS ROW 2: By Business Unit & Facility ═══ -->
+    <section id="chartsSection2">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">🏢</div>
+        <h2 class="section-title">Business Unit & Facility Performance</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="glass-card chart-card animate-in delay-4">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Average CSAT by Business Unit</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartByBU"></canvas></div>
+        </div>
+        <div class="glass-card chart-card animate-in delay-5">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Sub-Dimension Scores by Unit</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartRadar"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CHARTS ROW 3: Trends & Top Facilities ═══ -->
+    <section id="chartsSection3">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">📅</div>
+        <h2 class="section-title">Trends & Facility Rankings</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="glass-card chart-card animate-in delay-4 full-width">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">CSAT Score Trend Over Time</h3>
+          </div>
+          <div class="chart-container" style="height: 300px;"><canvas id="chartTrend"></canvas></div>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="glass-card chart-card animate-in delay-4">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Top 10 Facilities by Score</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartTopFacilities"></canvas></div>
+        </div>
+        <div class="glass-card chart-card animate-in delay-5">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Bottom 10 Facilities by Score</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartBottomFacilities"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TAGS CLOUD ═══ -->
+    <section id="tagsSection">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">🏷️</div>
+        <h2 class="section-title">Most Mentioned Topics</h2>
+      </div>
+      <div class="glass-card animate-in delay-4">
+        <div class="tags-cloud" id="tagsCloud">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FEEDBACK TABLE ═══ -->
+    <section class="feedback-section" id="feedbackSection" style="margin-top: var(--space-2xl);">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">💬</div>
+        <h2 class="section-title">Feedback Explorer</h2>
+        <span class="section-subtitle" id="feedbackCount"></span>
+      </div>
+      <div class="feedback-controls animate-in delay-4">
+        <div class="search-wrapper">
+          <input type="search" class="search-input" id="searchFeedback" placeholder="Search feedback…" aria-label="Search feedback">
+        </div>
+      </div>
+      <div class="glass-card animate-in delay-5" style="padding: 0; overflow: hidden;">
+        <div class="feedback-table-wrapper" style="max-height: 500px; overflow-y: auto;">
+          <table class="feedback-table" id="feedbackTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Unit</th>
+                <th>Location</th>
+                <th>Facility</th>
+                <th>Score</th>
+                <th>Sentiment</th>
+                <th>Feedback</th>
+              </tr>
+            </thead>
+            <tbody id="feedbackBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pagination" id="pagination">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
