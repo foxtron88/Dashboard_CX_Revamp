@@ -9,6 +9,7 @@
   // ── State ──
   let allData = [];
   let filteredData = [];
+  let performanceData = {}; // Stores CX Performance Excel data
   let currentPage = 1;
   const PAGE_SIZE = 20;
 
@@ -39,6 +40,13 @@
     } catch (err) {
       console.error('Failed to load data:', err);
       $('loadingOverlay').querySelector('.loading-text').textContent = 'Error loading data. Check console.';
+    }
+
+    try {
+      const perfResp = await fetch('data/cx_performance.json');
+      performanceData = await perfResp.json();
+    } catch (err) {
+      console.warn('Failed to load CX Performance data:', err);
     }
   }
 
@@ -115,21 +123,69 @@
 
   // ── Bind Events ──
   function bindEvents() {
-    $('filterBU').addEventListener('change', () => {
-      updateDependentFilters();
-      applyFilters();
-    });
-    $('filterLocation').addEventListener('change', () => {
-      updateDependentFilters();
-      applyFilters();
-    });
+    $('filterBU').addEventListener('change', () => { updateDependentFilters(); applyFilters(); });
+    $('filterLocation').addEventListener('change', () => { updateDependentFilters(); applyFilters(); });
     $('filterFacility').addEventListener('change', applyFilters);
     $('filterSentiment').addEventListener('change', applyFilters);
-    $('btnReset').addEventListener('click', resetFilters);
-    $('searchFeedback').addEventListener('input', debounce(() => {
+    $('btnReset').addEventListener('click', () => {
+      $('filterBU').value = 'all';
+      updateDependentFilters();
+      $('filterLocation').value = 'all';
+      updateDependentFilters();
+      $('filterFacility').value = 'all';
+      $('filterSentiment').value = 'all';
+      applyFilters();
+    });
+
+    $('searchFeedback').addEventListener('input', () => {
       currentPage = 1;
       renderFeedbackTable();
-    }, 300));
+    });
+
+    // View Tabs Logic
+    const tabRaw = $('tabRaw');
+    const tabPerf = $('tabPerformance');
+    const viewRaw = $('viewRaw');
+    const viewPerf = $('viewPerformance');
+
+    if (tabRaw && tabPerf) {
+      tabRaw.addEventListener('click', () => {
+        tabRaw.classList.add('active');
+        tabRaw.style.borderBottom = '2px solid var(--accent)';
+        tabRaw.style.opacity = '1';
+        
+        tabPerf.classList.remove('active');
+        tabPerf.style.borderBottom = 'none';
+        tabPerf.style.opacity = '0.7';
+
+        viewRaw.style.display = 'block';
+        viewPerf.style.display = 'none';
+        
+        // Ensure filters apply to raw data view
+        $('filterBar').style.display = 'flex';
+      });
+
+      tabPerf.addEventListener('click', () => {
+        tabPerf.classList.add('active');
+        tabPerf.style.borderBottom = '2px solid var(--accent)';
+        tabPerf.style.opacity = '1';
+        
+        tabRaw.classList.remove('active');
+        tabRaw.style.borderBottom = 'none';
+        tabRaw.style.opacity = '0.7';
+
+        viewRaw.style.display = 'none';
+        viewPerf.style.display = 'block';
+        
+        // Hide standard filters since perf data is static by BU
+        $('filterBar').style.display = 'none';
+
+        // Render Performance Charts
+        if (window.renderPerformanceCharts) {
+          window.renderPerformanceCharts(performanceData);
+        }
+      });
+    }
   }
 
   function resetFilters() {

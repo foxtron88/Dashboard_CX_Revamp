@@ -72,6 +72,14 @@
       <button class="btn-reset" id="btnReset" title="Reset all filters">↻ Reset</button>
     </div>
 
+    <!-- ═══ VIEW TABS ═══ -->
+    <div class="view-tabs animate-in delay-1" style="display: flex; gap: var(--space-md); margin-bottom: var(--space-xl);">
+      <button class="btn-reset active" id="tabRaw" style="border-bottom: 2px solid var(--accent); border-radius: 0; padding-bottom: var(--space-xs);">Raw Survey Data</button>
+      <button class="btn-reset" id="tabPerformance" style="border-radius: 0; padding-bottom: var(--space-xs); opacity: 0.7;">Performance Targets</button>
+    </div>
+
+    <div id="viewRaw">
+
     <!-- ═══ KPI CARDS ═══ -->
     <section id="kpiSection">
       <div class="section-header animate-in delay-2">
@@ -259,6 +267,23 @@
         <!-- Populated by JS -->
       </div>
     </section>
+    
+    </div> <!-- End viewRaw -->
+
+    <!-- ═══ PERFORMANCE VIEW ═══ -->
+    <div id="viewPerformance" style="display: none;">
+      <section>
+        <div class="section-header animate-in delay-2">
+          <div class="section-icon">🎯</div>
+          <h2 class="section-title">Aggregated Monthly Performance (CSAT)</h2>
+          <span class="section-subtitle">Data sourced directly from CX Performance Excel templates</span>
+        </div>
+        
+        <div class="charts-grid" id="performanceChartsGrid">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </section>
+    </div>
 
   </div>
 

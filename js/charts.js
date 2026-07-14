@@ -515,3 +515,74 @@ const CXCharts = (() => {
     BU_COLORS,
   };
 })();
+
+// Global function to render performance charts
+window.renderPerformanceCharts = function(performanceData) {
+  const container = document.getElementById('performanceChartsGrid');
+  if (!container) return;
+
+  // Clear existing
+  container.innerHTML = '';
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  Object.entries(performanceData).forEach(([buName, data], index) => {
+    const cardId = `perf-chart-${index}`;
+    
+    // Create card element
+    const card = document.createElement('div');
+    card.className = 'glass-card chart-card animate-in';
+    card.innerHTML = `
+      <div class="chart-card-header">
+        <h3 class="chart-card-title">${buName}</h3>
+        <span class="chart-card-badge">${data.label}</span>
+      </div>
+      <div class="chart-container" style="height: 250px;">
+        <canvas id="${cardId}"></canvas>
+      </div>
+    `;
+    container.appendChild(card);
+
+    const ctx = document.getElementById(cardId);
+    
+    // Map missing values to null for chart.js
+    const scores = data.scores.map(s => s === null ? null : s);
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: data.label,
+          data: scores,
+          borderColor: CXCharts.BU_COLORS[index % CXCharts.BU_COLORS.length],
+          backgroundColor: CXCharts.BU_COLORS[index % CXCharts.BU_COLORS.length] + '22',
+          borderWidth: 2,
+          pointBackgroundColor: CXCharts.BU_COLORS[index % CXCharts.BU_COLORS.length],
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          fill: true,
+          tension: 0.3,
+          spanGaps: true // Connect lines over null values
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            min: 1,
+            max: 5,
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  });
+};

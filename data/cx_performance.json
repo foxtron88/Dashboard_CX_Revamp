@@ -1,0 +1,104 @@
+{
+  "ITDC": {
+    "label": "CSAT - Overall",
+    "scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      4.75,
+      3.67,
+      4.67
+    ]
+  },
+  "IAS": {
+    "label": "CSAT - Overall",
+    "scores": [
+      4.5,
+      null,
+      null,
+      4.55,
+      4.48,
+      4.74,
+      4.66,
+      4.62,
+      4.17,
+      4.71,
+      4.68,
+      4.76
+    ]
+  },
+  "IDM - TMII": {
+    "label": "CSAT - Overall",
+    "scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      4.56,
+      4.66
+    ]
+  },
+  "HIN": {
+    "label": "Kepuasan Menginap ",
+    "scores": [
+      4.5,
+      4.58,
+      4.58,
+      4.58,
+      4.58,
+      4.58,
+      4.58,
+      4.58,
+      4.58,
+      4.63,
+      4.64,
+      4.44
+    ]
+  },
+  "IDM - TWC": {
+    "label": "CSAT - Overall",
+    "scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      4.23,
+      4.57,
+      4.66
+    ]
+  },
+  "Sarinah": {
+    "label": "CSAT - Overall",
+    "scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      4.41
+    ]
+  }
+}
