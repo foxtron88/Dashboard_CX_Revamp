@@ -383,6 +383,77 @@ const CXCharts = (() => {
     });
   }
 
+  // ── Top/Bottom Facilities (Horizontal Bar) ──
+  function renderFacilityRanking(canvasId, data, top = true, limit = 10) {
+    destroyChart(canvasId);
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+
+    const facilityMap = {};
+    data.forEach(r => {
+      if (r.overall_score == null) return;
+      const key = r.survey_name || r.facility_type || 'Unknown';
+      if (!facilityMap[key]) facilityMap[key] = { sum: 0, count: 0 };
+      facilityMap[key].sum += r.overall_score;
+      facilityMap[key].count++;
+    });
+
+    let entries = Object.entries(facilityMap)
+      .filter(([_, v]) => v.count >= 2)
+      .map(([k, v]) => ({ name: k, avg: +(v.sum / v.count).toFixed(2), count: v.count }));
+
+    if (top) {
+      entries.sort((a, b) => b.avg - a.avg);
+    } else {
+      entries.sort((a, b) => a.avg - b.avg);
+    }
+    entries = entries.slice(0, limit);
+    if (!top) entries.reverse();
+
+    const labels = entries.map(e => e.name.length > 25 ? e.name.slice(0, 25) + '…' : e.name);
+    const values = entries.map(e => e.avg);
+    const counts = entries.map(e => e.count);
+
+    const barColors = values.map(v => {
+      if (v >= 4.5) return COLORS.success + 'bb';
+      if (v >= 4.0) return COLORS.secondary + 'bb';
+      if (v >= 3.0) return COLORS.warning + 'bb';
+      if (v >= 2.0) return COLORS.orange + 'bb';
+      return COLORS.danger + 'bb';
+    });
+
+    instances[canvasId] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Avg CSAT',
+          data: values,
+          backgroundColor: barColors,
+          borderRadius: 4,
+          barPercentage: 0.65,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        scales: {
+          x: { min: 0, max: 5, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { stepSize: 1 } },
+          y: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              afterLabel: (ctx) => `Responses: ${counts[ctx.dataIndex]}`,
+            },
+          },
+        },
+      },
+    });
+  }
+
   // ── Sentiment Distribution by BU (Stacked Horizontal Bar) ──
   function renderSentimentByBU(canvasId, data) {
     destroyChart(canvasId);
