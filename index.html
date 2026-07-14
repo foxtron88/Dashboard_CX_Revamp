@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Customer Experience Dashboard — Sensum Survey Analytics across API, IAS, IDM, IJH, ITDC, and Sarinah business units.">
   <title>CX Dashboard — Sensum Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
@@ -81,41 +84,38 @@
     </div>
 
     <!-- ═══ VIEW TABS ═══ -->
-    <div class="view-tabs animate-in delay-1" style="display: flex; gap: var(--space-md); margin-bottom: var(--space-xl);">
-      <button class="btn-reset active" id="tabRaw" style="border-bottom: 2px solid var(--accent); border-radius: 0; padding-bottom: var(--space-xs);">Raw Survey Data</button>
-      <button class="btn-reset" id="tabPerformance" style="border-radius: 0; padding-bottom: var(--space-xs); opacity: 0.7;">Performance Targets</button>
+    <div class="view-tabs animate-in delay-1">
+      <button class="tab-btn active" id="tabRaw">Raw Survey Data</button>
+      <button class="tab-btn" id="tabPerformance">Performance Targets</button>
     </div>
 
     <div id="viewRaw">
 
-    <!-- ═══ KPI CARDS ═══ -->
+    <!-- ═══ EXECUTIVE SUMMARY — OVERALL CSAT CASCADE ═══ -->
     <section id="kpiSection">
       <div class="section-header animate-in delay-2">
         <div class="section-icon">📊</div>
         <h2 class="section-title">Executive Summary</h2>
         <span class="section-subtitle" id="filteredCount"></span>
       </div>
-      <div class="kpi-grid" id="kpiGrid">
+
+      <!-- Overall KPI Row -->
+      <div class="overall-kpi-row animate-in delay-2" id="overallKpiRow">
         <!-- Populated by JS -->
       </div>
-      
+
       <!-- CSAT Cascade Diagram -->
       <div class="cascade-container animate-in delay-2" id="csatCascade">
-        <!-- Top Level: Overall -->
         <div class="cascade-node main-node">
           <div class="cascade-label">Overall CSAT</div>
           <div class="cascade-value" id="cascadeOverall">—</div>
         </div>
-        
-        <!-- Connecting lines -->
         <div class="cascade-lines">
           <div class="line-horizontal"></div>
           <div class="line-vertical-left"></div>
           <div class="line-vertical-center"></div>
           <div class="line-vertical-right"></div>
         </div>
-        
-        <!-- Bottom Level: Dimensions -->
         <div class="cascade-branches">
           <div class="cascade-node sub-node ppl-node">
             <div class="cascade-icon">👥</div>
@@ -136,6 +136,16 @@
             <div class="cascade-subtext">Facility Quality</div>
           </div>
         </div>
+      </div>
+
+      <!-- ═══ PER-MEMBER CSAT SCORECARD GRID ═══ -->
+      <div class="section-header animate-in delay-2" style="margin-top: var(--space-xl);">
+        <div class="section-icon">🏢</div>
+        <h2 class="section-title">CSAT per Member</h2>
+        <span class="section-subtitle">Individual Business Unit Performance</span>
+      </div>
+      <div class="member-csat-grid" id="memberCSATGrid">
+        <!-- Populated by JS -->
       </div>
     </section>
 
@@ -174,11 +184,11 @@
       </div>
     </section>
 
-    <!-- ═══ CHARTS ROW 2: By Business Unit & Facility ═══ -->
+    <!-- ═══ CHARTS ROW 2: Sentiment by BU & Response Volume ═══ -->
     <section id="chartsSection2">
       <div class="section-header animate-in delay-3">
         <div class="section-icon">🏢</div>
-        <h2 class="section-title">Business Unit & Facility Performance</h2>
+        <h2 class="section-title">Business Unit Deep Dive</h2>
       </div>
       <div class="charts-grid">
         <div class="glass-card chart-card animate-in delay-4">
@@ -189,26 +199,57 @@
         </div>
         <div class="glass-card chart-card animate-in delay-5">
           <div class="chart-card-header">
+            <h3 class="chart-card-title">Sentiment Distribution by Business Unit</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartSentimentByBU"></canvas></div>
+        </div>
+      </div>
+      <div class="charts-grid" style="margin-top: var(--space-lg);">
+        <div class="glass-card chart-card animate-in delay-4">
+          <div class="chart-card-header">
             <h3 class="chart-card-title">Sub-Dimension Scores by Unit</h3>
           </div>
           <div class="chart-container"><canvas id="chartRadar"></canvas></div>
         </div>
+        <div class="glass-card chart-card animate-in delay-5">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Monthly Response Volume</h3>
+          </div>
+          <div class="chart-container"><canvas id="chartResponseVolume"></canvas></div>
+        </div>
       </div>
     </section>
 
-    <!-- ═══ CHARTS ROW 3: Trends & Top Facilities ═══ -->
+    <!-- ═══ CHARTS ROW 3: Trends & CSAT Heatmap ═══ -->
     <section id="chartsSection3">
       <div class="section-header animate-in delay-3">
         <div class="section-icon">📅</div>
-        <h2 class="section-title">Trends & Facility Rankings</h2>
+        <h2 class="section-title">Trends & Heatmap</h2>
       </div>
       <div class="charts-grid">
         <div class="glass-card chart-card animate-in delay-4 full-width">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">CSAT Score Trend Over Time</h3>
+            <h3 class="chart-card-title">CSAT Trend Over Time (by Business Unit)</h3>
           </div>
-          <div class="chart-container" style="height: 300px;"><canvas id="chartTrend"></canvas></div>
+          <div class="chart-container" style="height: 340px;"><canvas id="chartTrend"></canvas></div>
         </div>
+      </div>
+      <!-- CSAT Heatmap -->
+      <div class="glass-card animate-in delay-4" style="margin-top: var(--space-lg); padding: var(--space-lg);">
+        <div class="chart-card-header">
+          <h3 class="chart-card-title">CSAT Heatmap — Business Unit × Month</h3>
+        </div>
+        <div class="heatmap-container" id="csatHeatmap">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CHARTS ROW 4: Facility Rankings ═══ -->
+    <section id="chartsSection4">
+      <div class="section-header animate-in delay-3">
+        <div class="section-icon">🏆</div>
+        <h2 class="section-title">Facility Rankings</h2>
       </div>
       <div class="charts-grid">
         <div class="glass-card chart-card animate-in delay-4">

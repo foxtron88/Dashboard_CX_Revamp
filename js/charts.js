@@ -307,86 +307,58 @@ const CXCharts = (() => {
     });
   }
 
-  // ── CSAT Trend Over Time (Line) ──
+  // ── CSAT Trend Over Time — Multi-line by BU ──
   function renderTrend(canvasId, data) {
     destroyChart(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
-    // Group by date
-    const dateMap = {};
+    // Group by month and BU
+    const buMonthMap = {};
+    const allMonths = new Set();
+    const allBUs = new Set();
+
     data.forEach(r => {
       if (!r.response_date || r.overall_score == null) return;
-      if (!dateMap[r.response_date]) dateMap[r.response_date] = { sum: 0, count: 0 };
-      dateMap[r.response_date].sum += r.overall_score;
-      dateMap[r.response_date].count++;
+      const month = r.response_date.substring(0, 7); // YYYY-MM
+      const bu = r.source || 'Unknown';
+      allMonths.add(month);
+      allBUs.add(bu);
+      if (!buMonthMap[bu]) buMonthMap[bu] = {};
+      if (!buMonthMap[bu][month]) buMonthMap[bu][month] = { sum: 0, count: 0 };
+      buMonthMap[bu][month].sum += r.overall_score;
+      buMonthMap[bu][month].count++;
     });
 
-    const sortedDates = Object.keys(dateMap).sort();
-    if (sortedDates.length === 0) return;
+    const sortedMonths = [...allMonths].sort();
+    if (sortedMonths.length === 0) return;
 
-    // Pad dates to create a proper chronological X-axis
-    const startDate = new Date(sortedDates[0] + 'T00:00:00');
-    const endDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00');
-    
-    const dates = [];
-    const averages = [];
-    const counts = [];
-    const formattedDates = [];
+    const labels = sortedMonths.map(m => {
+      const [y, mon] = m.split('-');
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${monthNames[parseInt(mon)-1]} ${y}`;
+    });
 
-    for (let dt = new Date(startDate); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
-      // Handle local timezone shift by using local parts to construct YYYY-MM-DD
-      const y = dt.getFullYear();
-      const m = String(dt.getMonth() + 1).padStart(2, '0');
-      const d = String(dt.getDate()).padStart(2, '0');
-      const dStr = `${y}-${m}-${d}`;
-      
-      dates.push(dStr);
-      formattedDates.push(dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
-      
-      if (dateMap[dStr]) {
-        averages.push(+(dateMap[dStr].sum / dateMap[dStr].count).toFixed(2));
-        counts.push(dateMap[dStr].count);
-      } else {
-        averages.push(null); // Null average breaks the line or spans gap
-        counts.push(0);      // 0 responses
-      }
-    }
+    const datasets = [...allBUs].sort().map((bu, i) => ({
+      label: bu,
+      data: sortedMonths.map(m => {
+        const entry = buMonthMap[bu]?.[m];
+        return entry ? +(entry.sum / entry.count).toFixed(2) : null;
+      }),
+      borderColor: BU_COLORS[i % BU_COLORS.length],
+      backgroundColor: BU_COLORS[i % BU_COLORS.length] + '15',
+      fill: false,
+      tension: 0.3,
+      spanGaps: true,
+      pointRadius: 4,
+      pointHoverRadius: 7,
+      pointBackgroundColor: BU_COLORS[i % BU_COLORS.length],
+      borderWidth: 2.5,
+    }));
 
     instances[canvasId] = new Chart(ctx, {
       type: 'line',
-      data: {
-        labels: formattedDates,
-        datasets: [
-          {
-            label: 'Avg CSAT Score',
-            data: averages,
-            borderColor: COLORS.primary,
-            backgroundColor: COLORS.primary + '15',
-            fill: true,
-            tension: 0.4,
-            spanGaps: true,
-            pointRadius: dates.length > 30 ? 0 : 3,
-            pointHoverRadius: 6,
-            pointBackgroundColor: COLORS.primary,
-            borderWidth: 2,
-            yAxisID: 'y',
-          },
-          {
-            label: 'Response Count',
-            data: counts,
-            borderColor: COLORS.secondary + '88',
-            backgroundColor: 'transparent',
-            borderDash: [5, 5],
-            tension: 0.4,
-            spanGaps: true,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            borderWidth: 1.5,
-            yAxisID: 'y1',
-          },
-        ],
-      },
+      data: { labels, datasets },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -394,84 +366,63 @@ const CXCharts = (() => {
         scales: {
           x: {
             grid: { display: false },
-            ticks: {
-              maxTicksLimit: 15,
-              font: { size: 10 },
-            },
+            ticks: { font: { size: 10 } },
           },
           y: {
             min: 1,
             max: 5,
-            position: 'left',
             grid: { color: 'rgba(255,255,255,0.04)' },
             ticks: { stepSize: 1 },
             title: { display: true, text: 'CSAT Score', font: { size: 11 } },
           },
-          y1: {
-            position: 'right',
-            grid: { display: false },
-            title: { display: true, text: 'Responses', font: { size: 11 } },
-          },
         },
         plugins: {
-          legend: { position: 'top' },
+          legend: { position: 'top', labels: { font: { size: 10 } } },
         },
       },
     });
   }
 
-  // ── Top/Bottom Facilities (Horizontal Bar) ──
-  function renderFacilityRanking(canvasId, data, top = true, limit = 10) {
+  // ── Sentiment Distribution by BU (Stacked Horizontal Bar) ──
+  function renderSentimentByBU(canvasId, data) {
     destroyChart(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
-    const facilityMap = {};
+    const buSent = {};
     data.forEach(r => {
-      if (r.overall_score == null) return;
-      const key = r.survey_name || r.facility_type || 'Unknown';
-      if (!facilityMap[key]) facilityMap[key] = { sum: 0, count: 0 };
-      facilityMap[key].sum += r.overall_score;
-      facilityMap[key].count++;
+      const bu = r.source || 'Unknown';
+      const sent = r.sentiment || 'Unknown';
+      if (!buSent[bu]) buSent[bu] = { Positive: 0, Neutral: 0, Negative: 0 };
+      if (buSent[bu].hasOwnProperty(sent)) buSent[bu][sent]++;
     });
 
-    // Only include facilities with >= 2 responses
-    let entries = Object.entries(facilityMap)
-      .filter(([_, v]) => v.count >= 2)
-      .map(([k, v]) => ({ name: k, avg: +(v.sum / v.count).toFixed(2), count: v.count }));
-
-    if (top) {
-      entries.sort((a, b) => b.avg - a.avg);
-    } else {
-      entries.sort((a, b) => a.avg - b.avg);
-    }
-    entries = entries.slice(0, limit);
-
-    if (!top) entries.reverse(); // Show lowest at bottom for readability
-
-    const labels = entries.map(e => e.name.length > 25 ? e.name.slice(0, 25) + '…' : e.name);
-    const values = entries.map(e => e.avg);
-    const counts = entries.map(e => e.count);
-
-    const barColors = values.map(v => {
-      if (v >= 4.5) return COLORS.success + 'bb';
-      if (v >= 4.0) return COLORS.secondary + 'bb';
-      if (v >= 3.0) return COLORS.warning + 'bb';
-      if (v >= 2.0) return COLORS.orange + 'bb';
-      return COLORS.danger + 'bb';
-    });
+    const bus = Object.keys(buSent).sort();
 
     instances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels,
-        datasets: [{
-          label: 'Avg CSAT',
-          data: values,
-          backgroundColor: barColors,
-          borderRadius: 4,
-          barPercentage: 0.65,
-        }],
+        labels: bus,
+        datasets: [
+          {
+            label: 'Positive',
+            data: bus.map(bu => buSent[bu].Positive),
+            backgroundColor: SENTIMENT_COLORS.Positive + 'bb',
+            borderRadius: 3,
+          },
+          {
+            label: 'Neutral',
+            data: bus.map(bu => buSent[bu].Neutral),
+            backgroundColor: SENTIMENT_COLORS.Neutral + 'bb',
+            borderRadius: 3,
+          },
+          {
+            label: 'Negative',
+            data: bus.map(bu => buSent[bu].Negative),
+            backgroundColor: SENTIMENT_COLORS.Negative + 'bb',
+            borderRadius: 3,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -479,26 +430,145 @@ const CXCharts = (() => {
         indexAxis: 'y',
         scales: {
           x: {
-            min: 0,
-            max: 5,
+            stacked: true,
             grid: { color: 'rgba(255,255,255,0.04)' },
-            ticks: { stepSize: 1 },
           },
           y: {
+            stacked: true,
             grid: { display: false },
-            ticks: { font: { size: 10 } },
           },
         },
         plugins: {
-          legend: { display: false },
+          legend: { position: 'top', labels: { font: { size: 10 } } },
           tooltip: {
             callbacks: {
-              afterLabel: (ctx) => `Responses: ${counts[ctx.dataIndex]}`,
+              afterBody: (items) => {
+                const bu = items[0].label;
+                const total = items.reduce((s, i) => s + i.parsed.x, 0);
+                return `Total: ${total}`;
+              },
             },
           },
         },
       },
     });
+  }
+
+  // ── Monthly Response Volume (Area Chart) ──
+  function renderResponseVolume(canvasId, data) {
+    destroyChart(canvasId);
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+
+    const monthMap = {};
+    data.forEach(r => {
+      if (!r.response_date) return;
+      const month = r.response_date.substring(0, 7);
+      monthMap[month] = (monthMap[month] || 0) + 1;
+    });
+
+    const sortedMonths = Object.keys(monthMap).sort();
+    const labels = sortedMonths.map(m => {
+      const [y, mon] = m.split('-');
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${monthNames[parseInt(mon)-1]} ${y}`;
+    });
+    const values = sortedMonths.map(m => monthMap[m]);
+
+    instances[canvasId] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Response Volume',
+          data: values,
+          borderColor: COLORS.secondary,
+          backgroundColor: COLORS.secondary + '20',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          pointBackgroundColor: COLORS.secondary,
+          borderWidth: 2.5,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 } },
+          },
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.04)' },
+            title: { display: true, text: 'Responses', font: { size: 11 } },
+          },
+        },
+        plugins: {
+          legend: { display: false },
+        },
+      },
+    });
+  }
+
+  // ── CSAT Heatmap (rendered as HTML table) ──
+  function renderCSATHeatmap(containerId, data) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Group by BU and month
+    const buMonthMap = {};
+    const allMonths = new Set();
+
+    data.forEach(r => {
+      if (!r.response_date || r.overall_score == null) return;
+      const month = r.response_date.substring(0, 7);
+      const bu = r.source || 'Unknown';
+      allMonths.add(month);
+      if (!buMonthMap[bu]) buMonthMap[bu] = {};
+      if (!buMonthMap[bu][month]) buMonthMap[bu][month] = { sum: 0, count: 0 };
+      buMonthMap[bu][month].sum += r.overall_score;
+      buMonthMap[bu][month].count++;
+    });
+
+    const sortedMonths = [...allMonths].sort();
+    const bus = Object.keys(buMonthMap).sort();
+
+    if (sortedMonths.length === 0 || bus.length === 0) {
+      container.innerHTML = '<div class="no-data"><div class="no-data-icon">📊</div>No data for heatmap</div>';
+      return;
+    }
+
+    const monthLabels = sortedMonths.map(m => {
+      const [y, mon] = m.split('-');
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${monthNames[parseInt(mon)-1]} '${y.slice(2)}`;
+    });
+
+    let html = '<table class="heatmap-table"><thead><tr><th>BU</th>';
+    monthLabels.forEach(ml => { html += `<th>${ml}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    bus.forEach(bu => {
+      html += `<tr><td>${bu}</td>`;
+      sortedMonths.forEach(m => {
+        const entry = buMonthMap[bu]?.[m];
+        if (entry) {
+          const avg = (entry.sum / entry.count).toFixed(2);
+          const rounded = Math.round(entry.sum / entry.count);
+          const cls = rounded >= 5 ? 'heatmap-5' : rounded >= 4 ? 'heatmap-4' : rounded >= 3 ? 'heatmap-3' : rounded >= 2 ? 'heatmap-2' : 'heatmap-1';
+          html += `<td><span class="heatmap-cell ${cls}" title="${bu} ${m}: ${avg} (${entry.count} responses)">${avg}</span></td>`;
+        } else {
+          html += `<td><span class="heatmap-cell heatmap-na" title="No data">—</span></td>`;
+        }
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
   }
 
   return {
@@ -508,6 +578,9 @@ const CXCharts = (() => {
     renderRadar,
     renderTrend,
     renderFacilityRanking,
+    renderSentimentByBU,
+    renderResponseVolume,
+    renderCSATHeatmap,
     destroyAll,
     COLORS,
     SCORE_COLORS,
