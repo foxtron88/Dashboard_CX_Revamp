@@ -1,5 +1,6 @@
 /**
- * CX Dashboard — Main Application Logic (Refactored for 4 Tabs)
+ * CX Dashboard — Main Application Logic
+ * Data loading, filtering, KPI calculation, insights, and feedback table
  */
 
 (function () {
@@ -7,8 +8,7 @@
 
   // ── State ──
   let allData = [];
-  let kpiFilteredData = [];
-  let currentTab = 'detailed';
+  let filteredData = [];
   let currentPage = 1;
   const PAGE_SIZE = 20;
 
@@ -21,14 +21,15 @@
       const resp = await fetch('data/consolidated.json');
       const json = await resp.json();
       allData = json.records || [];
-      kpiFilteredData = [...allData];
 
-      $('lastUpdated').textContent = `Data: ${json.generated_at ? new Date(json.generated_at).toLocaleDateString('en-GB') : 'N/A'}`;
+      // Set last updated
+      $('lastUpdated').textContent = `Data: ${json.generated_at ? new Date(json.generated_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}`;
 
-      bindEvents();
       populateFilters();
-      switchTab('detailed'); // Default tab
+      applyFilters();
+      bindEvents();
 
+      // Reveal dashboard
       setTimeout(() => {
         $('loadingOverlay').classList.add('hidden');
         $('dashboardContainer').style.opacity = '1';
@@ -41,299 +42,472 @@
     }
   }
 
-  // ── Tab Management ──
-  function bindEvents() {
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        switchTab(e.currentTarget.dataset.tab);
-      });
-    });
-
-    $('kpiFilterBU').addEventListener('change', applyKpiFilters);
-    $('kpiFilterLocation').addEventListener('change', applyKpiFilters);
-    $('kpiBtnReset').addEventListener('click', resetKpiFilters);
-    $('searchFeedback').addEventListener('input', debounce(() => { currentPage = 1; renderSentimentTab(); }, 300));
-  }
-
-  function switchTab(tabId) {
-    currentTab = tabId;
-    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-    $(`tab-${tabId}`).style.display = 'block';
-
-    if (tabId === 'overview') renderOverviewTab();
-    else if (tabId === 'kpi') renderKpiTab();
-    else if (tabId === 'detailed') renderDetailedTab();
-    else if (tabId === 'sentiment') renderSentimentTab();
-  }
-
-  // ── Filters for KPI Tab ──
+  // ── Populate Filter Dropdowns ──
   function populateFilters() {
     const bus = [...new Set(allData.map(r => r.source).filter(Boolean))].sort();
-    const buSelect = $('kpiFilterBU');
-    bus.forEach(bu => buSelect.appendChild(new Option(bu, bu)));
-    updateKpiLocationFilter();
+    const locSelect = $('filterLocation');
+    const facSelect = $('filterFacility');
+
+    const buSelect = $('filterBU');
+    bus.forEach(bu => {
+      const opt = document.createElement('option');
+      opt.value = bu;
+      opt.textContent = bu;
+      buSelect.appendChild(opt);
+    });
+
+    updateDependentFilters();
   }
 
-  function updateKpiLocationFilter() {
-    const selectedBU = $('kpiFilterBU').value;
+  function updateDependentFilters() {
+    const selectedBU = $('filterBU').value;
+
+    // Locations
     const relevantData = selectedBU === 'all' ? allData : allData.filter(r => r.source === selectedBU);
-    const locs = [...new Set(relevantData.map(r => r.location).filter(Boolean))].sort();
-    const locSelect = $('kpiFilterLocation');
+    const locations = [...new Set(relevantData.map(r => r.location).filter(Boolean))].sort();
+    const locSelect = $('filterLocation');
+    const currentLoc = locSelect.value;
     locSelect.innerHTML = '<option value="all">All Locations</option>';
-    locs.forEach(loc => locSelect.appendChild(new Option(loc, loc)));
+    locations.forEach(loc => {
+      const opt = document.createElement('option');
+      opt.value = loc;
+      opt.textContent = loc;
+      locSelect.appendChild(opt);
+    });
+    // Restore selection if still valid
+    if (locations.includes(currentLoc)) locSelect.value = currentLoc;
+
+    // Facility types
+    const locFilteredData = currentLoc !== 'all' && locations.includes(currentLoc)
+      ? relevantData.filter(r => r.location === currentLoc)
+      : relevantData;
+    const facilities = [...new Set(locFilteredData.map(r => r.survey_name || r.facility_type).filter(Boolean))].sort();
+    const facSelect = $('filterFacility');
+    const currentFac = facSelect.value;
+    facSelect.innerHTML = '<option value="all">All Facilities</option>';
+    facilities.forEach(fac => {
+      const opt = document.createElement('option');
+      opt.value = fac;
+      opt.textContent = fac;
+      facSelect.appendChild(opt);
+    });
+    if (facilities.includes(currentFac)) facSelect.value = currentFac;
   }
 
-  function applyKpiFilters() {
-    const bu = $('kpiFilterBU').value;
-    const loc = $('kpiFilterLocation').value;
-    if (bu !== 'all') updateKpiLocationFilter();
-    
-    kpiFilteredData = allData.filter(r => {
+  // ── Apply Filters ──
+  function applyFilters() {
+    const bu = $('filterBU').value;
+    const loc = $('filterLocation').value;
+    const fac = $('filterFacility').value;
+    const sent = $('filterSentiment').value;
+
+    filteredData = allData.filter(r => {
       if (bu !== 'all' && r.source !== bu) return false;
       if (loc !== 'all' && r.location !== loc) return false;
+      if (fac !== 'all' && (r.survey_name !== fac && r.facility_type !== fac)) return false;
+      if (sent !== 'all' && (r.sentiment || 'Unknown') !== sent) return false;
       return true;
     });
-    renderKpiTab();
+
+    currentPage = 1;
+    renderAll();
   }
 
-  function resetKpiFilters() {
-    $('kpiFilterBU').value = 'all';
-    $('kpiFilterLocation').value = 'all';
-    updateKpiLocationFilter();
-    applyKpiFilters();
-  }
-
-  // ════════════════════════════════════════════════════════
-  // TAB 1: OVERVIEW
-  // ════════════════════════════════════════════════════════
-  function renderOverviewTab() {
-    const scored = allData.filter(r => r.overall_score);
-    const avg = scored.length ? (scored.reduce((s, r)=>s+r.overall_score,0)/scored.length).toFixed(2) : 0;
-    const csatPct = scored.length ? ((scored.filter(r=>r.overall_score>=4).length/scored.length)*100).toFixed(1) : 0;
-    
-    $('overviewKPIs').innerHTML = `
-      <div class="glass-card kpi-card">
-        <div class="kpi-icon blue">📋</div>
-        <div class="kpi-value">${allData.length.toLocaleString()}</div>
-        <div class="kpi-label">Total Responses</div>
-      </div>
-      <div class="glass-card kpi-card">
-        <div class="kpi-icon green">⭐</div>
-        <div class="kpi-value">${avg}</div>
-        <div class="kpi-label">Average CSAT Score</div>
-      </div>
-      <div class="glass-card kpi-card">
-        <div class="kpi-icon purple">🎯</div>
-        <div class="kpi-value">${csatPct}%</div>
-        <div class="kpi-label">CSAT % (Score 4-5)</div>
-      </div>
-    `;
-    CXCharts.renderOverviewDist('chartOverviewDist', allData);
-    CXCharts.renderOverviewSentiment('chartOverviewSentiment', allData);
-    CXCharts.renderOverviewTrend('chartOverviewTrend', allData);
-  }
-
-  // ════════════════════════════════════════════════════════
-  // TAB 2: KPI & ANALYTICS
-  // ════════════════════════════════════════════════════════
-  function renderKpiTab() {
-    const scored = kpiFilteredData.filter(r => r.overall_score);
-    const staff = kpiFilteredData.filter(r => r.staff_score);
-    const fac = kpiFilteredData.filter(r => r.facility_score);
-    
-    const avgScore = scored.length ? (scored.reduce((s,r)=>s+r.overall_score,0)/scored.length).toFixed(2) : '—';
-    const avgStaff = staff.length ? (staff.reduce((s,r)=>s+r.staff_score,0)/staff.length).toFixed(2) : '—';
-    const avgFac = fac.length ? (fac.reduce((s,r)=>s+r.facility_score,0)/fac.length).toFixed(2) : '—';
-
-    $('kpiAnalyticsCards').innerHTML = `
-      <div class="glass-card kpi-card"><div class="kpi-icon blue">⭐</div><div class="kpi-value">${avgScore}</div><div class="kpi-label">CSAT Score</div></div>
-      <div class="glass-card kpi-card"><div class="kpi-icon purple">👥</div><div class="kpi-value">${avgStaff}</div><div class="kpi-label">Staff Score (PPL)</div></div>
-      <div class="glass-card kpi-card"><div class="kpi-icon amber">🏗️</div><div class="kpi-value">${avgFac}</div><div class="kpi-label">Facility Score (PRM)</div></div>
-    `;
-    
-    CXCharts.renderKpiBU('chartKpiBU', kpiFilteredData);
-    CXCharts.renderKpiRadar('chartKpiRadar', kpiFilteredData);
-  }
-
-  // ════════════════════════════════════════════════════════
-  // TAB 3: DETAILED CSAT (Matching Reference)
-  // ════════════════════════════════════════════════════════
-  function renderDetailedTab() {
-    // 1. Calculate Facility Performance
-    const facMap = {};
-    allData.forEach(r => {
-      if (!r.overall_score) return;
-      const fac = r.survey_name || r.facility_type || 'Unknown';
-      if (!facMap[fac]) facMap[fac] = { count:0, sum:0, sat:0, pplSum:0, pplCount:0, prmSum:0, prmCount:0, prcSum:0, prcCount:0 };
-      
-      facMap[fac].count++;
-      facMap[fac].sum += r.overall_score;
-      if (r.overall_score >= 4) facMap[fac].sat++;
-      
-      if (r.staff_score) { facMap[fac].pplSum += r.staff_score; facMap[fac].pplCount++; }
-      if (r.facility_score) { facMap[fac].prmSum += r.facility_score; facMap[fac].prmCount++; }
-      // Mocking PRC (Process) based on cleanliness/overall average to match layout requirement
-      if (r.cleanliness_score || r.overall_score) { 
-        facMap[fac].prcSum += (r.cleanliness_score || r.overall_score); 
-        facMap[fac].prcCount++; 
-      }
+  // ── Bind Events ──
+  function bindEvents() {
+    $('filterBU').addEventListener('change', () => {
+      updateDependentFilters();
+      applyFilters();
     });
+    $('filterLocation').addEventListener('change', () => {
+      updateDependentFilters();
+      applyFilters();
+    });
+    $('filterFacility').addEventListener('change', applyFilters);
+    $('filterSentiment').addEventListener('change', applyFilters);
+    $('btnReset').addEventListener('click', resetFilters);
+    $('searchFeedback').addEventListener('input', debounce(() => {
+      currentPage = 1;
+      renderFeedbackTable();
+    }, 300));
+  }
 
-    let facList = Object.entries(facMap).filter(e => e[1].count >= 2).map(([name, data]) => ({
-      name,
-      responses: data.count,
-      avg: data.sum / data.count,
-      csat: (data.sat / data.count) * 100,
-      ppl: data.pplCount ? data.pplSum / data.pplCount : 0,
-      prm: data.prmCount ? data.prmSum / data.prmCount : 0,
-      prc: data.prcCount ? data.prcSum / data.prcCount : 0
-    })).sort((a,b) => b.csat - a.csat);
+  function resetFilters() {
+    $('filterBU').value = 'all';
+    $('filterLocation').value = 'all';
+    $('filterFacility').value = 'all';
+    $('filterSentiment').value = 'all';
+    $('searchFeedback').value = '';
+    updateDependentFilters();
+    applyFilters();
+  }
 
-    // 2. Render Highlight Cards (Best & Needs Attention)
-    if (facList.length > 0) {
-      const best = facList[0];
-      const worst = facList[facList.length-1];
-      
-      $('highlightCards').innerHTML = `
-        <div class="highlight-card best">
-          <div class="highlight-card-label">🏆 BEST PERFORMING</div>
-          <div class="highlight-card-name">${best.name}</div>
-          <div class="highlight-card-stats">CSAT ${best.csat.toFixed(0)}% • Avg ${best.avg.toFixed(2)}/5 • ${best.responses} responses</div>
+  // ── Render All ──
+  function renderAll() {
+    renderHeader();
+    renderKPIs();
+    renderInsights();
+    renderCharts();
+    renderTagsCloud();
+    renderFeedbackTable();
+  }
+
+  // ── Header Stats ──
+  function renderHeader() {
+    $('headerTotalResponses').textContent = filteredData.length.toLocaleString();
+
+    const scored = filteredData.filter(r => r.overall_score != null);
+    const avgCSAT = scored.length > 0
+      ? (scored.reduce((sum, r) => sum + r.overall_score, 0) / scored.length).toFixed(2)
+      : '—';
+    $('headerAvgCSAT').textContent = avgCSAT;
+    $('filteredCount').textContent = `Showing ${filteredData.length.toLocaleString()} of ${allData.length.toLocaleString()} responses`;
+  }
+
+  // ── KPI Cards ──
+  function renderKPIs() {
+    const scored = filteredData.filter(r => r.overall_score != null);
+    const avgCSAT = scored.length > 0
+      ? (scored.reduce((s, r) => s + r.overall_score, 0) / scored.length).toFixed(2)
+      : 0;
+
+    const satisfied = scored.filter(r => r.overall_score >= 4).length;
+    const satPct = scored.length > 0 ? ((satisfied / scored.length) * 100).toFixed(1) : 0;
+
+    const sentiments = { Positive: 0, Neutral: 0, Negative: 0 };
+    filteredData.forEach(r => {
+      if (sentiments.hasOwnProperty(r.sentiment)) sentiments[r.sentiment]++;
+    });
+    const totalSent = sentiments.Positive + sentiments.Neutral + sentiments.Negative;
+    const posPct = totalSent > 0 ? ((sentiments.Positive / totalSent) * 100).toFixed(1) : 0;
+
+    const staffScored = filteredData.filter(r => r.staff_score != null);
+    const avgStaff = staffScored.length > 0
+      ? (staffScored.reduce((s, r) => s + r.staff_score, 0) / staffScored.length).toFixed(2)
+      : '—';
+
+    const facScored = filteredData.filter(r => r.facility_score != null);
+    const avgFac = facScored.length > 0
+      ? (facScored.reduce((s, r) => s + r.facility_score, 0) / facScored.length).toFixed(2)
+      : '—';
+
+    const cleanScored = filteredData.filter(r => r.cleanliness_score != null);
+    const avgClean = cleanScored.length > 0
+      ? (cleanScored.reduce((s, r) => s + r.cleanliness_score, 0) / cleanScored.length).toFixed(2)
+      : '—';
+
+    const kpis = [
+      {
+        icon: '📋', label: 'Total Responses', value: filteredData.length.toLocaleString(),
+        color: 'blue', glow: 'glow-blue',
+        trend: `${scored.length.toLocaleString()} scored`, trendClass: 'neutral',
+      },
+      {
+        icon: '⭐', label: 'Average CSAT', value: avgCSAT,
+        color: 'green', glow: 'glow-green',
+        trend: `${satPct}% satisfied (4-5)`, trendClass: parseFloat(satPct) >= 70 ? 'positive' : parseFloat(satPct) >= 50 ? 'neutral' : 'negative',
+      },
+      {
+        icon: '😊', label: 'Positive Sentiment', value: `${posPct}%`,
+        color: 'cyan', glow: 'glow-cyan',
+        trend: `${sentiments.Positive.toLocaleString()} of ${totalSent.toLocaleString()} responses`, trendClass: parseFloat(posPct) >= 60 ? 'positive' : 'neutral',
+      },
+      {
+        icon: '👥', label: 'Staff Score', value: avgStaff,
+        color: 'purple', glow: 'glow-purple',
+        trend: `${staffScored.length.toLocaleString()} rated`, trendClass: 'neutral',
+      },
+      {
+        icon: '🏗️', label: 'Facility Score', value: avgFac,
+        color: 'amber', glow: 'glow-amber',
+        trend: `${facScored.length.toLocaleString()} rated`, trendClass: 'neutral',
+      },
+      {
+        icon: '✨', label: 'Cleanliness Score', value: avgClean,
+        color: 'green', glow: 'glow-green',
+        trend: `${cleanScored.length.toLocaleString()} rated`, trendClass: 'neutral',
+      },
+    ];
+
+    $('kpiGrid').innerHTML = kpis.map((k, i) => `
+      <div class="glass-card kpi-card ${k.glow} animate-in delay-${i + 1}">
+        <div class="kpi-icon ${k.color}">${k.icon}</div>
+        <div class="kpi-value">${k.value}</div>
+        <div class="kpi-label">${k.label}</div>
+        <div class="kpi-trend ${k.trendClass}">${k.trend}</div>
+      </div>
+    `).join('');
+
+    // Update badge
+    $('avgScoreBadge').textContent = `Avg: ${avgCSAT}`;
+    $('sentimentBadge').textContent = `${posPct}% positive`;
+  }
+
+  // ── Insights ──
+  function renderInsights() {
+    const insights = generateInsights(filteredData);
+    $('insightCards').innerHTML = insights.map((ins, i) => `
+      <div class="glass-card insight-item animate-in delay-${(i % 4) + 1}">
+        <div class="insight-icon ${ins.color}">${ins.icon}</div>
+        <div class="insight-content">
+          <h4>${ins.title}</h4>
+          <p>${ins.description}</p>
         </div>
-        <div class="highlight-card attention">
-          <div class="highlight-card-label">⚠️ NEEDS ATTENTION</div>
-          <div class="highlight-card-name">${worst.name}</div>
-          <div class="highlight-card-stats">CSAT ${worst.csat.toFixed(0)}% • Avg ${worst.avg.toFixed(2)}/5 • ${worst.responses} responses</div>
-        </div>
-      `;
+      </div>
+    `).join('');
+  }
+
+  function generateInsights(data) {
+    const insights = [];
+    if (data.length === 0) {
+      insights.push({ icon: '📭', title: 'No Data', description: 'No records match the current filters.', color: 'amber' });
+      return insights;
     }
 
-    // 3. Render Charts
-    CXCharts.renderCSATByFacility('chartCSATByFacility', allData);
-    CXCharts.renderScoreDist('chartScoreDist', allData);
+    const scored = data.filter(r => r.overall_score != null);
+    if (scored.length === 0) return insights;
 
-    // 4. Render Crucial Verbatim Insights
-    const verbatims = allData.filter(r => r.feedback && r.feedback.length > 10).slice(0, 6);
-    $('verbatimGrid').innerHTML = verbatims.map(r => {
-      const ppl = r.staff_score ? r.staff_score.toFixed(1) : (r.overall_score ? r.overall_score.toFixed(1) : '-');
-      const prm = r.facility_score ? r.facility_score.toFixed(1) : (r.overall_score ? r.overall_score.toFixed(1) : '-');
-      const prc = r.cleanliness_score ? r.cleanliness_score.toFixed(1) : (r.overall_score ? r.overall_score.toFixed(1) : '-');
-      
-      const loc = r.location || r.source || 'LOCATION';
-      const fac = r.survey_name || r.facility_type || 'FACILITY';
-      const date = r.response_date ? r.response_date.substring(5) : ''; // MM-DD
-      
-      return `
-        <div class="verbatim-card">
-          <div class="verbatim-header">
-            <span class="verbatim-location">${loc} - ${fac}</span>
-            <span class="verbatim-date">${date}</span>
-          </div>
-          <div class="verbatim-text">${escapeHtml(r.feedback)}</div>
-          <div class="verbatim-scores">
-            <div class="verbatim-score-item"><span class="verbatim-score-label ppl">PPL:</span> <span class="verbatim-score-value">${ppl}</span></div>
-            <div class="verbatim-score-item"><span class="verbatim-score-label prc">PRC:</span> <span class="verbatim-score-value">${prc}</span></div>
-            <div class="verbatim-score-item"><span class="verbatim-score-label prm">PRM:</span> <span class="verbatim-score-value">${prm}</span></div>
-          </div>
-        </div>
-      `;
-    }).join('');
+    const avgCSAT = scored.reduce((s, r) => s + r.overall_score, 0) / scored.length;
 
-    // 5. Render Performance Summary Table
-    $('performanceBody').innerHTML = facList.map((f, i) => {
-      const statusClass = f.csat >= 80 ? 'good' : f.csat >= 60 ? 'fair' : 'poor';
-      const statusIcon = f.csat >= 80 ? '✅ Good' : f.csat >= 60 ? '⚠️ Fair' : '❌ Poor';
-      
-      const scoreClass = f.avg >= 4.5 ? 'excellent' : f.avg >= 4 ? 'good' : f.avg >= 3 ? 'fair' : 'poor';
-      const csatClass = f.csat >= 80 ? 'high' : f.csat >= 50 ? 'medium' : 'low';
-      
-      return `
-        <tr>
-          <td class="rank-cell">#${i+1}</td>
-          <td><div class="facility-name"><span class="facility-dot" style="background:${CXCharts.BU_COLORS[i%CXCharts.BU_COLORS.length]}"></span>${f.name}</div></td>
-          <td>${f.responses}</td>
-          <td><span class="score-pill ${scoreClass}">${f.avg.toFixed(2)}/5</span></td>
-          <td><span class="csat-pill ${csatClass}">${f.csat.toFixed(1)}%</span></td>
-          <td class="dim-score">${f.ppl.toFixed(2)}</td>
-          <td class="dim-score">${f.prm.toFixed(2)}</td>
-          <td class="dim-score">${f.prc.toFixed(2)}</td>
-          <td><span class="status-badge ${statusClass}">${statusIcon}</span></td>
-        </tr>
-      `;
-    }).join('');
+    // Best performing BU
+    const buMap = {};
+    scored.forEach(r => {
+      const bu = r.source;
+      if (!buMap[bu]) buMap[bu] = { sum: 0, count: 0 };
+      buMap[bu].sum += r.overall_score;
+      buMap[bu].count++;
+    });
+    const buEntries = Object.entries(buMap).filter(([_, v]) => v.count >= 3);
+    if (buEntries.length > 0) {
+      buEntries.sort((a, b) => (b[1].sum / b[1].count) - (a[1].sum / a[1].count));
+      const best = buEntries[0];
+      const bestAvg = (best[1].sum / best[1].count).toFixed(2);
+      insights.push({
+        icon: '🏆', title: 'Top Performing Unit',
+        description: `${best[0]} leads with an average CSAT of ${bestAvg} across ${best[1].count.toLocaleString()} responses.`,
+        color: 'green',
+      });
+
+      if (buEntries.length > 1) {
+        const worst = buEntries[buEntries.length - 1];
+        const worstAvg = (worst[1].sum / worst[1].count).toFixed(2);
+        if (parseFloat(worstAvg) < 4.0) {
+          insights.push({
+            icon: '⚠️', title: 'Needs Attention',
+            description: `${worst[0]} has the lowest CSAT at ${worstAvg} (${worst[1].count.toLocaleString()} responses). Consider targeted improvements.`,
+            color: 'amber',
+          });
+        }
+      }
+    }
+
+    // Sentiment insight
+    const negCount = data.filter(r => r.sentiment === 'Negative').length;
+    const totalWithSent = data.filter(r => r.sentiment && r.sentiment !== 'Unknown').length;
+    if (totalWithSent > 0) {
+      const negPct = ((negCount / totalWithSent) * 100).toFixed(1);
+      if (parseFloat(negPct) > 20) {
+        insights.push({
+          icon: '😟', title: 'High Negative Sentiment',
+          description: `${negPct}% of feedback is negative (${negCount.toLocaleString()} responses). Review common complaints to identify root causes.`,
+          color: 'red',
+        });
+      } else {
+        insights.push({
+          icon: '😊', title: 'Positive Customer Mood',
+          description: `Only ${negPct}% of feedback is negative. Customers are generally satisfied with the services.`,
+          color: 'green',
+        });
+      }
+    }
+
+    // Best facility
+    const facMap = {};
+    scored.forEach(r => {
+      const fac = r.survey_name || r.facility_type || 'Unknown';
+      if (!facMap[fac]) facMap[fac] = { sum: 0, count: 0 };
+      facMap[fac].sum += r.overall_score;
+      facMap[fac].count++;
+    });
+    const facEntries = Object.entries(facMap).filter(([_, v]) => v.count >= 5);
+    if (facEntries.length > 0) {
+      facEntries.sort((a, b) => (b[1].sum / b[1].count) - (a[1].sum / a[1].count));
+      const bestFac = facEntries[0];
+      insights.push({
+        icon: '🌟', title: 'Star Facility',
+        description: `"${bestFac[0]}" is the highest-rated facility with ${(bestFac[1].sum / bestFac[1].count).toFixed(2)} avg score (${bestFac[1].count} responses).`,
+        color: 'cyan',
+      });
+    }
+
+    // Language distribution
+    const langMap = {};
+    data.forEach(r => {
+      const lang = r.language || 'Unknown';
+      langMap[lang] = (langMap[lang] || 0) + 1;
+    });
+    const langEntries = Object.entries(langMap).filter(([k]) => k !== 'Unknown').sort((a, b) => b[1] - a[1]);
+    if (langEntries.length > 0) {
+      const topLang = langEntries[0];
+      const langPct = ((topLang[1] / data.length) * 100).toFixed(0);
+      insights.push({
+        icon: '🌐', title: 'Primary Language',
+        description: `${langPct}% of responses are in ${topLang[0]}. ${langEntries.length > 1 ? `Also received in ${langEntries.slice(1).map(e => e[0]).join(', ')}.` : ''}`,
+        color: 'blue',
+      });
+    }
+
+    // Score 1-2 alert
+    const lowScores = scored.filter(r => r.overall_score <= 2);
+    if (lowScores.length > 0) {
+      const lowPct = ((lowScores.length / scored.length) * 100).toFixed(1);
+      insights.push({
+        icon: '🔴', title: 'Critical Feedback',
+        description: `${lowScores.length.toLocaleString()} responses (${lowPct}%) gave a score of 1-2. These require immediate attention.`,
+        color: 'red',
+      });
+    }
+
+    return insights;
   }
 
-  // ════════════════════════════════════════════════════════
-  // TAB 4: SOCIAL SENTIMENT
-  // ════════════════════════════════════════════════════════
-  function renderSentimentTab() {
-    CXCharts.renderSentDist('chartSentDist', allData);
-    CXCharts.renderSentByBU('chartSentByBU', allData);
+  // ── Charts ──
+  function renderCharts() {
+    CXCharts.destroyAll();
+    CXCharts.renderCSATDistribution('chartCSATDist', filteredData);
+    CXCharts.renderSentiment('chartSentiment', filteredData);
+    CXCharts.renderByBusinessUnit('chartByBU', filteredData);
+    CXCharts.renderRadar('chartRadar', filteredData);
+    CXCharts.renderTrend('chartTrend', filteredData);
+    CXCharts.renderFacilityRanking('chartTopFacilities', filteredData, true, 10);
+    CXCharts.renderFacilityRanking('chartBottomFacilities', filteredData, false, 10);
+  }
 
-    // Tags Cloud
+  // ── Tags Cloud ──
+  function renderTagsCloud() {
     const tagCounts = {};
-    allData.forEach(r => {
+    filteredData.forEach(r => {
       if (!r.tags) return;
       r.tags.split('|').forEach(tag => {
         tag = tag.trim();
-        if (tag.length > 2) tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        if (tag && tag.length > 2) {
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        }
       });
     });
-    $('tagsCloud').innerHTML = Object.entries(tagCounts)
-      .sort((a,b)=>b[1]-a[1]).slice(0, 30)
-      .map(([tag, count]) => `<span class="tag-pill">${tag}<span class="tag-count">${count}</span></span>`)
-      .join('');
 
-    // Feedback Table
+    const sorted = Object.entries(tagCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 30);
+
+    const cloud = $('tagsCloud');
+    if (sorted.length === 0) {
+      cloud.innerHTML = '<div class="no-data"><div class="no-data-icon">🏷️</div>No tags found for current filters</div>';
+      return;
+    }
+
+    cloud.innerHTML = sorted.map(([tag, count]) =>
+      `<span class="tag-pill">${tag}<span class="tag-count">${count}</span></span>`
+    ).join('');
+  }
+
+  // ── Feedback Table ──
+  function renderFeedbackTable() {
     const query = ($('searchFeedback').value || '').toLowerCase().trim();
-    let tableData = allData.filter(r => r.feedback && r.feedback.trim());
+
+    let tableData = filteredData.filter(r => r.feedback && r.feedback.trim());
     if (query) {
-      tableData = tableData.filter(r => 
-        (r.feedback||'').toLowerCase().includes(query) || 
-        (r.location||'').toLowerCase().includes(query)
+      tableData = tableData.filter(r =>
+        (r.feedback || '').toLowerCase().includes(query) ||
+        (r.location || '').toLowerCase().includes(query) ||
+        (r.facility_type || '').toLowerCase().includes(query) ||
+        (r.survey_name || '').toLowerCase().includes(query)
       );
     }
-    tableData.sort((a,b) => (b.response_date||'').localeCompare(a.response_date||''));
-    $('feedbackCount').textContent = `${tableData.length} entries`;
-    
+
+    // Sort by date descending
+    tableData.sort((a, b) => {
+      if (!a.response_date) return 1;
+      if (!b.response_date) return -1;
+      return b.response_date.localeCompare(a.response_date);
+    });
+
+    $('feedbackCount').textContent = `${tableData.length.toLocaleString()} feedback entries`;
+
+    const totalPages = Math.max(1, Math.ceil(tableData.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
     const start = (currentPage - 1) * PAGE_SIZE;
     const pageData = tableData.slice(start, start + PAGE_SIZE);
-    
-    $('feedbackBody').innerHTML = pageData.map(r => {
-      const sentClass = r.sentiment === 'Positive' ? 'badge-positive' : r.sentiment === 'Negative' ? 'badge-negative' : r.sentiment === 'Neutral' ? 'badge-neutral' : 'badge-unknown';
-      const scoreClass = r.overall_score ? `score-${r.overall_score}` : '';
-      return `
-        <tr>
-          <td>${r.response_date ? new Date(r.response_date).toLocaleDateString('en-GB') : '—'}</td>
+
+    const tbody = $('feedbackBody');
+    if (pageData.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No feedback entries match your criteria</td></tr>`;
+    } else {
+      tbody.innerHTML = pageData.map(r => {
+        const sentClass = r.sentiment === 'Positive' ? 'badge-positive'
+          : r.sentiment === 'Negative' ? 'badge-negative'
+            : r.sentiment === 'Neutral' ? 'badge-neutral'
+              : 'badge-unknown';
+        const sentLabel = r.sentiment || 'Unknown';
+        const scoreClass = r.overall_score ? `score-${r.overall_score}` : '';
+        const dateStr = r.response_date
+          ? new Date(r.response_date + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' })
+          : '—';
+
+        return `<tr>
+          <td>${dateStr}</td>
           <td>${r.source || '—'}</td>
           <td>${r.location || '—'}</td>
           <td>${r.survey_name || r.facility_type || '—'}</td>
           <td><span class="score-badge ${scoreClass}">${r.overall_score || '—'}</span></td>
-          <td><span class="badge ${sentClass}">${r.sentiment || 'Unknown'}</span></td>
+          <td><span class="badge ${sentClass}">${sentLabel}</span></td>
           <td title="${escapeHtml(r.feedback)}">${escapeHtml(r.feedback)}</td>
-        </tr>
-      `;
-    }).join('');
+        </tr>`;
+      }).join('');
+    }
 
-    renderPagination(Math.max(1, Math.ceil(tableData.length / PAGE_SIZE)));
+    // Pagination
+    renderPagination(totalPages, tableData.length);
   }
 
-  function renderPagination(totalPages) {
+  function renderPagination(totalPages, totalItems) {
     const pag = $('pagination');
-    if (totalPages <= 1) { pag.innerHTML = ''; return; }
-    
-    let html = `<button class="pagination-btn" onclick="CXApp.goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
-    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+    if (totalPages <= 1) {
+      pag.innerHTML = `<span class="pagination-info">Showing all ${totalItems.toLocaleString()} entries</span>`;
+      return;
+    }
+
+    let html = '';
+    html += `<button class="pagination-btn" onclick="CXApp.goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    if (endPage - startPage < maxButtons - 1) startPage = Math.max(1, endPage - maxButtons + 1);
+
+    if (startPage > 1) {
+      html += `<button class="pagination-btn" onclick="CXApp.goPage(1)">1</button>`;
+      if (startPage > 2) html += `<span class="pagination-info">…</span>`;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="CXApp.goPage(${i})">${i}</button>`;
     }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) html += `<span class="pagination-info">…</span>`;
+      html += `<button class="pagination-btn" onclick="CXApp.goPage(${totalPages})">${totalPages}</button>`;
+    }
+
     html += `<button class="pagination-btn" onclick="CXApp.goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+    html += `<span class="pagination-info">Page ${currentPage} of ${totalPages}</span>`;
+
     pag.innerHTML = html;
   }
 
-  // ── Utils ──
+  // ── Utilities ──
   function escapeHtml(str) {
+    if (!str) return '';
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
@@ -341,10 +515,22 @@
 
   function debounce(fn, ms) {
     let timer;
-    return function (...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this, args), ms); };
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), ms);
+    };
   }
 
-  window.CXApp = { goPage(page) { currentPage = page; renderSentimentTab(); } };
+  // ── Public API ──
+  window.CXApp = {
+    goPage(page) {
+      currentPage = page;
+      renderFeedbackTable();
+      // Scroll to feedback section
+      $('feedbackSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    },
+  };
 
+  // ── Boot ──
   document.addEventListener('DOMContentLoaded', init);
 })();
