@@ -9,6 +9,7 @@ import json
 import os
 import re
 from datetime import datetime
+import pandas as pd
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 OUTPUT_FILE = os.path.join(DATA_DIR, 'consolidated.json')
@@ -196,6 +197,31 @@ def process_csv(filepath, source_folder):
                     # Extract from filename
                     facility_type = re.sub(r'_\d{2}-\d{2}-\d{4}.*$', '', filename).replace('.csv', '').strip()
 
+                feedback_text = str(row.get(col_feedback, '')).strip() if col_feedback else ''
+                
+                if not feedback_text:
+                    sentiment_val = 'Neutral'
+                else:
+                    text_lower = feedback_text.lower()
+                    pos_words = ['bagus', 'ramah', 'baik', 'bersih', 'nyaman', 'cepat', 'puas', 'mantap', 'keren', 'wangi', 'rapi', 'aman', 'terbaik', 'oke', 'ok', 'good', 'top', 'bantu', 'suka']
+                    neg_words = ['lama', 'buruk', 'jelek', 'kotor', 'rusak', 'lambat', 'antri', 'panas', 'mahal', 'bau', 'kurang', 'kasar', 'kecewa', 'parah', 'busuk', 'lelet', 'jorok', 'macet', 'susah', 'bising']
+                    
+                    pos_score = sum(1 for w in pos_words if w in text_lower)
+                    neg_score = sum(1 for w in neg_words if w in text_lower)
+                    
+                    if pos_score > neg_score:
+                        sentiment_val = 'Positive'
+                    elif neg_score > pos_score:
+                        sentiment_val = 'Negative'
+                    else:
+                        # Fallback to score if words are neutral/tied
+                        if overall_score in [4, 5]:
+                            sentiment_val = 'Positive'
+                        elif overall_score in [1, 2]:
+                            sentiment_val = 'Negative'
+                        else:
+                            sentiment_val = 'Neutral'
+                            
                 record = {
                     'source': source_folder,
                     'subholding': row.get(col_subholding, source_folder) if col_subholding else source_folder,
@@ -208,14 +234,14 @@ def process_csv(filepath, source_folder):
                     'facility_score': safe_int(row.get(col_facility)) if col_facility else None,
                     'cleanliness_score': safe_int(row.get(col_cleanliness)) if col_cleanliness else None,
                     'feedback': row.get(col_feedback, '') if col_feedback else '',
-                    'sentiment': row.get(col_sentiment, '') if col_sentiment else '',
+                    'sentiment': sentiment_val,
                     'tags': row.get(col_tags, '') if col_tags else '',
                     'response_date': response_date,
                     'language': row.get(col_language, '') if col_language else '',
                     'channel': row.get(col_channel, '') if col_channel else '',
                     'nps_score': safe_int(row.get(col_nps)) if col_nps else None,
                     'nps_group': row.get(col_nps_group, '') if col_nps_group else '',
-                    'survey_name': re.sub(r'_\d{2}-\d{2}-\d{4}.*$', '', filename).replace('.csv', '').strip(),
+                    'survey_name': re.sub(r'(_\d{1,2}-\d{1,2}-\d{4}.*|_\(.*?\))', '', filename.replace('.csv', '')).strip(),
                 }
 
                 # Hotel-specific dimensions
@@ -235,7 +261,7 @@ def process_csv(filepath, source_folder):
 def main():
     all_records = []
     folders = ['API', 'IAS', 'IDM', 'IJH', 'ITDC', 'Sarinah']
-    RAW_DATA_DIR = os.path.join(DATA_DIR, 'Sensum_Raw')
+    RAW_DATA_DIR = os.path.join(DATA_DIR, 'Sensum')
 
     for folder in folders:
         folder_path = os.path.join(RAW_DATA_DIR, folder)
@@ -299,6 +325,14 @@ def main():
     file_size = os.path.getsize(OUTPUT_FILE)
     print(f"\n✅ Output written to {OUTPUT_FILE}")
     print(f"   File size: {file_size / 1024:.1f} KB")
+
+    # Also export to Excel
+    excel_file = os.path.join(DATA_DIR, 'consolidated_raw.xlsx')
+    df = pd.DataFrame(all_records)
+    df.to_excel(excel_file, index=False)
+    excel_size = os.path.getsize(excel_file)
+    print(f"✅ Excel Output written to {excel_file}")
+    print(f"   File size: {excel_size / 1024:.1f} KB")
 
 if __name__ == '__main__':
     main()

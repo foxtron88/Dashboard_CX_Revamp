@@ -27,18 +27,10 @@
         <div class="logo-icon">CX</div>
         <div>
           <h1 class="header-title">Customer Experience Dashboard</h1>
-          <p class="header-subtitle">Sensum Survey Analytics — All Business Units</p>
         </div>
       </div>
       <div class="header-right">
-        <div class="header-stat">
-          <div class="header-stat-value" id="headerTotalResponses">—</div>
-          <div class="header-stat-label">Total Responses</div>
-        </div>
-        <div class="header-stat">
-          <div class="header-stat-value" id="headerAvgCSAT">—</div>
-          <div class="header-stat-label">Avg CSAT</div>
-        </div>
+
         <span class="last-updated" id="lastUpdated">Loading…</span>
       </div>
     </header>
@@ -85,7 +77,7 @@
 
     <!-- ═══ VIEW TABS ═══ -->
     <div class="view-tabs animate-in delay-1">
-      <button class="tab-btn active" id="tabRaw">Raw Survey Data</button>
+      <button class="tab-btn active" id="tabRaw">CSAT</button>
       <button class="tab-btn" id="tabPerformance">Performance Targets</button>
     </div>
 
@@ -106,16 +98,7 @@
 
       <!-- CSAT Cascade Diagram -->
       <div class="cascade-container animate-in delay-2" id="csatCascade">
-        <div class="cascade-node main-node">
-          <div class="cascade-label">Overall CSAT</div>
-          <div class="cascade-value" id="cascadeOverall">—</div>
-        </div>
-        <div class="cascade-lines">
-          <div class="line-horizontal"></div>
-          <div class="line-vertical-left"></div>
-          <div class="line-vertical-center"></div>
-          <div class="line-vertical-right"></div>
-        </div>
+
         <div class="cascade-branches">
           <div class="cascade-node sub-node ppl-node">
             <div class="cascade-icon">👥</div>
@@ -193,23 +176,9 @@
       <div class="charts-grid">
         <div class="glass-card chart-card animate-in delay-4">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Average CSAT by Business Unit</h3>
-          </div>
-          <div class="chart-container"><canvas id="chartByBU"></canvas></div>
-        </div>
-        <div class="glass-card chart-card animate-in delay-5">
-          <div class="chart-card-header">
             <h3 class="chart-card-title">Sentiment Distribution by Business Unit</h3>
           </div>
           <div class="chart-container"><canvas id="chartSentimentByBU"></canvas></div>
-        </div>
-      </div>
-      <div class="charts-grid" style="margin-top: var(--space-lg);">
-        <div class="glass-card chart-card animate-in delay-4">
-          <div class="chart-card-header">
-            <h3 class="chart-card-title">Sub-Dimension Scores by Unit</h3>
-          </div>
-          <div class="chart-container"><canvas id="chartRadar"></canvas></div>
         </div>
         <div class="glass-card chart-card animate-in delay-5">
           <div class="chart-card-header">
@@ -254,13 +223,13 @@
       <div class="charts-grid">
         <div class="glass-card chart-card animate-in delay-4">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Top 10 Facilities by Score</h3>
+            <h3 class="chart-card-title">Top 5 Facilities by Score</h3>
           </div>
           <div class="chart-container"><canvas id="chartTopFacilities"></canvas></div>
         </div>
         <div class="glass-card chart-card animate-in delay-5">
           <div class="chart-card-header">
-            <h3 class="chart-card-title">Bottom 10 Facilities by Score</h3>
+            <h3 class="chart-card-title">Bottom 5 Facilities by Score</h3>
           </div>
           <div class="chart-container"><canvas id="chartBottomFacilities"></canvas></div>
         </div>
@@ -297,12 +266,12 @@
           <table class="feedback-table" id="feedbackTable">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Unit</th>
-                <th>Location</th>
-                <th>Facility</th>
-                <th>Score</th>
-                <th>Sentiment</th>
+                <th class="sortable sort-desc" data-sort="date">Date</th>
+                <th class="sortable" data-sort="unit">Unit</th>
+                <th class="sortable" data-sort="location">Location</th>
+                <th class="sortable" data-sort="facility">Facility</th>
+                <th class="sortable" data-sort="score">Score</th>
+                <th class="sortable" data-sort="sentiment">Sentiment</th>
                 <th>Feedback</th>
               </tr>
             </thead>
@@ -320,16 +289,46 @@
     </div> <!-- End viewRaw -->
 
     <!-- ═══ PERFORMANCE VIEW ═══ -->
-    <div id="viewPerformance" style="display: none;">
+    <div id="viewPerformance" style="display: none; padding-top: 1rem;">
       <section>
-        <div class="section-header animate-in delay-2">
-          <div class="section-icon">🎯</div>
-          <h2 class="section-title">Aggregated Monthly Performance (CSAT)</h2>
-          <span class="section-subtitle">Data sourced directly from CX Performance Excel templates</span>
+        <div class="section-header animate-in delay-2" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div class="section-icon">🎯</div>
+            <h2 class="section-title">Performance Targets & Trends</h2>
+            <span class="section-subtitle">Data sourced directly from CX Performance Excel templates</span>
+          </div>
+          <div class="filter-group" style="min-width: 200px;">
+            <label class="filter-label">Select Business Unit</label>
+            <select class="filter-select" id="perfFilterBU">
+              <option value="ALL">All Business Units</option>
+              <option value="API">API</option>
+              <option value="HIN">HIN</option>
+              <option value="IAS">IAS</option>
+              <option value="IDM - TMII">IDM - TMII</option>
+              <option value="IDM - TWC">IDM - TWC</option>
+              <option value="ITDC">ITDC</option>
+              <option value="Sarinah">Sarinah</option>
+            </select>
+          </div>
         </div>
         
-        <div class="charts-grid" id="performanceChartsGrid">
-          <!-- Populated dynamically by JS -->
+        <!-- Performance Charts -->
+        <div class="charts-grid animate-in delay-3" style="grid-template-columns: 1fr; margin-top: 2rem;">
+          <!-- CSAT Line Chart -->
+          <div class="glass-card">
+            <h3 class="card-title">CSAT Trend (2025 - 2026)</h3>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="perfCsatChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- Interactions Bar Chart -->
+          <div class="glass-card" style="margin-top: 1.5rem;">
+            <h3 class="card-title">Interaction Volumes (Pengaduan vs Informasi)</h3>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="perfInteractionChart"></canvas>
+            </div>
+          </div>
         </div>
       </section>
     </div>

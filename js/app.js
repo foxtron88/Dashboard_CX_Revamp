@@ -11,6 +11,8 @@
   let filteredData = [];
   let performanceData = {}; // Stores CX Performance Excel data
   let currentPage = 1;
+  let currentSortCol = 'date';
+  let currentSortDir = 'desc';
   const PAGE_SIZE = 20;
 
   // ── DOM References ──
@@ -22,9 +24,17 @@
       const resp = await fetch('data/consolidated.json');
       const json = await resp.json();
       allData = json.records || [];
+      allData.forEach((r, i) => r._id = i);
 
       // Set last updated
       $('lastUpdated').textContent = `Data: ${json.generated_at ? new Date(json.generated_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}`;
+
+      try {
+        const perfResp = await fetch('data/cx_performance.json?v=' + new Date().getTime());
+        performanceData = await perfResp.json();
+      } catch (err) {
+        console.warn('Failed to load CX Performance data:', err);
+      }
 
       populateFilters();
       applyFilters();
@@ -40,13 +50,6 @@
     } catch (err) {
       console.error('Failed to load data:', err);
       $('loadingOverlay').querySelector('.loading-text').textContent = 'Error loading data. Check console.';
-    }
-
-    try {
-      const perfResp = await fetch('data/cx_performance.json');
-      performanceData = await perfResp.json();
-    } catch (err) {
-      console.warn('Failed to load CX Performance data:', err);
     }
   }
 
@@ -152,6 +155,27 @@
       renderFeedbackTable();
     });
 
+    // Table Sorting Logic
+    document.querySelectorAll('.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = th.getAttribute('data-sort');
+        if (currentSortCol === col) {
+          currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSortCol = col;
+          currentSortDir = 'desc'; // default to desc on new column
+        }
+        
+        // Update UI
+        document.querySelectorAll('.sortable').forEach(el => {
+          el.classList.remove('sort-asc', 'sort-desc');
+        });
+        th.classList.add(`sort-${currentSortDir}`);
+        
+        renderFeedbackTable();
+      });
+    });
+
     // View Tabs Logic
     const tabRaw = $('tabRaw');
     const tabPerf = $('tabPerformance');
@@ -172,12 +196,21 @@
         tabRaw.classList.remove('active');
         viewRaw.style.display = 'none';
         viewPerf.style.display = 'block';
-        $('filterBar').style.display = 'flex';
+        $('filterBar').style.display = 'none'; // Hide main filters for perf view
 
         if (window.renderPerformanceCharts) {
           window.renderPerformanceCharts(performanceData);
         }
       });
+      
+      const perfFilter = $('perfFilterBU');
+      if (perfFilter) {
+          perfFilter.addEventListener('change', () => {
+             if (window.renderPerformanceCharts) {
+                 window.renderPerformanceCharts(performanceData);
+             }
+          });
+      }
     }
   }
 
@@ -198,13 +231,6 @@
 
   // ── Header Stats ──
   function renderHeader() {
-    $('headerTotalResponses').textContent = filteredData.length.toLocaleString();
-
-    const scored = filteredData.filter(r => r.overall_score != null);
-    const avgCSAT = scored.length > 0
-      ? (scored.reduce((sum, r) => sum + r.overall_score, 0) / scored.length).toFixed(2)
-      : '—';
-    $('headerAvgCSAT').textContent = avgCSAT;
     $('filteredCount').textContent = `Showing ${filteredData.length.toLocaleString()} of ${allData.length.toLocaleString()} responses`;
   }
 
@@ -268,12 +294,9 @@
     const avgFac = facScored.length > 0
       ? (facScored.reduce((s, r) => s + r.facility_score, 0) / facScored.length).toFixed(2) : '—';
 
-    if ($('cascadeOverall')) {
-      $('cascadeOverall').textContent = avgCSAT;
-      $('cascadePPL').textContent = avgStaff;
-      $('cascadePRC').textContent = avgClean;
-      $('cascadePRM').textContent = avgFac;
-    }
+    if ($('cascadePPL')) $('cascadePPL').textContent = avgStaff;
+    if ($('cascadePRC')) $('cascadePRC').textContent = avgClean;
+    if ($('cascadePRM')) $('cascadePRM').textContent = avgFac;
   }
 
   // ── Per-Member CSAT Scorecard ──
@@ -521,32 +544,33 @@
     CXCharts.destroyAll();
     CXCharts.renderCSATDistribution('chartCSATDist', filteredData);
     CXCharts.renderSentiment('chartSentiment', filteredData);
-    CXCharts.renderByBusinessUnit('chartByBU', filteredData);
     CXCharts.renderSentimentByBU('chartSentimentByBU', filteredData);
-    CXCharts.renderRadar('chartRadar', filteredData);
     CXCharts.renderResponseVolume('chartResponseVolume', filteredData);
     CXCharts.renderTrend('chartTrend', filteredData);
     CXCharts.renderCSATHeatmap('csatHeatmap', filteredData);
-    CXCharts.renderFacilityRanking('chartTopFacilities', filteredData, true, 10);
-    CXCharts.renderFacilityRanking('chartBottomFacilities', filteredData, false, 10);
+    CXCharts.renderFacilityRanking('chartTopFacilities', filteredData, true, 5);
+    CXCharts.renderFacilityRanking('chartBottomFacilities', filteredData, false, 5);
   }
 
   // ── Tags Cloud ──
   function renderTagsCloud() {
-    const tagCounts = {};
+    const wordCounts = {};
+    const stopwords = new Set(['dan','di','ke','dari','yang','untuk','dengan','ini','itu','ada','saya','kami','tidak','bisa','sudah','juga','lagi','sangat','lebih','karena','kalau','apa','buat','banyak','tapi','saja','mau','harus','agak','masih','pada','dalam','saat','terus','biar','akan','belum','seperti','begitu','tolong','mohon','agar','nya','ya','yg','aja','udah']);
+    
     filteredData.forEach(r => {
-      if (!r.tags) return;
-      r.tags.split('|').forEach(tag => {
-        tag = tag.trim();
-        if (tag && tag.length > 2) {
-          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      if (!r.feedback) return;
+      // Extract words (min 3 chars)
+      const words = r.feedback.toLowerCase().match(/[a-z]+/g) || [];
+      words.forEach(w => {
+        if (w.length > 3 && !stopwords.has(w)) {
+          wordCounts[w] = (wordCounts[w] || 0) + 1;
         }
       });
     });
 
-    const sorted = Object.entries(tagCounts)
+    const sorted = Object.entries(wordCounts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 30);
+      .slice(0, 40);
 
     const cloud = $('tagsCloud');
     if (sorted.length === 0) {
@@ -573,11 +597,45 @@
       );
     }
 
-    // Sort by date descending
+    // Dynamic Sort
     tableData.sort((a, b) => {
-      if (!a.response_date) return 1;
-      if (!b.response_date) return -1;
-      return b.response_date.localeCompare(a.response_date);
+      let valA, valB;
+      switch (currentSortCol) {
+        case 'date':
+          valA = a.response_date || '';
+          valB = b.response_date || '';
+          break;
+        case 'unit':
+          valA = a.source || '';
+          valB = b.source || '';
+          break;
+        case 'location':
+          valA = a.location || '';
+          valB = b.location || '';
+          break;
+        case 'facility':
+          valA = a.facility_type || '';
+          valB = b.facility_type || '';
+          break;
+        case 'score':
+          valA = a.overall_score || 0;
+          valB = b.overall_score || 0;
+          break;
+        case 'sentiment':
+          valA = a.sentiment || '';
+          valB = b.sentiment || '';
+          break;
+        default:
+          valA = ''; valB = '';
+      }
+      
+      let cmp = 0;
+      if (typeof valA === 'string' && typeof valB === 'string') {
+        cmp = valA.localeCompare(valB);
+      } else {
+        cmp = valA > valB ? 1 : (valA < valB ? -1 : 0);
+      }
+      return currentSortDir === 'asc' ? cmp : -cmp;
     });
 
     $('feedbackCount').textContent = `${tableData.length.toLocaleString()} feedback entries`;
@@ -608,7 +666,13 @@
           <td>${r.location || '—'}</td>
           <td>${r.survey_name || r.facility_type || '—'}</td>
           <td><span class="score-badge ${scoreClass}">${r.overall_score || '—'}</span></td>
-          <td><span class="badge ${sentClass}">${sentLabel}</span></td>
+          <td>
+            <select class="badge ${sentClass}" style="border:none; outline:none; cursor:pointer;" onchange="window.updateSentiment(${r._id}, this.value)">
+              <option value="Positive" ${sentLabel === 'Positive' ? 'selected' : ''}>Positive</option>
+              <option value="Neutral" ${sentLabel === 'Neutral' ? 'selected' : ''}>Neutral</option>
+              <option value="Negative" ${sentLabel === 'Negative' ? 'selected' : ''}>Negative</option>
+            </select>
+          </td>
           <td title="${escapeHtml(r.feedback)}">${escapeHtml(r.feedback)}</td>
         </tr>`;
       }).join('');
@@ -667,6 +731,19 @@
       renderFeedbackTable();
       $('feedbackSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
+  };
+
+  window.updateSentiment = function(id, newVal) {
+    const record = allData.find(r => r._id === id);
+    if (record) {
+      record.sentiment = newVal;
+      // Re-render components that depend on sentiment counts
+      renderOverallKPIs();
+      if (window.renderCharts) window.renderCharts();
+      // Render table to update the row's class colors if we want, or just let it be.
+      // We shouldn't jump pages, so we just call renderFeedbackTable which respects currentPage.
+      renderFeedbackTable();
+    }
   };
 
   // ── Boot ──

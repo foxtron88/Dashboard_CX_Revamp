@@ -392,7 +392,11 @@ const CXCharts = (() => {
     const facilityMap = {};
     data.forEach(r => {
       if (r.overall_score == null) return;
-      const key = r.survey_name || r.facility_type || 'Unknown';
+      let key = r.survey_name || r.facility_type || 'Unknown';
+      const bu = r.source || '';
+      if (bu && !key.toUpperCase().includes(bu.toUpperCase())) {
+        key = `${key} - ${bu}`;
+      }
       if (!facilityMap[key]) facilityMap[key] = { sum: 0, count: 0 };
       facilityMap[key].sum += r.overall_score;
       facilityMap[key].count++;
@@ -402,13 +406,23 @@ const CXCharts = (() => {
       .filter(([_, v]) => v.count >= 2)
       .map(([k, v]) => ({ name: k, avg: +(v.sum / v.count).toFixed(2), count: v.count }));
 
+    // Sort descending overall (best to worst)
+    entries.sort((a, b) => b.avg - a.avg);
+
     if (top) {
-      entries.sort((a, b) => b.avg - a.avg);
+      entries = entries.slice(0, limit);
     } else {
-      entries.sort((a, b) => a.avg - b.avg);
+      // Avoid redundancy by completely excluding items already shown in the Top chart
+      if (entries.length <= limit) {
+        entries = []; // All items fit in Top, so Bottom is empty
+      } else {
+        const numAvailable = entries.length - limit;
+        const numToTake = Math.min(limit, numAvailable);
+        entries = entries.slice(entries.length - numToTake);
+        // Reverse so the absolute worst is at the top of the bar chart
+        entries.reverse();
+      }
     }
-    entries = entries.slice(0, limit);
-    if (!top) entries.reverse();
 
     const labels = entries.map(e => e.name.length > 25 ? e.name.slice(0, 25) + '…' : e.name);
     const values = entries.map(e => e.avg);
@@ -773,3 +787,183 @@ window.renderPerformanceCharts = function(performanceData) {
     });
   });
 };
+
+// ── Performance Targets Dashboard Charts ──
+window.renderPerformanceCharts = function(perfData) {
+  if (!perfData || !perfData._months) return;
+  const buSelect = document.getElementById('perfFilterBU');
+  if (!buSelect) return;
+  
+  const selectedBU = buSelect.value;
+  const months = perfData._months;
+  let buData;
+  
+  if (selectedBU === 'ALL') {
+    buData = { scores: { overall: [], people: [], process: [], premises: [] }, interactions: { pengaduan: [], permohonan: [], informasi: [] } };
+    const numMonths = months.length;
+    for (let i = 0; i < numMonths; i++) {
+      ['overall', 'people', 'process', 'premises'].forEach(cat => {
+        let sum = 0, count = 0;
+        Object.keys(perfData).forEach(k => {
+          if (k !== '_months' && perfData[k].scores[cat] && perfData[k].scores[cat][i] != null) {
+            sum += perfData[k].scores[cat][i];
+            count++;
+          }
+        });
+        buData.scores[cat].push(count > 0 ? +(sum / count).toFixed(2) : null);
+      });
+      ['pengaduan', 'permohonan', 'informasi'].forEach(cat => {
+        let sum = 0;
+        Object.keys(perfData).forEach(k => {
+          if (k !== '_months' && perfData[k].interactions[cat] && perfData[k].interactions[cat][i] != null) {
+            sum += perfData[k].interactions[cat][i];
+          }
+        });
+        buData.interactions[cat].push(sum > 0 ? sum : null);
+      });
+    }
+  } else {
+    buData = perfData[selectedBU];
+  }
+  
+  // 1. Render CSAT Trend Line Chart
+  if (!window.chartInstances) window.chartInstances = {};
+  if (window.chartInstances['perfCsatChart']) {
+    window.chartInstances['perfCsatChart'].destroy();
+  }
+  const csatCtx = document.getElementById('perfCsatChart');
+  if (csatCtx && buData && buData.scores) {
+    window.chartInstances['perfCsatChart'] = new Chart(csatCtx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Overall CSAT',
+            data: buData.scores.overall || [],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            spanGaps: true
+          },
+          {
+            label: 'People',
+            data: buData.scores.people || [],
+            borderColor: '#10b981',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0.3,
+            spanGaps: true
+          },
+          {
+            label: 'Process',
+            data: buData.scores.process || [],
+            borderColor: '#f59e0b',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0.3,
+            spanGaps: true
+          },
+          {
+            label: 'Premises',
+            data: buData.scores.premises || [],
+            borderColor: '#8b5cf6',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0.3,
+            spanGaps: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { min: 1, max: 5, grid: { color: 'rgba(255,255,255,0.05)' } },
+          x: { grid: { display: false } }
+        },
+        plugins: {
+          legend: { position: 'top', labels: { color: '#e2e8f0' } },
+          tooltip: { mode: 'index', intersect: false }
+        }
+      }
+    });
+  }
+
+  // 2. Render Interactions Bar Chart
+  if (window.chartInstances['perfInteractionChart']) {
+    window.chartInstances['perfInteractionChart'].destroy();
+  }
+  const intCtx = document.getElementById('perfInteractionChart');
+  if (intCtx && buData && buData.interactions) {
+    window.chartInstances['perfInteractionChart'] = new Chart(intCtx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Total Pengunjung',
+            data: buData.interactions.pengunjung || [],
+            type: 'line',
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            tension: 0.3,
+            yAxisID: 'y1',
+            fill: true
+          },
+          {
+            label: 'Informasi',
+            data: buData.interactions.informasi || [],
+            backgroundColor: '#3b82f6',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Pengaduan',
+            data: buData.interactions.pengaduan || [],
+            backgroundColor: '#ef4444',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Permohonan',
+            data: buData.interactions.permohonan || [],
+            backgroundColor: '#f59e0b',
+            borderRadius: 4,
+            yAxisID: 'y'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { 
+            type: 'linear',
+            display: true,
+            position: 'left',
+            stacked: true, 
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            title: { display: true, text: 'Interactions', color: '#94a3b8' }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            grid: { drawOnChartArea: false },
+            title: { display: true, text: 'Total Pengunjung', color: '#10b981' }
+          },
+          x: { stacked: true, grid: { display: false } }
+        },
+        plugins: {
+          legend: { position: 'top', labels: { color: '#e2e8f0' } },
+          tooltip: { mode: 'index', intersect: false }
+        }
+      }
+    });
+  }
+};
+
