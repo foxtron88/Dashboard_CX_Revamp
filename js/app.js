@@ -192,8 +192,8 @@
         viewRaw.style.display = 'none';
         viewPerf.style.display = 'block';
         
-        // Hide standard filters since perf data is static by BU
-        $('filterBar').style.display = 'none';
+        // Ensure filters apply to performance data view
+        $('filterBar').style.display = 'flex';
 
         // Render Performance Charts
         if (window.renderPerformanceCharts) {
@@ -221,6 +221,9 @@
     renderCharts();
     renderTagsCloud();
     renderFeedbackTable();
+    if (window.renderPerformanceCharts && typeof performanceData !== 'undefined') {
+      window.renderPerformanceCharts(performanceData);
+    }
   }
 
   // ── Header Stats ──

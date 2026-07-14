@@ -524,7 +524,13 @@ window.renderPerformanceCharts = function(performanceData) {
   // Clear existing
   container.innerHTML = '';
 
+  const selectedBU = document.getElementById('filterBU')?.value || 'all';
+  const startDate = document.getElementById('filterStartDate')?.value;
+  const endDate = document.getElementById('filterEndDate')?.value;
+
   Object.entries(performanceData).forEach(([buName, buData], index) => {
+    if (selectedBU !== 'all' && buName !== selectedBU) return;
+
     const cardId = `perf-chart-${index}`;
     
     // Create card element
@@ -549,9 +555,41 @@ window.renderPerformanceCharts = function(performanceData) {
       'Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026', 'Oct 2026', 'Nov 2026', 'Dec 2026'
     ];
 
-    const scores = buData.data.map(d => d.score);
+    let scores = buData.data.map(d => d.score);
     // Truncate or extend labels to match scores length
-    const labels = monthYearLabels.slice(0, scores.length);
+    let labels = monthYearLabels.slice(0, scores.length);
+
+    // Apply Date Range Filter
+    if (startDate || endDate) {
+      const filteredLabels = [];
+      const filteredScores = [];
+      
+      labels.forEach((lbl, i) => {
+        const lblDate = new Date('1 ' + lbl);
+        let include = true;
+        
+        if (startDate) {
+          const s = new Date(startDate);
+          if (lblDate.getFullYear() < s.getFullYear() || (lblDate.getFullYear() === s.getFullYear() && lblDate.getMonth() < s.getMonth())) {
+            include = false;
+          }
+        }
+        if (endDate) {
+          const e = new Date(endDate);
+          if (lblDate.getFullYear() > e.getFullYear() || (lblDate.getFullYear() === e.getFullYear() && lblDate.getMonth() > e.getMonth())) {
+            include = false;
+          }
+        }
+        
+        if (include) {
+          filteredLabels.push(lbl);
+          filteredScores.push(scores[i]);
+        }
+      });
+      
+      labels = filteredLabels;
+      scores = filteredScores;
+    }
 
     new Chart(ctx, {
       type: 'line',
