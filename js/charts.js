@@ -799,27 +799,50 @@ window.renderPerformanceCharts = function(perfData) {
   let buData;
   
   if (selectedBU === 'ALL') {
-    buData = { scores: { overall: [], people: [], process: [], premises: [] }, interactions: { pengaduan: [], permohonan: [], informasi: [] } };
+    buData = {
+      scores: { overall: [], people: [], process: [], premises: [] },
+      interactions: { pengaduan: [], permohonan: [], informasi: [], pengunjung: [], volume: [] },
+      call_center: { volume: [], fcr: [], service_level: [], waiting_time: [], abandoned_rate: [] },
+      social_media: { nss: [], avg_response_time: [], rsr: [] },
+      complaints: { total: [], completed: [], progress: [], untouch: [], resolution_rate: [], avg_time_resolution: [] }
+    };
     const numMonths = months.length;
     for (let i = 0; i < numMonths; i++) {
-      ['overall', 'people', 'process', 'premises'].forEach(cat => {
-        let sum = 0, count = 0;
-        Object.keys(perfData).forEach(k => {
-          if (k !== '_months' && perfData[k].scores[cat] && perfData[k].scores[cat][i] != null) {
-            sum += perfData[k].scores[cat][i];
-            count++;
-          }
+      // Metrics that should be Averaged
+      [
+        { obj: buData.scores, cats: ['overall', 'people', 'process', 'premises'], source: 'scores' },
+        { obj: buData.call_center, cats: ['fcr', 'service_level', 'abandoned_rate'], source: 'call_center' },
+        { obj: buData.social_media, cats: ['nss', 'rsr'], source: 'social_media' },
+        { obj: buData.complaints, cats: ['resolution_rate'], source: 'complaints' }
+      ].forEach(group => {
+        group.cats.forEach(cat => {
+          let sum = 0, count = 0;
+          Object.keys(perfData).forEach(k => {
+            if (k !== '_months' && perfData[k][group.source] && perfData[k][group.source][cat] && perfData[k][group.source][cat][i] != null) {
+              sum += perfData[k][group.source][cat][i];
+              count++;
+            }
+          });
+          group.obj[cat].push(count > 0 ? +(sum / count).toFixed(2) : null);
         });
-        buData.scores[cat].push(count > 0 ? +(sum / count).toFixed(2) : null);
       });
-      ['pengaduan', 'permohonan', 'informasi'].forEach(cat => {
-        let sum = 0;
-        Object.keys(perfData).forEach(k => {
-          if (k !== '_months' && perfData[k].interactions[cat] && perfData[k].interactions[cat][i] != null) {
-            sum += perfData[k].interactions[cat][i];
-          }
+
+      // Metrics that should be Summed
+      [
+        { obj: buData.interactions, cats: ['pengaduan', 'permohonan', 'informasi', 'pengunjung', 'volume'], source: 'interactions' },
+        { obj: buData.call_center, cats: ['volume'], source: 'call_center' },
+        { obj: buData.complaints, cats: ['total', 'completed', 'progress', 'untouch'], source: 'complaints' }
+      ].forEach(group => {
+        group.cats.forEach(cat => {
+          let sum = 0, count = 0;
+          Object.keys(perfData).forEach(k => {
+            if (k !== '_months' && perfData[k][group.source] && perfData[k][group.source][cat] && perfData[k][group.source][cat][i] != null) {
+              sum += perfData[k][group.source][cat][i];
+              count++;
+            }
+          });
+          group.obj[cat].push(count > 0 ? sum : null);
         });
-        buData.interactions[cat].push(sum > 0 ? sum : null);
       });
     }
   } else {
@@ -965,5 +988,451 @@ window.renderPerformanceCharts = function(perfData) {
       }
     });
   }
+
+  // 3. Render Call Center Chart
+  if (window.chartInstances['perfCallCenterChart']) {
+    window.chartInstances['perfCallCenterChart'].destroy();
+  }
+  const ccCtx = document.getElementById('perfCallCenterChart');
+  if (ccCtx && buData && buData.call_center) {
+    window.chartInstances['perfCallCenterChart'] = new Chart(ccCtx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Volume of Call',
+            data: buData.call_center.volume || [],
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: '#3b82f6',
+            borderWidth: 1,
+            yAxisID: 'yVolume'
+          },
+          {
+            label: 'Service Level (%)',
+            data: buData.call_center.service_level || [],
+            type: 'line',
+            borderColor: '#10b981',
+            tension: 0.3,
+            yAxisID: 'yPct'
+          },
+          {
+            label: 'FCR (%)',
+            data: buData.call_center.fcr || [],
+            type: 'line',
+            borderColor: '#f59e0b',
+            tension: 0.3,
+            yAxisID: 'yPct'
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          yVolume: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+          yPct: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, min: 0, max: 100 }
+        }
+      }
+    });
+  }
+
+  // 4. Render Social Media Chart
+  if (window.chartInstances['perfSocialMediaChart']) {
+    window.chartInstances['perfSocialMediaChart'].destroy();
+  }
+  const smCtx = document.getElementById('perfSocialMediaChart');
+  if (smCtx && buData && buData.social_media) {
+    window.chartInstances['perfSocialMediaChart'] = new Chart(smCtx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Net Sentiment Score (%)',
+            data: buData.social_media.nss || [],
+            borderColor: '#8b5cf6',
+            tension: 0.3
+          },
+          {
+            label: 'Response to Sentiment Ratio',
+            data: buData.social_media.rsr || [],
+            borderColor: '#ec4899',
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } } }
+      }
+    });
+  }
+
+  // 5. Render Complaint Handling Chart
+  if (window.chartInstances['perfComplaintChart']) {
+    window.chartInstances['perfComplaintChart'].destroy();
+  }
+  const compCtx = document.getElementById('perfComplaintChart');
+  if (compCtx && buData && buData.complaints) {
+    window.chartInstances['perfComplaintChart'] = new Chart(compCtx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Resolution Rate (%)',
+            data: buData.complaints.resolution_rate || [],
+            type: 'line',
+            borderColor: '#10b981',
+            tension: 0.3,
+            yAxisID: 'yPct'
+          },
+          {
+            label: 'Completed',
+            data: buData.complaints.completed || [],
+            backgroundColor: '#3b82f6',
+            yAxisID: 'yVol'
+          },
+          {
+            label: 'Progress',
+            data: buData.complaints.progress || [],
+            backgroundColor: '#f59e0b',
+            yAxisID: 'yVol'
+          },
+          {
+            label: 'Untouch',
+            data: buData.complaints.untouch || [],
+            backgroundColor: '#ef4444',
+            yAxisID: 'yVol'
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          yVol: { type: 'linear', position: 'left', stacked: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+          yPct: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, min: 0, max: 100 },
+          x: { stacked: true }
+        }
+      }
+      }
+    });
+  }
 };
 
+// ── Interaksi & Pengunjung Analytics Dashboard ──
+window.renderInteractionDashboard = function(perfData) {
+  if (!perfData || !perfData._months) return;
+
+  const months = perfData._months;
+  const buSelect = document.getElementById('perfFilterBU');
+  const selectedBU = buSelect ? buSelect.value : 'ALL';
+
+  if (!window.chartInstances) window.chartInstances = {};
+
+  // ── Aggregate statistik data across BUs ──
+  let jumlahPengunjung = new Array(18).fill(0);
+  let totalInteraksi   = new Array(18).fill(0);
+  let kategoriSums     = { pengaduan: 0, permohonan: 0, informasi: 0, apresiasi: 0 };
+  let channelSums      = {};   // channel -> total across months
+  let ahtByChannel     = {};   // channel -> [18 months] (averaged)
+
+  const buKeys = Object.keys(perfData).filter(k => k !== '_months');
+  const activeBUs = selectedBU === 'ALL'
+    ? buKeys
+    : buKeys.filter(k => k === selectedBU || k.startsWith(selectedBU + ' - '));
+
+  activeBUs.forEach(buKey => {
+    const st = perfData[buKey] && perfData[buKey].statistik;
+    if (!st) return;
+
+    // Trend data (sum across selected BUs)
+    st.jumlah_pengunjung.forEach((v, i) => { if (v) jumlahPengunjung[i] += v; });
+    st.total_interaksi.forEach((v, i) => { if (v) totalInteraksi[i] += v; });
+
+    // Kategori totals
+    Object.keys(kategoriSums).forEach(cat => {
+      if (st.interaksi_kategori && st.interaksi_kategori[cat]) {
+        kategoriSums[cat] += st.interaksi_kategori[cat].reduce((a, b) => a + (b || 0), 0);
+      }
+    });
+
+    // Channel volumes
+    if (st.interaksi_channel) {
+      Object.entries(st.interaksi_channel).forEach(([ch, vals]) => {
+        if (!channelSums[ch]) channelSums[ch] = 0;
+        channelSums[ch] += vals.reduce((a, b) => a + (b || 0), 0);
+      });
+    }
+
+    // AHT per channel (average across BUs)
+    if (st.aht_channel) {
+      Object.entries(st.aht_channel).forEach(([ch, vals]) => {
+        if (!ahtByChannel[ch]) ahtByChannel[ch] = { sum: new Array(18).fill(0), count: new Array(18).fill(0) };
+        vals.forEach((v, i) => {
+          if (v !== null && v > 0) {
+            ahtByChannel[ch].sum[i] += v;
+            ahtByChannel[ch].count[i]++;
+          }
+        });
+      });
+    }
+  });
+
+  // Average AHT across BUs
+  const ahtAvg = {};
+  Object.entries(ahtByChannel).forEach(([ch, d]) => {
+    ahtAvg[ch] = d.sum.map((s, i) => d.count[i] > 0 ? +(s / d.count[i]).toFixed(2) : null);
+  });
+
+  // ── KPI Cards ──
+  const totalPeng = jumlahPengunjung.reduce((a, b) => a + b, 0);
+  const totalIntr = totalInteraksi.reduce((a, b) => a + b, 0);
+  const activeMonths = jumlahPengunjung.filter(v => v > 0).length;
+  const avgPengPerMonth = activeMonths > 0 ? Math.round(totalPeng / activeMonths) : 0;
+
+  const kpiContainer = document.getElementById('interaksiKpiCards');
+  if (kpiContainer) {
+    kpiContainer.innerHTML = `
+      <div class="kpi-card overall-kpi-card purple animate-in">
+        <div class="kpi-icon">🚶</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Total Pengunjung</div>
+          <div class="kpi-value" style="font-size:1.4rem;">${totalPeng.toLocaleString('id-ID')}</div>
+          <div class="kpi-sub">Seluruh periode data</div>
+        </div>
+      </div>
+      <div class="kpi-card overall-kpi-card blue animate-in">
+        <div class="kpi-icon">💬</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Total Interaksi</div>
+          <div class="kpi-value" style="font-size:1.4rem;">${totalIntr.toLocaleString('id-ID')}</div>
+          <div class="kpi-sub">Semua kategori</div>
+        </div>
+      </div>
+      <div class="kpi-card overall-kpi-card cyan animate-in">
+        <div class="kpi-icon">📅</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Rata-rata Pengunjung/Bulan</div>
+          <div class="kpi-value" style="font-size:1.4rem;">${avgPengPerMonth.toLocaleString('id-ID')}</div>
+          <div class="kpi-sub">Berdasarkan ${activeMonths} bulan aktif</div>
+        </div>
+      </div>
+      <div class="kpi-card overall-kpi-card amber animate-in">
+        <div class="kpi-icon">📡</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Channel Aktif</div>
+          <div class="kpi-value" style="font-size:1.4rem;">${Object.keys(channelSums).length}</div>
+          <div class="kpi-sub">Channel dengan data</div>
+        </div>
+      </div>
+    `;
+  }
+
+  const CHART_DEFAULTS = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { color: '#e2e8f0', padding: 12, font: { size: 11 } } },
+      tooltip: { mode: 'index', intersect: false }
+    }
+  };
+
+  // ── Chart 1: Pengunjung vs Interaksi Trend ──
+  const destroy1 = window.chartInstances['chartPengunjungInteraksi'];
+  if (destroy1) destroy1.destroy();
+  const ctx1 = document.getElementById('chartPengunjungInteraksi');
+  if (ctx1) {
+    window.chartInstances['chartPengunjungInteraksi'] = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'Jumlah Pengunjung',
+            data: jumlahPengunjung.map(v => v || null),
+            backgroundColor: 'rgba(139, 92, 246, 0.25)',
+            borderColor: '#8b5cf6',
+            borderWidth: 2,
+            borderRadius: 4,
+            type: 'bar',
+            yAxisID: 'yPeng'
+          },
+          {
+            label: 'Total Interaksi',
+            data: totalInteraksi.map(v => v || null),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            borderWidth: 2.5,
+            tension: 0.4,
+            fill: true,
+            type: 'line',
+            yAxisID: 'yIntr',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        scales: {
+          yPeng: {
+            type: 'linear', position: 'left',
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#8b5cf6', callback: v => (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v) },
+            title: { display: true, text: 'Pengunjung', color: '#8b5cf6' }
+          },
+          yIntr: {
+            type: 'linear', position: 'right',
+            grid: { drawOnChartArea: false },
+            ticks: { color: '#10b981', callback: v => (v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v) },
+            title: { display: true, text: 'Interaksi', color: '#10b981' }
+          },
+          x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  // ── Chart 2: Kategori Donut ──
+  const destroy2 = window.chartInstances['chartKategoriInteraksi'];
+  if (destroy2) destroy2.destroy();
+  const ctx2 = document.getElementById('chartKategoriInteraksi');
+  const kategoriLabels = ['Pengaduan', 'Permohonan/Permintaan', 'Informasi/Pertanyaan', 'Apresiasi'];
+  const kategoriData   = [kategoriSums.pengaduan, kategoriSums.permohonan, kategoriSums.informasi, kategoriSums.apresiasi];
+  const KATEGORI_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+  if (ctx2) {
+    window.chartInstances['chartKategoriInteraksi'] = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: kategoriLabels,
+        datasets: [{
+          data: kategoriData,
+          backgroundColor: KATEGORI_COLORS.map(c => c + 'cc'),
+          borderColor: KATEGORI_COLORS,
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          legend: { position: 'right', labels: { color: '#e2e8f0', padding: 10, font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                return ` ${ctx.label}: ${ctx.parsed.toLocaleString('id-ID')} (${pct}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ── Chart 3: Channel Volume Horizontal Bar ──
+  const destroy3 = window.chartInstances['chartChannelVolume'];
+  if (destroy3) destroy3.destroy();
+  const ctx3 = document.getElementById('chartChannelVolume');
+  const channelEntries = Object.entries(channelSums).sort((a, b) => b[1] - a[1]);
+  const CHANNEL_PALETTE = [
+    '#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b',
+    '#10b981','#14b8a6','#3b82f6','#06b6d4','#84cc16'
+  ];
+  if (ctx3 && channelEntries.length > 0) {
+    window.chartInstances['chartChannelVolume'] = new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: channelEntries.map(([ch]) => ch),
+        datasets: [{
+          label: 'Total Interaksi',
+          data: channelEntries.map(([, v]) => v),
+          backgroundColor: channelEntries.map((_, i) => CHANNEL_PALETTE[i % CHANNEL_PALETTE.length] + 'bb'),
+          borderColor: channelEntries.map((_, i) => CHANNEL_PALETTE[i % CHANNEL_PALETTE.length]),
+          borderWidth: 1.5,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        indexAxis: 'y',
+        plugins: {
+          ...CHART_DEFAULTS.plugins,
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.parsed.x.toLocaleString('id-ID')} interaksi` }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#94a3b8', callback: v => v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v }
+          },
+          y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11 } } }
+        }
+      }
+    });
+  }
+
+  // ── Chart 4: AHT per Channel ──
+  const destroy4 = window.chartInstances['chartAHTChannel'];
+  if (destroy4) destroy4.destroy();
+  const ctx4 = document.getElementById('chartAHTChannel');
+  const ahtWrapper = document.getElementById('ahtChartWrapper');
+  const ahtNoData  = document.getElementById('ahtNoData');
+
+  const ahtEntries = Object.entries(ahtAvg).map(([ch, vals]) => {
+    const nonNull = vals.filter(v => v !== null);
+    const avg = nonNull.length > 0 ? +(nonNull.reduce((a, b) => a + b, 0) / nonNull.length).toFixed(2) : null;
+    return [ch, avg];
+  }).filter(([, avg]) => avg !== null && avg > 0).sort((a, b) => b[1] - a[1]);
+
+  if (ahtWrapper && ahtNoData) {
+    if (ahtEntries.length === 0) {
+      ahtWrapper.style.display = 'none';
+      ahtNoData.style.display = 'block';
+    } else {
+      ahtWrapper.style.display = 'block';
+      ahtNoData.style.display = 'none';
+    }
+  }
+
+  if (ctx4 && ahtEntries.length > 0) {
+    window.chartInstances['chartAHTChannel'] = new Chart(ctx4, {
+      type: 'bar',
+      data: {
+        labels: ahtEntries.map(([ch]) => ch),
+        datasets: [{
+          label: 'Avg. Handling Time (menit)',
+          data: ahtEntries.map(([, avg]) => avg),
+          backgroundColor: '#f59e0bbb',
+          borderColor: '#f59e0b',
+          borderWidth: 1.5,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        indexAxis: 'y',
+        plugins: {
+          ...CHART_DEFAULTS.plugins,
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.parsed.x.toFixed(1)} menit` }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#94a3b8', callback: v => v + ' min' }
+          },
+          y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11 } } }
+        }
+      }
+    });
+  }
+};

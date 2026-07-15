@@ -330,6 +330,90 @@
             </div>
           </div>
         </div>
+
+        <div class="charts-grid animate-in delay-4" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); margin-top: 1.5rem;">
+          <!-- Call Center Chart -->
+          <div class="glass-card">
+            <h3 class="card-title">Call Center Performance</h3>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="perfCallCenterChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Social Media Chart -->
+          <div class="glass-card">
+            <h3 class="card-title">Social Media Monitoring</h3>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="perfSocialMediaChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Complaint Handling Chart -->
+          <div class="glass-card" style="grid-column: 1 / -1;">
+            <h3 class="card-title">Complaint Handling</h3>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="perfComplaintChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ NEW: INTERAKSI & PENGUNJUNG ANALYTICS ═══ -->
+      <section style="margin-top: 2.5rem;">
+        <div class="section-header animate-in delay-2" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div class="section-icon">📊</div>
+            <h2 class="section-title">Interaksi &amp; Pengunjung Analytics</h2>
+            <span class="section-subtitle">Data dari Statistik Operasional CX Performance</span>
+          </div>
+        </div>
+
+        <!-- KPI Summary Cards -->
+        <div id="interaksiKpiCards" class="kpi-grid animate-in delay-3" style="margin-top: 1rem;">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Row 1: Trend Pengunjung & Interaksi -->
+        <div class="charts-grid animate-in delay-3" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
+          <div class="glass-card">
+            <h3 class="card-title">📈 Jumlah Pengunjung vs Total Interaksi (Bulanan)</h3>
+            <div class="chart-container" style="height: 320px;">
+              <canvas id="chartPengunjungInteraksi"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Kategori + Channel side by side -->
+        <div class="charts-grid animate-in delay-4" style="grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); margin-top: 1.5rem;">
+          <!-- Kategorisasi Interaksi Donut -->
+          <div class="glass-card">
+            <h3 class="card-title">🗂️ Kategorisasi Interaksi</h3>
+            <div class="chart-container" style="height: 320px;">
+              <canvas id="chartKategoriInteraksi"></canvas>
+            </div>
+          </div>
+
+          <!-- Interaksi per Channel -->
+          <div class="glass-card">
+            <h3 class="card-title">📡 Volume Interaksi per Channel</h3>
+            <div class="chart-container" style="height: 320px;">
+              <canvas id="chartChannelVolume"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: AHT per Channel -->
+        <div class="charts-grid animate-in delay-5" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
+          <div class="glass-card">
+            <h3 class="card-title">⏱️ Average Handling Time per Channel (dalam menit)</h3>
+            <div id="ahtChartWrapper" class="chart-container" style="height: 280px;">
+              <canvas id="chartAHTChannel"></canvas>
+            </div>
+            <p id="ahtNoData" style="display:none; text-align:center; color:var(--text-muted); padding: 2rem;">
+              Tidak ada data AHT untuk BU ini
+            </p>
+          </div>
+        </div>
       </section>
     </div>
 

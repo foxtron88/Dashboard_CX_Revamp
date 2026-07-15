@@ -201,6 +201,9 @@
         if (window.renderPerformanceCharts) {
           window.renderPerformanceCharts(performanceData);
         }
+        if (window.renderInteractionDashboard) {
+          window.renderInteractionDashboard(performanceData);
+        }
       });
       
       const perfFilter = $('perfFilterBU');
@@ -208,6 +211,9 @@
           perfFilter.addEventListener('change', () => {
              if (window.renderPerformanceCharts) {
                  window.renderPerformanceCharts(performanceData);
+             }
+             if (window.renderInteractionDashboard) {
+                 window.renderInteractionDashboard(performanceData);
              }
           });
       }
@@ -226,6 +232,9 @@
     renderFeedbackTable();
     if (window.renderPerformanceCharts && typeof performanceData !== 'undefined') {
       window.renderPerformanceCharts(performanceData);
+    }
+    if (window.renderInteractionDashboard && typeof performanceData !== 'undefined') {
+      window.renderInteractionDashboard(performanceData);
     }
   }
 
@@ -260,6 +269,50 @@
       { icon: '😊', label: 'Positive Sentiment', value: `${posPct}%`, cls: 'cyan' },
       { icon: '⚠️', label: 'Negative Sentiment', value: `${negPct}%`, cls: 'amber' },
     ];
+
+    // Add Total Pengunjung from cx_performance data if available
+    let totalPengunjung = 0;
+    if (performanceData && Object.keys(performanceData).length > 0 && performanceData._months) {
+      const bu = document.getElementById('filterBU').value;
+      const filterStart = document.getElementById('filterStartDate').value;
+      const filterEnd = document.getElementById('filterEndDate').value;
+      
+      let startD = filterStart ? new Date(filterStart) : null;
+      let endD = filterEnd ? new Date(filterEnd) : null;
+      if (startD) startD = new Date(startD.getFullYear(), startD.getMonth(), 1);
+      if (endD) endD = new Date(endD.getFullYear(), endD.getMonth(), 31);
+
+      const validIndices = [];
+      performanceData._months.forEach((m, i) => {
+        const parts = m.split(' ');
+        const mDate = new Date(`${parts[0]} 1, 20${parts[1]}`);
+        if (startD && mDate < startD) return;
+        if (endD && mDate > endD) return;
+        validIndices.push(i);
+      });
+
+      if (bu === 'all') {
+        Object.keys(performanceData).forEach(key => {
+          if (key !== '_months' && performanceData[key].interactions && performanceData[key].interactions.pengunjung) {
+            validIndices.forEach(idx => {
+              totalPengunjung += (performanceData[key].interactions.pengunjung[idx] || 0);
+            });
+          }
+        });
+      } else {
+        Object.keys(performanceData).forEach(key => {
+          if ((key === bu || key.startsWith(bu + ' - ')) && performanceData[key].interactions && performanceData[key].interactions.pengunjung) {
+            validIndices.forEach(idx => {
+              totalPengunjung += (performanceData[key].interactions.pengunjung[idx] || 0);
+            });
+          }
+        });
+      }
+    }
+    
+    if (totalPengunjung > 0) {
+      kpis.splice(1, 0, { icon: '🚶', label: 'Total Pengunjung', value: totalPengunjung.toLocaleString(), cls: 'purple' });
+    }
 
     $('overallKpiRow').innerHTML = kpis.map(k => `
       <div class="overall-kpi-card">
