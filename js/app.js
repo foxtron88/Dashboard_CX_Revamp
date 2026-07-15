@@ -32,6 +32,24 @@
       try {
         const perfResp = await fetch('data/cx_performance.json?v=' + new Date().getTime());
         performanceData = await perfResp.json();
+        
+        if (performanceData && performanceData._months) {
+          const mSelectFrom = $('perfFilterMonthFrom');
+          const mSelectTo = $('perfFilterMonthTo');
+          if (mSelectFrom && mSelectTo) {
+            performanceData._months.forEach((m, idx) => {
+              const optFrom = document.createElement('option');
+              optFrom.value = idx.toString();
+              optFrom.textContent = m;
+              mSelectFrom.appendChild(optFrom);
+
+              const optTo = document.createElement('option');
+              optTo.value = idx.toString();
+              optTo.textContent = m;
+              mSelectTo.appendChild(optTo);
+            });
+          }
+        }
       } catch (err) {
         console.warn('Failed to load CX Performance data:', err);
       }
@@ -207,15 +225,26 @@
       });
       
       const perfFilter = $('perfFilterBU');
+      const perfMonthFilterFrom = $('perfFilterMonthFrom');
+      const perfMonthFilterTo = $('perfFilterMonthTo');
+      
+      const renderPerfViews = () => {
+         if (window.renderPerformanceCharts) {
+             window.renderPerformanceCharts(performanceData);
+         }
+         if (window.renderInteractionDashboard) {
+             window.renderInteractionDashboard(performanceData);
+         }
+      };
+
       if (perfFilter) {
-          perfFilter.addEventListener('change', () => {
-             if (window.renderPerformanceCharts) {
-                 window.renderPerformanceCharts(performanceData);
-             }
-             if (window.renderInteractionDashboard) {
-                 window.renderInteractionDashboard(performanceData);
-             }
-          });
+          perfFilter.addEventListener('change', renderPerfViews);
+      }
+      if (perfMonthFilterFrom) {
+          perfMonthFilterFrom.addEventListener('change', renderPerfViews);
+      }
+      if (perfMonthFilterTo) {
+          perfMonthFilterTo.addEventListener('change', renderPerfViews);
       }
     }
   }

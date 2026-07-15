@@ -801,7 +801,7 @@ window.renderPerformanceCharts = function(perfData) {
   if (selectedBU === 'ALL') {
     buData = {
       scores: { overall: [], people: [], process: [], premises: [] },
-      interactions: { pengaduan: [], permohonan: [], informasi: [], pengunjung: [], volume: [] },
+      interactions: { pengaduan: [], permohonan: [], informasi: [], apresiasi: [], laporan: [], saran: [], lost_and_found: [], priority_service: [], pengunjung: [], volume: [] },
       call_center: { volume: [], fcr: [], service_level: [], waiting_time: [], abandoned_rate: [] },
       social_media: { nss: [], avg_response_time: [], rsr: [] },
       complaints: { total: [], completed: [], progress: [], untouch: [], resolution_rate: [], avg_time_resolution: [] }
@@ -829,7 +829,7 @@ window.renderPerformanceCharts = function(perfData) {
 
       // Metrics that should be Summed
       [
-        { obj: buData.interactions, cats: ['pengaduan', 'permohonan', 'informasi', 'pengunjung', 'volume'], source: 'interactions' },
+        { obj: buData.interactions, cats: ['pengaduan', 'permohonan', 'informasi', 'apresiasi', 'laporan', 'saran', 'lost_and_found', 'priority_service', 'pengunjung', 'volume'], source: 'interactions' },
         { obj: buData.call_center, cats: ['volume'], source: 'call_center' },
         { obj: buData.complaints, cats: ['total', 'completed', 'progress', 'untouch'], source: 'complaints' }
       ].forEach(group => {
@@ -849,71 +849,38 @@ window.renderPerformanceCharts = function(perfData) {
     buData = perfData[selectedBU];
   }
   
-  // 1. Render CSAT Trend Line Chart
-  if (!window.chartInstances) window.chartInstances = {};
-  if (window.chartInstances['perfCsatChart']) {
-    window.chartInstances['perfCsatChart'].destroy();
+  const mSelectFrom = document.getElementById('perfFilterMonthFrom');
+  const mSelectTo = document.getElementById('perfFilterMonthTo');
+  
+  let fromIdx = (mSelectFrom && mSelectFrom.value !== 'ALL') ? parseInt(mSelectFrom.value, 10) : 0;
+  let toIdx = (mSelectTo && mSelectTo.value !== 'ALL') ? parseInt(mSelectTo.value, 10) : months.length - 1;
+  
+  if (fromIdx > toIdx) {
+    const temp = fromIdx;
+    fromIdx = toIdx;
+    toIdx = temp;
   }
-  const csatCtx = document.getElementById('perfCsatChart');
-  if (csatCtx && buData && buData.scores) {
-    window.chartInstances['perfCsatChart'] = new Chart(csatCtx, {
-      type: 'line',
-      data: {
-        labels: months,
-        datasets: [
-          {
-            label: 'Overall CSAT',
-            data: buData.scores.overall || [],
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.3,
-            spanGaps: true
-          },
-          {
-            label: 'People',
-            data: buData.scores.people || [],
-            borderColor: '#10b981',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0.3,
-            spanGaps: true
-          },
-          {
-            label: 'Process',
-            data: buData.scores.process || [],
-            borderColor: '#f59e0b',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0.3,
-            spanGaps: true
-          },
-          {
-            label: 'Premises',
-            data: buData.scores.premises || [],
-            borderColor: '#8b5cf6',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0.3,
-            spanGaps: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: { min: 1, max: 5, grid: { color: 'rgba(255,255,255,0.05)' } },
-          x: { grid: { display: false } }
-        },
-        plugins: {
-          legend: { position: 'top', labels: { color: '#e2e8f0' } },
-          tooltip: { mode: 'index', intersect: false }
+  
+  const indicesToProcess = Array.from({length: toIdx - fromIdx + 1}, (_, i) => fromIdx + i);
+  const displayMonths = indicesToProcess.map(idx => months[idx]);
+
+  if (indicesToProcess.length < months.length) {
+    if (selectedBU !== 'ALL') {
+      buData = JSON.parse(JSON.stringify(buData));
+    }
+    const filterArrays = (obj) => {
+      for (const key in obj) {
+        if (Array.isArray(obj[key])) {
+          obj[key] = indicesToProcess.map(idx => obj[key][idx]);
+        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+          filterArrays(obj[key]);
         }
       }
-    });
+    };
+    filterArrays(buData);
   }
+
+  if (!window.chartInstances) window.chartInstances = {};
 
   // 2. Render Interactions Bar Chart
   if (window.chartInstances['perfInteractionChart']) {
@@ -924,7 +891,7 @@ window.renderPerformanceCharts = function(perfData) {
     window.chartInstances['perfInteractionChart'] = new Chart(intCtx, {
       type: 'bar',
       data: {
-        labels: months,
+        labels: displayMonths,
         datasets: [
           {
             label: 'Total Pengunjung',
@@ -955,6 +922,41 @@ window.renderPerformanceCharts = function(perfData) {
             label: 'Permohonan',
             data: buData.interactions.permohonan || [],
             backgroundColor: '#f59e0b',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Apresiasi',
+            data: buData.interactions.apresiasi || [],
+            backgroundColor: '#8b5cf6',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Laporan',
+            data: buData.interactions.laporan || [],
+            backgroundColor: '#0ea5e9',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Saran',
+            data: buData.interactions.saran || [],
+            backgroundColor: '#14b8a6',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Lost & Found',
+            data: buData.interactions.lost_and_found || [],
+            backgroundColor: '#f43f5e',
+            borderRadius: 4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Priority Service',
+            data: buData.interactions.priority_service || [],
+            backgroundColor: '#eab308',
             borderRadius: 4,
             yAxisID: 'y'
           }
@@ -998,7 +1000,7 @@ window.renderPerformanceCharts = function(perfData) {
     window.chartInstances['perfCallCenterChart'] = new Chart(ccCtx, {
       type: 'bar',
       data: {
-        labels: months,
+        labels: displayMonths,
         datasets: [
           {
             label: 'Volume of Call',
@@ -1045,7 +1047,7 @@ window.renderPerformanceCharts = function(perfData) {
     window.chartInstances['perfSocialMediaChart'] = new Chart(smCtx, {
       type: 'line',
       data: {
-        labels: months,
+        labels: displayMonths,
         datasets: [
           {
             label: 'Net Sentiment Score (%)',
@@ -1068,55 +1070,7 @@ window.renderPerformanceCharts = function(perfData) {
     });
   }
 
-  // 5. Render Complaint Handling Chart
-  if (window.chartInstances['perfComplaintChart']) {
-    window.chartInstances['perfComplaintChart'].destroy();
-  }
-  const compCtx = document.getElementById('perfComplaintChart');
-  if (compCtx && buData && buData.complaints) {
-    window.chartInstances['perfComplaintChart'] = new Chart(compCtx, {
-      type: 'bar',
-      data: {
-        labels: months,
-        datasets: [
-          {
-            label: 'Resolution Rate (%)',
-            data: buData.complaints.resolution_rate || [],
-            type: 'line',
-            borderColor: '#10b981',
-            tension: 0.3,
-            yAxisID: 'yPct'
-          },
-          {
-            label: 'Completed',
-            data: buData.complaints.completed || [],
-            backgroundColor: '#3b82f6',
-            yAxisID: 'yVol'
-          },
-          {
-            label: 'Progress',
-            data: buData.complaints.progress || [],
-            backgroundColor: '#f59e0b',
-            yAxisID: 'yVol'
-          },
-          {
-            label: 'Untouch',
-            data: buData.complaints.untouch || [],
-            backgroundColor: '#ef4444',
-            yAxisID: 'yVol'
-          }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          yVol: { type: 'linear', position: 'left', stacked: true, grid: { color: 'rgba(255,255,255,0.05)' } },
-          yPct: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, min: 0, max: 100 },
-          x: { stacked: true }
-        }
-      }
-    });
-  }
+
 };
 
 // ── Interaksi & Pengunjung Analytics Dashboard ──
@@ -1126,15 +1080,31 @@ window.renderInteractionDashboard = function(perfData) {
   const months = perfData._months;
   const buSelect = document.getElementById('perfFilterBU');
   const selectedBU = buSelect ? buSelect.value : 'ALL';
+  const mSelectFrom = document.getElementById('perfFilterMonthFrom');
+  const mSelectTo = document.getElementById('perfFilterMonthTo');
+  
+  let fromIdx = (mSelectFrom && mSelectFrom.value !== 'ALL') ? parseInt(mSelectFrom.value, 10) : 0;
+  let toIdx = (mSelectTo && mSelectTo.value !== 'ALL') ? parseInt(mSelectTo.value, 10) : months.length - 1;
+  
+  if (fromIdx > toIdx) {
+    const temp = fromIdx;
+    fromIdx = toIdx;
+    toIdx = temp;
+  }
+  
+  const indicesToProcess = Array.from({length: toIdx - fromIdx + 1}, (_, i) => fromIdx + i);
+  const displayMonths = indicesToProcess.map(idx => months[idx]);
 
   if (!window.chartInstances) window.chartInstances = {};
 
   // ── Aggregate statistik data across BUs ──
-  let jumlahPengunjung = new Array(18).fill(0);
-  let totalInteraksi   = new Array(18).fill(0);
-  let kategoriSums     = { pengaduan: 0, permohonan: 0, informasi: 0, apresiasi: 0 };
-  let channelSums      = {};   // channel -> total across months
-  let ahtByChannel     = {};   // channel -> [18 months] (averaged)
+  let jumlahPengunjung = new Array(indicesToProcess.length).fill(0);
+  let totalInteraksi   = new Array(indicesToProcess.length).fill(0);
+  let csatScoresSum    = new Array(indicesToProcess.length).fill(0);
+  let csatScoresCount  = new Array(indicesToProcess.length).fill(0);
+  let kategoriSums     = { pengaduan: 0, permohonan: 0, informasi: 0, pertanyaan: 0, apresiasi: 0, laporan: 0, saran: 0, lost_and_found: 0, priority_service: 0 };
+  let channelSums      = {};   // channel -> total across selected months
+  let ahtByChannel     = {};   // channel -> [selected months] (averaged)
 
   const buKeys = Object.keys(perfData).filter(k => k !== '_months');
   const activeBUs = selectedBU === 'ALL'
@@ -1143,16 +1113,31 @@ window.renderInteractionDashboard = function(perfData) {
 
   activeBUs.forEach(buKey => {
     const st = perfData[buKey] && perfData[buKey].statistik;
+    const sc = perfData[buKey] && perfData[buKey].scores;
+
+    if (sc && sc.overall) {
+      indicesToProcess.forEach((idx, outIdx) => {
+        if (sc.overall[idx] != null) {
+          csatScoresSum[outIdx] += sc.overall[idx];
+          csatScoresCount[outIdx]++;
+        }
+      });
+    }
+
     if (!st) return;
 
     // Trend data (sum across selected BUs)
-    st.jumlah_pengunjung.forEach((v, i) => { if (v) jumlahPengunjung[i] += v; });
-    st.total_interaksi.forEach((v, i) => { if (v) totalInteraksi[i] += v; });
+    indicesToProcess.forEach((idx, outIdx) => {
+      if (st.jumlah_pengunjung && st.jumlah_pengunjung[idx]) jumlahPengunjung[outIdx] += st.jumlah_pengunjung[idx];
+      if (st.total_interaksi && st.total_interaksi[idx]) totalInteraksi[outIdx] += st.total_interaksi[idx];
+    });
 
     // Kategori totals
     Object.keys(kategoriSums).forEach(cat => {
       if (st.interaksi_kategori && st.interaksi_kategori[cat]) {
-        kategoriSums[cat] += st.interaksi_kategori[cat].reduce((a, b) => a + (b || 0), 0);
+        indicesToProcess.forEach(idx => {
+          kategoriSums[cat] += (st.interaksi_kategori[cat][idx] || 0);
+        });
       }
     });
 
@@ -1160,18 +1145,21 @@ window.renderInteractionDashboard = function(perfData) {
     if (st.interaksi_channel) {
       Object.entries(st.interaksi_channel).forEach(([ch, vals]) => {
         if (!channelSums[ch]) channelSums[ch] = 0;
-        channelSums[ch] += vals.reduce((a, b) => a + (b || 0), 0);
+        indicesToProcess.forEach(idx => {
+          channelSums[ch] += (vals[idx] || 0);
+        });
       });
     }
 
     // AHT per channel (average across BUs)
     if (st.aht_channel) {
       Object.entries(st.aht_channel).forEach(([ch, vals]) => {
-        if (!ahtByChannel[ch]) ahtByChannel[ch] = { sum: new Array(18).fill(0), count: new Array(18).fill(0) };
-        vals.forEach((v, i) => {
+        if (!ahtByChannel[ch]) ahtByChannel[ch] = { sum: new Array(indicesToProcess.length).fill(0), count: new Array(indicesToProcess.length).fill(0) };
+        indicesToProcess.forEach((idx, outIdx) => {
+          const v = vals[idx];
           if (v !== null && v > 0) {
-            ahtByChannel[ch].sum[i] += v;
-            ahtByChannel[ch].count[i]++;
+            ahtByChannel[ch].sum[outIdx] += v;
+            ahtByChannel[ch].count[outIdx]++;
           }
         });
       });
@@ -1245,7 +1233,7 @@ window.renderInteractionDashboard = function(perfData) {
     window.chartInstances['chartPengunjungInteraksi'] = new Chart(ctx1, {
       type: 'bar',
       data: {
-        labels: months,
+        labels: displayMonths,
         datasets: [
           {
             label: 'Jumlah Pengunjung',
@@ -1299,8 +1287,13 @@ window.renderInteractionDashboard = function(perfData) {
     const kategoriItems = [
       { label: 'Pengaduan',              icon: '⚠️', value: kategoriSums.pengaduan,  color: '#ef4444' },
       { label: 'Permohonan/Permintaan',  icon: '📋', value: kategoriSums.permohonan, color: '#f59e0b' },
-      { label: 'Informasi/Pertanyaan',   icon: 'ℹ️', value: kategoriSums.informasi,  color: '#3b82f6' },
-      { label: 'Apresiasi',              icon: '👍', value: kategoriSums.apresiasi,   color: '#10b981' },
+      { label: 'Informasi',              icon: 'ℹ️', value: kategoriSums.informasi,  color: '#3b82f6' },
+      { label: 'Pertanyaan',             icon: '❓', value: kategoriSums.pertanyaan, color: '#6366f1' },
+      { label: 'Apresiasi',              icon: '👍', value: kategoriSums.apresiasi,  color: '#8b5cf6' },
+      { label: 'Laporan',                icon: '📝', value: kategoriSums.laporan,    color: '#0ea5e9' },
+      { label: 'Saran',                  icon: '💡', value: kategoriSums.saran,      color: '#14b8a6' },
+      { label: 'Lost & Found',           icon: '🔍', value: kategoriSums.lost_and_found, color: '#f43f5e' },
+      { label: 'Priority Service',       icon: '⭐', value: kategoriSums.priority_service, color: '#eab308' },
     ];
     const grandTotal = kategoriItems.reduce((s, k) => s + (k.value || 0), 0);
 
@@ -1432,6 +1425,73 @@ window.renderInteractionDashboard = function(perfData) {
             ticks: { color: '#94a3b8', callback: v => v + ' min' }
           },
           y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11 } } }
+        }
+      }
+    });
+  }
+
+  // ── 5. Render Correlation Scatter Chart ──
+  const avgCsatScores = csatScoresSum.map((sum, i) => csatScoresCount[i] > 0 ? (sum / csatScoresCount[i]) : null);
+  
+  if (window.chartInstances['chartCorrelation']) {
+    window.chartInstances['chartCorrelation'].destroy();
+  }
+  const corrCtx = document.getElementById('chartCorrelation');
+  if (corrCtx) {
+    const scatterData = displayMonths.map((m, i) => {
+      if (jumlahPengunjung[i] != null && totalInteraksi[i] != null && avgCsatScores[i] != null) {
+        return {
+          x: jumlahPengunjung[i],
+          y: totalInteraksi[i],
+          csat: avgCsatScores[i].toFixed(2),
+          month: m
+        };
+      }
+      return null;
+    }).filter(Boolean);
+
+    window.chartInstances['chartCorrelation'] = new Chart(corrCtx, {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Bulan (Titik = Pengunjung vs Interaksi)',
+          data: scatterData,
+          backgroundColor: scatterData.map(d => {
+             const csat = parseFloat(d.csat);
+             if (csat >= 4.5) return 'rgba(16, 185, 129, 0.8)'; // Green
+             if (csat >= 4.0) return 'rgba(59, 130, 246, 0.8)'; // Blue
+             if (csat >= 3.5) return 'rgba(245, 158, 11, 0.8)'; // Orange
+             return 'rgba(239, 68, 68, 0.8)'; // Red
+          }),
+          borderColor: 'rgba(255,255,255,0.8)',
+          borderWidth: 1,
+          pointRadius: 8,
+          pointHoverRadius: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { 
+            title: { display: true, text: 'Jumlah Pengunjung', color: '#94a3b8' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          },
+          y: { 
+            title: { display: true, text: 'Total Interaksi', color: '#94a3b8' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const d = context.raw;
+                return `${d.month} | Pengunjung: ${d.x}, Interaksi: ${d.y}, CSAT: ${d.csat}`;
+              }
+            }
+          },
+          legend: { display: false }
         }
       }
     });

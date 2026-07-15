@@ -141,7 +141,12 @@ def parse_statistik_sheet(df):
             "pengaduan": [None] * 18,
             "permohonan": [None] * 18,
             "informasi": [None] * 18,
+            "pertanyaan": [None] * 18,
             "apresiasi": [None] * 18,
+            "laporan": [None] * 18,
+            "saran": [None] * 18,
+            "lost_and_found": [None] * 18,
+            "priority_service": [None] * 18,
         },
         "interaksi_channel": {},
         "aht_channel": {},
@@ -198,12 +203,27 @@ def parse_statistik_sheet(df):
             elif any(k in label for k in ['permintaan', 'permohonan', 'request', 'reservasi']):
                 if all(v is None for v in data["interaksi_kategori"]["permohonan"]):
                     data["interaksi_kategori"]["permohonan"] = vals
-            elif any(k in label for k in ['informasi', 'pertanyaan', 'permintaan informasi']):
+            elif any(k in label for k in ['informasi', 'permintaan informasi']):
                 if all(v is None for v in data["interaksi_kategori"]["informasi"]):
                     data["interaksi_kategori"]["informasi"] = vals
+            elif 'pertanyaan' in label:
+                if all(v is None for v in data["interaksi_kategori"]["pertanyaan"]):
+                    data["interaksi_kategori"]["pertanyaan"] = vals
             elif 'apresiasi' in label:
                 if all(v is None for v in data["interaksi_kategori"]["apresiasi"]):
                     data["interaksi_kategori"]["apresiasi"] = vals
+            elif 'laporan' in label:
+                if all(v is None for v in data["interaksi_kategori"]["laporan"]):
+                    data["interaksi_kategori"]["laporan"] = vals
+            elif 'saran' in label:
+                if all(v is None for v in data["interaksi_kategori"]["saran"]):
+                    data["interaksi_kategori"]["saran"] = vals
+            elif 'lost and found' in label or 'lost & found' in label:
+                if all(v is None for v in data["interaksi_kategori"]["lost_and_found"]):
+                    data["interaksi_kategori"]["lost_and_found"] = vals
+            elif 'priority service' in label:
+                if all(v is None for v in data["interaksi_kategori"]["priority_service"]):
+                    data["interaksi_kategori"]["priority_service"] = vals
 
     # Extract Channel interactions (sum all category rows per channel)
     if idx_channel_start is not None:
@@ -283,14 +303,17 @@ def main():
         print(f"Processing {bu_name}...")
         bu_data = {
             "scores": {"overall": [], "people": [], "process": [], "premises": []},
-            "interactions": {"pengaduan": [], "permohonan": [], "informasi": [], "pengunjung": [], "volume": []},
+            "interactions": {"pengaduan": [], "permohonan": [], "informasi": [], "pertanyaan": [], "pengunjung": [], "volume": []},
             "call_center": {"volume": [], "fcr": [], "service_level": [], "waiting_time": [], "abandoned_rate": []},
             "social_media": {"nss": [], "avg_response_time": [], "rsr": []},
             "complaints": {"total": [], "completed": [], "progress": [], "untouch": [], "resolution_rate": [], "avg_time_resolution": []},
             "statistik": {
                 "jumlah_pengunjung": [None] * 18,
                 "total_interaksi": [None] * 18,
-                "interaksi_kategori": {"pengaduan": [None]*18, "permohonan": [None]*18, "informasi": [None]*18, "apresiasi": [None]*18},
+                "interaksi_kategori": {
+                    "pengaduan": [None]*18, "permohonan": [None]*18, "informasi": [None]*18, "pertanyaan": [None]*18, "apresiasi": [None]*18,
+                    "laporan": [None]*18, "saran": [None]*18, "lost_and_found": [None]*18, "priority_service": [None]*18
+                },
                 "interaksi_channel": {},
                 "aht_channel": {},
             }
@@ -360,6 +383,14 @@ def main():
                 bu_data["interactions"]["permohonan"] = stat_data["interaksi_kategori"]["permohonan"]
             if all(v is None for v in bu_data["interactions"]["informasi"]):
                 bu_data["interactions"]["informasi"] = stat_data["interaksi_kategori"]["informasi"]
+            if all(v is None for v in bu_data["interactions"]["pertanyaan"]):
+                bu_data["interactions"]["pertanyaan"] = stat_data["interaksi_kategori"]["pertanyaan"]
+            if all(v is None for v in bu_data["interactions"].get("apresiasi", [None])):
+                bu_data["interactions"]["apresiasi"] = stat_data["interaksi_kategori"]["apresiasi"]
+            bu_data["interactions"]["laporan"] = stat_data["interaksi_kategori"]["laporan"]
+            bu_data["interactions"]["saran"] = stat_data["interaksi_kategori"]["saran"]
+            bu_data["interactions"]["lost_and_found"] = stat_data["interaksi_kategori"]["lost_and_found"]
+            bu_data["interactions"]["priority_service"] = stat_data["interaksi_kategori"]["priority_service"]
 
         result[bu_name] = bu_data
         # Report what was found

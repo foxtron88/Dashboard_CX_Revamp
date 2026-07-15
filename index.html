@@ -291,40 +291,66 @@
     <!-- ═══ PERFORMANCE VIEW ═══ -->
     <div id="viewPerformance" style="display: none; padding-top: 1rem;">
       <section>
-        <div class="section-header animate-in delay-2" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <div class="section-icon">🎯</div>
-            <h2 class="section-title">Performance Targets & Trends</h2>
-            <span class="section-subtitle">Data sourced directly from CX Performance Excel templates</span>
+        <div class="section-header animate-in delay-2" style="display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="filter-group" style="min-width: 150px;">
+              <label class="filter-label">Month From</label>
+              <select class="filter-select" id="perfFilterMonthFrom">
+                <option value="ALL">All Months</option>
+              </select>
+            </div>
+            <div class="filter-group" style="min-width: 150px;">
+              <label class="filter-label">Month To</label>
+              <select class="filter-select" id="perfFilterMonthTo">
+                <option value="ALL">All Months</option>
+              </select>
+            </div>
+            <div class="filter-group" style="min-width: 200px;">
+              <label class="filter-label">Select Business Unit</label>
+              <select class="filter-select" id="perfFilterBU">
+                <option value="ALL">All Business Units</option>
+                <option value="API">API</option>
+                <option value="HIN">HIN</option>
+                <option value="IAS">IAS</option>
+                <option value="IDM - TMII">IDM - TMII</option>
+                <option value="IDM - TWC">IDM - TWC</option>
+                <option value="ITDC">ITDC</option>
+                <option value="Sarinah">Sarinah</option>
+              </select>
+            </div>
           </div>
-          <div class="filter-group" style="min-width: 200px;">
-            <label class="filter-label">Select Business Unit</label>
-            <select class="filter-select" id="perfFilterBU">
-              <option value="ALL">All Business Units</option>
-              <option value="API">API</option>
-              <option value="HIN">HIN</option>
-              <option value="IAS">IAS</option>
-              <option value="IDM - TMII">IDM - TMII</option>
-              <option value="IDM - TWC">IDM - TWC</option>
-              <option value="ITDC">ITDC</option>
-              <option value="Sarinah">Sarinah</option>
-            </select>
+        </div>
+
+        <!-- ═══ INTERAKSI & PENGUNJUNG SUMMARY ═══ -->
+        <div class="section-header animate-in delay-2" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+          <div>
+            <div class="section-icon">📊</div>
+            <h2 class="section-title">Interaksi &amp; Pengunjung Analytics</h2>
+            <span class="section-subtitle">Data dari Statistik Operasional CX Performance</span>
+          </div>
+        </div>
+
+        <!-- KPI Summary Cards -->
+        <div id="interaksiKpiCards" class="kpi-grid animate-in delay-3" style="margin-top: 1rem;">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="charts-grid animate-in delay-3" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
+          <!-- Kategorisasi Interaksi: Number Cards -->
+          <div class="glass-card">
+            <h3 class="card-title">🗂️ Kategorisasi Interaksi</h3>
+            <div id="kategoriStatCards" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 0.5rem 0;">
+              <!-- Populated by JS -->
+            </div>
           </div>
         </div>
         
         <!-- Performance Charts -->
         <div class="charts-grid animate-in delay-3" style="grid-template-columns: 1fr; margin-top: 2rem;">
-          <!-- CSAT Line Chart -->
-          <div class="glass-card">
-            <h3 class="card-title">CSAT Trend (2025 - 2026)</h3>
-            <div class="chart-container" style="height: 350px;">
-              <canvas id="perfCsatChart"></canvas>
-            </div>
-          </div>
-          
+
           <!-- Interactions Bar Chart -->
           <div class="glass-card" style="margin-top: 1.5rem;">
-            <h3 class="card-title">Interaction Volumes (Pengaduan vs Informasi)</h3>
+            <h3 class="card-title">Interaction Volumes per Kategori</h3>
             <div class="chart-container" style="height: 350px;">
               <canvas id="perfInteractionChart"></canvas>
             </div>
@@ -348,31 +374,12 @@
             </div>
           </div>
 
-          <!-- Complaint Handling Chart -->
-          <div class="glass-card" style="grid-column: 1 / -1;">
-            <h3 class="card-title">Complaint Handling</h3>
-            <div class="chart-container" style="height: 350px;">
-              <canvas id="perfComplaintChart"></canvas>
-            </div>
-          </div>
+
         </div>
       </section>
 
-      <!-- ═══ NEW: INTERAKSI & PENGUNJUNG ANALYTICS ═══ -->
+      <!-- ═══ ADDITIONAL ANALYTICS CHARTS ═══ -->
       <section style="margin-top: 2.5rem;">
-        <div class="section-header animate-in delay-2" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
-          <div>
-            <div class="section-icon">📊</div>
-            <h2 class="section-title">Interaksi &amp; Pengunjung Analytics</h2>
-            <span class="section-subtitle">Data dari Statistik Operasional CX Performance</span>
-          </div>
-        </div>
-
-        <!-- KPI Summary Cards -->
-        <div id="interaksiKpiCards" class="kpi-grid animate-in delay-3" style="margin-top: 1rem;">
-          <!-- Populated by JS -->
-        </div>
-
         <!-- Row 1: Trend Pengunjung & Interaksi -->
         <div class="charts-grid animate-in delay-3" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
           <div class="glass-card">
@@ -383,16 +390,8 @@
           </div>
         </div>
 
-        <!-- Row 2: Kategori + Channel side by side -->
-        <div class="charts-grid animate-in delay-4" style="grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); margin-top: 1.5rem;">
-          <!-- Kategorisasi Interaksi: Number Cards -->
-          <div class="glass-card">
-            <h3 class="card-title">🗂️ Kategorisasi Interaksi</h3>
-            <div id="kategoriStatCards" style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0.5rem 0;">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-
+        <!-- Row 2: Channel Volume -->
+        <div class="charts-grid animate-in delay-4" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
           <!-- Interaksi per Channel -->
           <div class="glass-card">
             <h3 class="card-title">📡 Volume Interaksi per Channel</h3>
@@ -411,6 +410,18 @@
             </div>
             <p id="ahtNoData" style="display:none; text-align:center; color:var(--text-muted); padding: 2rem;">
               Tidak ada data AHT untuk BU ini
+            </p>
+          </div>
+        </div>
+        <!-- Row 4: Correlation Analysis -->
+        <div class="charts-grid animate-in delay-6" style="grid-template-columns: 1fr; margin-top: 1.5rem;">
+          <div class="glass-card">
+            <h3 class="card-title">🧩 Analisis Korelasi (Pengunjung vs Interaksi vs CSAT)</h3>
+            <div class="chart-container" style="height: 380px;">
+              <canvas id="chartCorrelation"></canvas>
+            </div>
+            <p style="text-align:center; color:var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+              Setiap titik mewakili 1 bulan. Posisi titik menunjukkan jumlah pengunjung (Sumbu X) dan volume interaksi (Sumbu Y). Warna titik menunjukkan Skor CSAT.
             </p>
           </div>
         </div>

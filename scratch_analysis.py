@@ -28,6 +28,7 @@ for f in sorted(files):
             "Pengaduan (Complaints)": 0,
             "Permintaan/Permohonan (Requests)": 0,
             "Informasi (Information)": 0,
+            "Pertanyaan (Questions)": 0,
             "Apresiasi (Appreciation)": 0,
             "Saran (Suggestions)": 0
         }
@@ -48,6 +49,8 @@ for f in sorted(files):
                 metrics["Pengaduan (Complaints)"] += row_sum
             elif "permohonan" in row_str:
                 metrics["Permintaan/Permohonan (Requests)"] += row_sum
+            elif "pertanyaan" in row_str:
+                metrics["Pertanyaan (Questions)"] += row_sum
             elif "informasi" in row_str:
                 metrics["Informasi (Information)"] += row_sum
             elif "apresiasi" in row_str:
