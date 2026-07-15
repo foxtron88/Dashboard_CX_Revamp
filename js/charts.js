@@ -1115,7 +1115,6 @@ window.renderPerformanceCharts = function(perfData) {
           x: { stacked: true }
         }
       }
-      }
     });
   }
 };
@@ -1294,44 +1293,46 @@ window.renderInteractionDashboard = function(perfData) {
     });
   }
 
-  // ── Chart 2: Kategori Donut ──
-  const destroy2 = window.chartInstances['chartKategoriInteraksi'];
-  if (destroy2) destroy2.destroy();
-  const ctx2 = document.getElementById('chartKategoriInteraksi');
-  const kategoriLabels = ['Pengaduan', 'Permohonan/Permintaan', 'Informasi/Pertanyaan', 'Apresiasi'];
-  const kategoriData   = [kategoriSums.pengaduan, kategoriSums.permohonan, kategoriSums.informasi, kategoriSums.apresiasi];
-  const KATEGORI_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
-  if (ctx2) {
-    window.chartInstances['chartKategoriInteraksi'] = new Chart(ctx2, {
-      type: 'doughnut',
-      data: {
-        labels: kategoriLabels,
-        datasets: [{
-          data: kategoriData,
-          backgroundColor: KATEGORI_COLORS.map(c => c + 'cc'),
-          borderColor: KATEGORI_COLORS,
-          borderWidth: 2,
-          hoverOffset: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '62%',
-        plugins: {
-          legend: { position: 'right', labels: { color: '#e2e8f0', padding: 10, font: { size: 11 } } },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
-                return ` ${ctx.label}: ${ctx.parsed.toLocaleString('id-ID')} (${pct}%)`;
-              }
-            }
-          }
-        }
-      }
-    });
+  // ── Kategori Interaksi: Number Cards (no chart) ──
+  const kategoriContainer = document.getElementById('kategoriStatCards');
+  if (kategoriContainer) {
+    const kategoriItems = [
+      { label: 'Pengaduan',              icon: '⚠️', value: kategoriSums.pengaduan,  color: '#ef4444' },
+      { label: 'Permohonan/Permintaan',  icon: '📋', value: kategoriSums.permohonan, color: '#f59e0b' },
+      { label: 'Informasi/Pertanyaan',   icon: 'ℹ️', value: kategoriSums.informasi,  color: '#3b82f6' },
+      { label: 'Apresiasi',              icon: '👍', value: kategoriSums.apresiasi,   color: '#10b981' },
+    ];
+    const grandTotal = kategoriItems.reduce((s, k) => s + (k.value || 0), 0);
+
+    kategoriContainer.innerHTML = kategoriItems.map(item => {
+      const pct = grandTotal > 0 ? ((item.value / grandTotal) * 100).toFixed(1) : 0;
+      return `
+        <div style="
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-left: 3px solid ${item.color};
+          border-radius: 10px;
+          padding: 1rem 1.2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        ">
+          <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.8rem; color:#94a3b8; font-weight:500; letter-spacing:0.03em;">
+            <span>${item.icon}</span>
+            <span style="text-transform:uppercase;">${item.label}</span>
+          </div>
+          <div style="font-size:1.6rem; font-weight:700; color:#e2e8f0; letter-spacing:-0.02em; line-height:1.1;">
+            ${(item.value || 0).toLocaleString('id-ID')}
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <div style="flex:1; height:4px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden;">
+              <div style="width:${pct}%; height:100%; background:${item.color}; border-radius:99px; transition:width 0.6s ease;"></div>
+            </div>
+            <span style="font-size:0.78rem; color:${item.color}; font-weight:600; min-width:3rem; text-align:right;">${pct}%</span>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   // ── Chart 3: Channel Volume Horizontal Bar ──
