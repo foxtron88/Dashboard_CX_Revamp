@@ -63,7 +63,11 @@
         $('loadingOverlay').classList.add('hidden');
         $('dashboardContainer').style.opacity = '1';
         $('dashboardContainer').style.transition = 'opacity 0.5s ease';
+        // Set default active tab
+        const defaultTab = $('tabRaw');
+        if (defaultTab) { defaultTab.classList.add('active'); }
       }, 400);
+
 
     } catch (err) {
       console.error('Failed to load data:', err);
@@ -197,32 +201,75 @@
     // View Tabs Logic
     const tabRaw = $('tabRaw');
     const tabPerf = $('tabPerformance');
+    const tabPerfAnalysis = $('tabPerfAnalysis');
+    const tabSocmed = $('tabSocmed');
     const viewRaw = $('viewRaw');
     const viewPerf = $('viewPerformance');
+    const viewPerfAnalysis = $('viewPerfAnalysis');
+    const viewSocmed = $('viewSocmed');
+
+    const allTabs = [tabRaw, tabPerf, tabPerfAnalysis, tabSocmed].filter(Boolean);
+    const allViews = [viewRaw, viewPerf, viewPerfAnalysis, viewSocmed].filter(Boolean);
+
+    function switchTab(activeTab, activeView) {
+      allTabs.forEach(t => t && t.classList.remove('active'));
+      allViews.forEach(v => v && (v.style.display = 'none'));
+      if (activeTab) activeTab.classList.add('active');
+      if (activeView) activeView.style.display = 'block';
+    }
 
     if (tabRaw && tabPerf && viewRaw && viewPerf) {
       tabRaw.addEventListener('click', () => {
-        tabRaw.classList.add('active');
-        tabPerf.classList.remove('active');
-        viewRaw.style.display = 'block';
-        viewPerf.style.display = 'none';
+        switchTab(tabRaw, viewRaw);
         $('filterBar').style.display = 'flex';
       });
 
       tabPerf.addEventListener('click', () => {
-        tabPerf.classList.add('active');
-        tabRaw.classList.remove('active');
-        viewRaw.style.display = 'none';
-        viewPerf.style.display = 'block';
-        $('filterBar').style.display = 'none'; // Hide main filters for perf view
-
-        if (window.renderPerformanceCharts) {
-          window.renderPerformanceCharts(performanceData);
-        }
-        if (window.renderInteractionDashboard) {
-          window.renderInteractionDashboard(performanceData);
-        }
+        switchTab(tabPerf, viewPerf);
+        $('filterBar').style.display = 'none';
+        if (window.renderPerformanceCharts) window.renderPerformanceCharts(performanceData);
+        if (window.renderInteractionDashboard) window.renderInteractionDashboard(performanceData);
       });
+
+      if (tabPerfAnalysis && viewPerfAnalysis) {
+        // Populate BU dropdown
+        const paFilterBu = $('pa-filter-bu');
+        if (paFilterBu && performanceData) {
+          Object.keys(performanceData).filter(k => !k.startsWith('_')).forEach(bu => {
+            const opt = document.createElement('option');
+            opt.value = bu;
+            opt.textContent = bu;
+            paFilterBu.appendChild(opt);
+          });
+        }
+
+        const runPerfAnalysis = () => {
+          if (window.renderPerfAnalysis) window.renderPerfAnalysis(performanceData);
+        };
+
+        tabPerfAnalysis.addEventListener('click', () => {
+          switchTab(tabPerfAnalysis, viewPerfAnalysis);
+          $('filterBar').style.display = 'none';
+          // Small delay so canvas is visible before rendering
+          setTimeout(runPerfAnalysis, 80);
+        });
+
+        if (paFilterBu) paFilterBu.addEventListener('change', runPerfAnalysis);
+        const paRefresh = $('pa-btn-refresh');
+        if (paRefresh) paRefresh.addEventListener('click', runPerfAnalysis);
+      }
+
+      if (tabSocmed && viewSocmed) {
+        tabSocmed.addEventListener('click', () => {
+          switchTab(tabSocmed, viewSocmed);
+          $('filterBar').style.display = 'none';
+          if (window.renderSocmedCharts && !window.socmedRendered) {
+             window.renderSocmedCharts();
+             window.socmedRendered = true;
+          }
+        });
+      }
+
       
       const perfFilter = $('perfFilterBU');
       const perfMonthFilterFrom = $('perfFilterMonthFrom');

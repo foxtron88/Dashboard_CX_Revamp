@@ -75,10 +75,11 @@
       <button class="btn-reset" id="btnReset" title="Reset all filters">↻ Reset</button>
     </div>
 
-    <!-- ═══ VIEW TABS ═══ -->
     <div class="view-tabs animate-in delay-1">
-      <button class="tab-btn active" id="tabRaw">CSAT</button>
+      <button class="tab-btn" id="tabRaw">CSAT</button>
       <button class="tab-btn" id="tabPerformance">Performance Targets</button>
+      <button class="tab-btn" id="tabPerfAnalysis">📊 CX Analysis</button>
+      <button class="tab-btn" id="tabSocmed">Social Media Analytics</button>
     </div>
 
     <div id="viewRaw">
@@ -426,11 +427,353 @@
           </div>
         </div>
       </section>
+    </div> <!-- End viewPerformance -->
+
+    <!-- ═══ CX PERFORMANCE DEEP ANALYSIS VIEW ═══ -->
+    <div id="viewPerfAnalysis" style="display: none;">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar" style="margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+        <div class="filter-group">
+          <label class="filter-label" for="pa-filter-bu">Business Unit</label>
+          <select class="filter-select" id="pa-filter-bu">
+            <option value="all">Semua BU</option>
+          </select>
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button class="btn-reset" id="pa-btn-refresh" title="Refresh Charts">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- KPI Summary -->
+      <section>
+        <div class="section-header animate-in delay-1">
+          <div class="section-icon">📊</div>
+          <h2 class="section-title">Executive Summary</h2>
+          <span class="section-subtitle">Ringkasan KPI dari Data Performance & Statistik</span>
+        </div>
+        <div class="kpi-grid" id="pa-kpi-cards" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;"></div>
+      </section>
+
+      <!-- CSAT Analysis -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">⭐</div>
+          <h2 class="section-title">CSAT Analysis</h2>
+          <span class="section-subtitle">Customer Satisfaction Score — Trend & Perbandingan</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">📈 CSAT Trend per BU (18 Bulan)</h3>
+            <div class="chart-container" style="height:320px;"><canvas id="pa-csat-trend"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">🕸️ CSAT Radar — People, Process, Premises</h3>
+            <div class="chart-container" style="height:320px;"><canvas id="pa-csat-radar"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Performance -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">🎯</div>
+          <h2 class="section-title">Branch Service Performance</h2>
+          <span class="section-subtitle">Persentase ketercapaian standar layanan per BU</span>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">📈 Service Performance Overall — Trend</h3>
+          <div class="chart-container" style="height:300px;"><canvas id="pa-service-trend"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Call Center Performance -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">📞</div>
+          <h2 class="section-title">Call Center Performance</h2>
+          <span class="section-subtitle">FCR, Service Level, Volume, dan Abandoned Rate</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">✅ First Call Resolution (FCR %)</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-fcr-chart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📶 Service Level (%)</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-sl-chart"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-top:1rem;">
+          <h3 class="chart-title">📊 Total Volume Panggilan per BU</h3>
+          <div class="chart-container" style="height:240px;"><canvas id="pa-callvol-chart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Complaint Handling -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">⚠️</div>
+          <h2 class="section-title">Complaint Handling</h2>
+          <span class="section-subtitle">Volume, Resolution Rate, dan Kecepatan Penyelesaian</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Total Complaint per BU</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-complaint-total-chart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">⏱️ Avg. Waktu Resolusi per BU (Hari)</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-avg-resolution-chart"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-top:1rem;">
+          <h3 class="chart-title">📈 Complaint Resolution Rate — Trend</h3>
+          <div class="chart-container" style="height:260px;"><canvas id="pa-res-rate-chart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Interaksi Statistik -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">💬</div>
+          <h2 class="section-title">Statistik Interaksi</h2>
+          <span class="section-subtitle">Breakdown channel, kategori, dan tren volume interaksi</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Total Interaksi per Channel</h3>
+            <div class="chart-container" style="height:340px;"><canvas id="pa-channel-bar"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">🍩 Distribusi Kategori Interaksi</h3>
+            <div class="chart-container" style="height:340px;"><canvas id="pa-kategori-donut"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-top:1rem;">
+          <h3 class="chart-title">📈 Tren Top 3 Channel (per Bulan)</h3>
+          <div class="chart-container" style="height:280px;"><canvas id="pa-channel-trend"></canvas></div>
+        </div>
+      </section>
+
+      <!-- AHT & SLA -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">⏱️</div>
+          <h2 class="section-title">AHT & SLA Resolution</h2>
+          <span class="section-subtitle">Average Handling Time dan distribusi penyelesaian keluhan berdasarkan SLA</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">⏱️ Avg. Handling Time per Channel (menit)</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-aht-chart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📊 SLA Resolution Distribution (per Bulan)</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="pa-sla-chart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Auto Insights -->
+      <section style="margin-top:2rem; margin-bottom:3rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">💡</div>
+          <h2 class="section-title">Auto-Generated Insights</h2>
+          <span class="section-subtitle">Temuan otomatis berdasarkan analisis data</span>
+        </div>
+        <div id="pa-insights-container" style="margin-top:1rem;"></div>
+      </section>
+
+    </div> <!-- End viewPerfAnalysis -->
+
+
+    <div id="viewSocmed" style="display: none;">
+
+      <!-- ── HEADER & KPI ── -->
+      <section>
+        <div class="section-header animate-in delay-1">
+          <div class="section-icon">📱</div>
+          <h2 class="section-title">Social Media Analytics</h2>
+          <span class="section-subtitle">Deep Analysis · 150.185 Posts · 10.001 Comments · 5 Platform</span>
+        </div>
+        <div id="sm-kpi-row" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:1rem; margin-top:1rem;"></div>
+      </section>
+
+      <!-- ── TREN BULANAN ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">📈</div>
+          <h2 class="section-title">Tren Bulanan</h2>
+          <span class="section-subtitle">Volume post &amp; sentimen dari Jan 2025 – Jul 2026</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Tren Sentimen Posts per Bulan</h3>
+            <div class="chart-container" style="height:300px;"><canvas id="sm-sentiment-trend"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Volume Post per Platform per Bulan</h3>
+            <div class="chart-container" style="height:300px;"><canvas id="sm-platform-trend"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PLATFORM ANALYSIS ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">🌐</div>
+          <h2 class="section-title">Analisis Platform</h2>
+          <span class="section-subtitle">Distribusi post, engagement, dan performa tiap platform</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">🍩 Distribusi Post per Platform</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="sm-platform-donut"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">💯 Avg. Likes per Post per Platform</h3>
+            <div class="chart-container" style="height:280px;"><canvas id="sm-engagement-rate"></canvas></div>
+          </div>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">👍 Total Likes per Platform</h3>
+            <div class="chart-container" style="height:240px;"><canvas id="sm-platform-likes"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">👁️ Total Views per Platform</h3>
+            <div class="chart-container" style="height:240px;"><canvas id="sm-platform-views"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SENTIMEN ANALYSIS ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">💬</div>
+          <h2 class="section-title">Analisis Sentimen</h2>
+          <span class="section-subtitle">Distribusi sentimen posts, komentar, dan Net Sentiment Score per topik</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">😊 Sentimen Posts</h3>
+            <div class="chart-container" style="height:260px;"><canvas id="sm-post-sentiment-donut"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">💬 Sentimen Komentar</h3>
+            <div class="chart-container" style="height:260px;"><canvas id="sm-comment-sentiment-donut"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Net Sentiment Score per Keyword</h3>
+            <div class="chart-container" style="height:260px;"><canvas id="sm-nss-chart"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-top:1rem;">
+          <h3 class="chart-title">🔀 Breakdown Sentimen per Topik</h3>
+          <div class="chart-container" style="height:320px;"><canvas id="sm-keyword-sentiment-bar"></canvas></div>
+        </div>
+      </section>
+
+      <!-- ── KEYWORD ANALYSIS ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">🔖</div>
+          <h2 class="section-title">Analisis Topik &amp; Keyword</h2>
+          <span class="section-subtitle">Volume, engagement, dan popularitas tiap topik</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">📊 Volume Post per Keyword (Top 15)</h3>
+            <div class="chart-container" style="height:360px;"><canvas id="sm-keyword-volume"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">❤️ Total Likes per Keyword</h3>
+            <div class="chart-container" style="height:360px;"><canvas id="sm-keyword-likes"></canvas></div>
+          </div>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">👁️ Total Views per Keyword</h3>
+            <div class="chart-container" style="height:320px;"><canvas id="sm-keyword-views"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">⚡ Avg. Likes per Post per Keyword</h3>
+            <div class="chart-container" style="height:320px;"><canvas id="sm-keyword-avglikes"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── RESPONSE & COMMENT ANALYTICS ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">⏱️</div>
+          <h2 class="section-title">Analisis Komentar &amp; Response Time</h2>
+          <span class="section-subtitle">Pola komentar publik, respons brand, dan kecepatan balasan</span>
+        </div>
+        <div class="charts-grid" style="grid-template-columns:1fr 1fr; gap:1rem;">
+          <div class="chart-card">
+            <h3 class="chart-title">🕐 Distribusi Response Time Brand</h3>
+            <div class="chart-container" style="height:260px;"><canvas id="sm-response-time-donut"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📅 Aktivitas Komentar per Jam</h3>
+            <div class="chart-container" style="height:260px;"><canvas id="sm-hourly-comments"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-top:1rem; padding:1.5rem;">
+          <h3 class="chart-title" style="margin-bottom:1.5rem;">🏷️ Brand vs Public Comments</h3>
+          <div id="sm-brand-vs-public" style="display:flex; align-items:center; justify-content:center; gap:3rem; flex-wrap:wrap;"></div>
+        </div>
+      </section>
+
+      <!-- ── VIRAL POSTS TABLE ── -->
+      <section style="margin-top:2rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">🔥</div>
+          <h2 class="section-title">Top 10 Viral Posts</h2>
+          <span class="section-subtitle">Konten dengan engagement tertinggi dari seluruh platform</span>
+        </div>
+        <div class="chart-card" style="padding:0; overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+              <thead>
+                <tr style="background:rgba(99,102,241,0.15); color:#94a3b8; text-align:left;">
+                  <th style="padding:0.85rem 1rem;">#</th>
+                  <th style="padding:0.85rem 1rem;">Platform</th>
+                  <th style="padding:0.85rem 1rem;">Konten</th>
+                  <th style="padding:0.85rem 1rem; text-align:right;">👍 Likes</th>
+                  <th style="padding:0.85rem 1rem; text-align:right;">👁️ Views</th>
+                  <th style="padding:0.85rem 1rem; text-align:right;">💬 Replies</th>
+                  <th style="padding:0.85rem 1rem;">Sentimen</th>
+                  <th style="padding:0.85rem 1rem;">Tanggal</th>
+                </tr>
+              </thead>
+              <tbody id="sm-viral-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── AUTO INSIGHTS ── -->
+      <section style="margin-top:2rem; margin-bottom:3rem;">
+        <div class="section-header animate-in">
+          <div class="section-icon">💡</div>
+          <h2 class="section-title">Key Insights</h2>
+          <span class="section-subtitle">Temuan strategis dari analisis mendalam data social media</span>
+        </div>
+        <div id="sm-insights-container" style="margin-top:1rem;"></div>
+      </section>
+
     </div>
 
-  </div>
 
-  <script src="js/charts.js"></script>
+  </div> <!-- end dashboard-container -->
+
+  <!-- Load our data and app scripts -->
   <script src="js/app.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/socmed_charts.js"></script>
+  <script src="js/perf_analysis.js"></script>
 </body>
 </html>
