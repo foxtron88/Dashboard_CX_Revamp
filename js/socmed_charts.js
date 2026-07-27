@@ -91,6 +91,14 @@
   function renderKPIs(d) {
     const rt = d.response_time;
     const rtHr = (rt.avg_minutes / 60).toFixed(1);
+
+    // Overall NSS from posts_sentiment
+    const ps = d.posts_sentiment || {};
+    const totalSent = (ps['Positif'] || 0) + (ps['Netral'] || 0) + (ps['Negatif'] || 0);
+    const overallNSS = totalSent > 0
+      ? (((ps['Positif'] || 0) - (ps['Negatif'] || 0)) / totalSent * 100)
+      : null;
+
     const kpis = [
       { label: 'Total Posts', value: fmt(d.total_posts), icon: '📝', color: '#6366f1' },
       { label: 'Total Comments', value: fmt(d.total_comments), icon: '💬', color: '#06b6d4' },
@@ -99,6 +107,14 @@
       { label: 'Total Replies', value: fmt(d.total_replies), icon: '↩️', color: '#8b5cf6' },
       { label: 'Avg Response Time', value: rtHr + ' jam', icon: '⏱️', color: '#f97316' },
     ];
+
+    // Add NSS as a KPI card
+    if (overallNSS !== null) {
+      const nssColor = overallNSS >= 30 ? '#10b981' : overallNSS >= 0 ? '#f59e0b' : '#ef4444';
+      const nssStr = (overallNSS > 0 ? '+' : '') + overallNSS.toFixed(1);
+      kpis.push({ label: 'Overall NSS', value: nssStr, icon: '📊', color: nssColor });
+    }
+
     const container = document.getElementById('sm-kpi-row');
     if (!container) return;
     container.innerHTML = kpis.map(k => `
@@ -110,6 +126,66 @@
         <div class="kpi-value" style="color:${k.color}; font-size:1.8rem;">${k.value}</div>
       </div>
     `).join('');
+
+    // Render NSS overall detail bar
+    renderNSSOverall(d);
+  }
+
+  // ── NSS Overall Summary Bar ──
+  function renderNSSOverall(d) {
+    const container = document.getElementById('sm-nss-overall-bar');
+    if (!container) return;
+
+    const ps = d.posts_sentiment || {};
+    const pos = ps['Positif'] || 0;
+    const neu = ps['Netral']  || 0;
+    const neg = ps['Negatif'] || 0;
+    const total = pos + neu + neg;
+    if (total === 0) return;
+
+    const nss = ((pos - neg) / total * 100);
+    const nssStr = (nss > 0 ? '+' : '') + nss.toFixed(1) + '%';
+    const nssColor = nss >= 30 ? '#10b981' : nss >= 0 ? '#f59e0b' : '#ef4444';
+    const nssLabel = nss >= 50 ? 'Excellent' : nss >= 30 ? 'Good' : nss >= 0 ? 'Moderate' : 'Needs Attention';
+
+    const posPct = ((pos / total) * 100).toFixed(1);
+    const neuPct = ((neu / total) * 100).toFixed(1);
+    const negPct = ((neg / total) * 100).toFixed(1);
+
+    // Per-keyword NSS
+    const kwNSS = d.keyword_nss || {};
+    const kwEntries = Object.entries(kwNSS).sort((a, b) => b[1] - a[1]);
+
+    container.innerHTML = `
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;width:100%;">
+        <div style="text-align:center;padding:0.5rem 1rem;background:rgba(0,0,0,0.2);border-radius:10px;">
+          <div style="font-size:1.8rem;font-weight:800;color:${nssColor};">${nssStr}</div>
+          <div style="font-size:0.7rem;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Overall NSS · ${nssLabel}</div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:0.4rem;">
+            <div style="width:${posPct}%;background:#10b981;" title="Positif ${posPct}%"></div>
+            <div style="width:${neuPct}%;background:#6366f1;" title="Netral ${neuPct}%"></div>
+            <div style="width:${negPct}%;background:#ef4444;" title="Negatif ${negPct}%"></div>
+          </div>
+          <div style="display:flex;gap:1rem;font-size:0.75rem;">
+            <span style="color:#10b981;">😊 Positif ${posPct}% (${fmt(pos)})</span>
+            <span style="color:#6366f1;">😐 Netral ${neuPct}% (${fmt(neu)})</span>
+            <span style="color:#ef4444;">😠 Negatif ${negPct}% (${fmt(neg)})</span>
+          </div>
+        </div>
+      </div>
+      <div style="width:100%;margin-top:0.75rem;">
+        <div style="font-size:0.75rem;color:#64748b;margin-bottom:0.4rem;">NSS per Keyword:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+          ${kwEntries.map(([kw, val]) => {
+            const c = val >= 30 ? '#10b981' : val >= 0 ? '#f59e0b' : '#ef4444';
+            const sign = val > 0 ? '+' : '';
+            return `<span style="padding:0.25rem 0.6rem;border-radius:20px;font-size:0.72rem;background:rgba(0,0,0,0.2);border:1px solid ${c}33;color:${c};">${kw}: ${sign}${val.toFixed(1)}%</span>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
   }
 
   // ── Sentiment Trend (Posts) ──
@@ -538,31 +614,51 @@
     `).join('');
   }
 
+  function renderAll(d) {
+    if (!d) {
+      console.warn("No data available for selected BU.");
+      return;
+    }
+    renderKPIs(d);
+    renderSentimentTrend(d);
+    renderPlatformTrend(d);
+    renderPlatformDonut(d);
+    renderEngagementRate(d);
+    renderPlatformLikes(d);
+    renderPlatformViews(d);
+    renderPostSentimentDonut(d);
+    renderCommentSentimentDonut(d);
+    renderNSSChart(d);
+    renderKeywordSentimentBar(d);
+    renderKeywordVolume(d);
+    renderKeywordLikes(d);
+    renderKeywordViews(d);
+    renderKeywordAvgLikes(d);
+    renderResponseTimeDonut(d);
+    renderHourlyComments(d);
+    renderBrandVsPublic(d);
+    renderViralTable(d);
+    renderInsights(d);
+  }
+
   // ── MAIN RENDER ──
   window.renderSocmedCharts = function () {
-    fetch('data/socmed_data.json')
+    fetch('data/socmed_data.json?v=' + new Date().getTime())
       .then(r => r.json())
       .then(d => {
-        renderKPIs(d);
-        renderSentimentTrend(d);
-        renderPlatformTrend(d);
-        renderPlatformDonut(d);
-        renderEngagementRate(d);
-        renderPlatformLikes(d);
-        renderPlatformViews(d);
-        renderPostSentimentDonut(d);
-        renderCommentSentimentDonut(d);
-        renderNSSChart(d);
-        renderKeywordSentimentBar(d);
-        renderKeywordVolume(d);
-        renderKeywordLikes(d);
-        renderKeywordViews(d);
-        renderKeywordAvgLikes(d);
-        renderResponseTimeDonut(d);
-        renderHourlyComments(d);
-        renderBrandVsPublic(d);
-        renderViralTable(d);
-        renderInsights(d);
+        window.socmedFullData = d;
+        const filter = document.getElementById('sm-filter-bu');
+        
+        function updateView() {
+          const val = filter ? filter.value : 'global';
+          const dataToRender = val === 'global' ? window.socmedFullData.global : window.socmedFullData.bu_data[val];
+          renderAll(dataToRender);
+        }
+        
+        if (filter) {
+          filter.addEventListener('change', updateView);
+        }
+        updateView();
       })
       .catch(err => console.error('Failed to load socmed_data.json:', err));
   };

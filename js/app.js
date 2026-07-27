@@ -300,6 +300,7 @@
   function renderAll() {
     renderHeader();
     renderOverallKPIs();
+    renderNPSPanel();
     renderMemberCSAT();
     renderCascade();
     renderInsights();
@@ -317,6 +318,37 @@
   // ── Header Stats ──
   function renderHeader() {
     $('filteredCount').textContent = `Showing ${filteredData.length.toLocaleString()} of ${allData.length.toLocaleString()} responses`;
+  }
+
+  // ── NPS Helper ──
+  // Derives NPS from 5-point overall_score:
+  //   Score 5   → Promoter  (equiv. 9-10 on standard 0-10 scale)
+  //   Score 4   → Passive   (equiv. 7-8)
+  //   Score 1-3 → Detractor (equiv. 0-6)
+  // NPS = (% Promoters) − (% Detractors), range −100 to +100
+  function calcNPS(records) {
+    const scored = records.filter(r => r.overall_score != null);
+    if (scored.length === 0) return null;
+    const promoters  = scored.filter(r => r.overall_score === 5).length;
+    const detractors = scored.filter(r => r.overall_score <= 3).length;
+    const nps = ((promoters / scored.length) * 100) - ((detractors / scored.length) * 100);
+    return { nps: Math.round(nps * 10) / 10, promoters, detractors, passives: scored.length - promoters - detractors, total: scored.length };
+  }
+
+  function npsColor(nps) {
+    if (nps === null) return '#64748b';
+    if (nps >= 50)  return '#10b981'; // Excellent
+    if (nps >= 0)   return '#f59e0b'; // Good
+    return '#ef4444';                 // Needs improvement
+  }
+
+  function npsLabel(nps) {
+    if (nps === null) return '—';
+    if (nps >= 70)  return 'Excellent';
+    if (nps >= 50)  return 'Great';
+    if (nps >= 0)   return 'Good';
+    if (nps >= -20) return 'Needs Work';
+    return 'Critical';
   }
 
   // ── Overall KPI Row ──
@@ -338,6 +370,12 @@
 
     const negCount = sentiments.Negative;
     const negPct = totalSent > 0 ? ((negCount / totalSent) * 100).toFixed(1) : 0;
+
+    // NPS values — used only in renderNPSPanel, not shown inline in KPI row
+    const npsResult = calcNPS(filteredData);
+    const npsVal    = npsResult !== null ? npsResult.nps : null;
+    const npsClr    = npsColor(npsVal);
+    const npsLbl    = npsLabel(npsVal);
 
     const kpis = [
       { icon: '📋', label: 'Total Responses', value: filteredData.length.toLocaleString(), cls: 'blue' },
@@ -394,15 +432,200 @@
       <div class="overall-kpi-card">
         <div class="overall-kpi-icon ${k.cls}">${k.icon}</div>
         <div class="overall-kpi-text">
-          <div class="kpi-value">${k.value}</div>
-          <div class="kpi-label">${k.label}</div>
+          <div class="kpi-value" ${k.color ? `style="color:${k.color}"` : ''}>${k.value}</div>
+          <div class="kpi-label">${k.label}${k.sub ? ` <span style="font-size:0.7rem;opacity:0.7;">(${k.sub})</span>` : ''}</div>
         </div>
       </div>
     `).join('');
 
+    // Render NPS breakdown bar
+    if (npsResult) {
+      const pPct = ((npsResult.promoters  / npsResult.total) * 100).toFixed(1);
+      const dPct = ((npsResult.detractors / npsResult.total) * 100).toFixed(1);
+      const psPct = ((npsResult.passives  / npsResult.total) * 100).toFixed(1);
+      let npsBreakdown = $('npsBreakdown');
+      if (npsBreakdown) {
+        npsBreakdown.innerHTML = `
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+            <span style="color:#94a3b8;font-size:0.8rem;">NPS Breakdown:</span>
+            <span style="color:#10b981;font-size:0.8rem;">😊 Promoters ${pPct}%</span>
+            <span style="color:#f59e0b;font-size:0.8rem;">😐 Passives ${psPct}%</span>
+            <span style="color:#ef4444;font-size:0.8rem;">😠 Detractors ${dPct}%</span>
+            <div style="flex:1;min-width:120px;height:8px;border-radius:4px;overflow:hidden;display:flex;">
+              <div style="width:${pPct}%;background:#10b981;"></div>
+              <div style="width:${psPct}%;background:#f59e0b;"></div>
+              <div style="width:${dPct}%;background:#ef4444;"></div>
+            </div>
+          </div>`;
+      }
+    }
+
     // Update badges
     if ($('avgScoreBadge')) $('avgScoreBadge').textContent = `Avg: ${avgCSAT}`;
     if ($('sentimentBadge')) $('sentimentBadge').textContent = `${posPct}% positive`;
+  }
+
+  // ── Dedicated NPS Panel ──
+  function renderNPSPanel() {
+    const panel = $('npsPanel');
+    if (!panel) return;
+
+    const npsResult = calcNPS(filteredData);
+    if (!npsResult) {
+      panel.innerHTML = '';
+      return;
+    }
+
+    const { nps, promoters, passives, detractors, total } = npsResult;
+    const npsStr  = (nps > 0 ? '+' : '') + nps;
+    const clr     = npsColor(nps);
+    const lbl     = npsLabel(nps);
+    const pPct    = ((promoters  / total) * 100).toFixed(1);
+    const psPct   = ((passives   / total) * 100).toFixed(1);
+    const dPct    = ((detractors / total) * 100).toFixed(1);
+
+    // --- Per BU NPS ---
+    const buMap = {};
+    filteredData.forEach(r => {
+      const bu = r.source || 'Unknown';
+      if (!buMap[bu]) buMap[bu] = [];
+      buMap[bu].push(r);
+    });
+    const buRows = Object.entries(buMap)
+      .map(([bu, records]) => ({ bu, result: calcNPS(records), count: records.length }))
+      .filter(x => x.result !== null)
+      .sort((a, b) => b.result.nps - a.result.nps);
+
+    // --- Zone reference data ---
+    const zones = [
+      { range: '70 → 100', label: 'Excellent',   color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
+      { range: '50 → 69',  label: 'Great',       color: '#06b6d4', bg: 'rgba(6,182,212,0.12)'  },
+      { range: '0 → 49',   label: 'Good',        color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+      { range: '-20 → -1', label: 'Needs Work',  color: '#f97316', bg: 'rgba(249,115,22,0.12)' },
+      { range: '< -20',    label: 'Critical',    color: '#ef4444', bg: 'rgba(239,68,68,0.12)'  },
+    ];
+
+    panel.innerHTML = `
+      <div style="
+        background: linear-gradient(135deg, rgba(17,24,39,0.85) 0%, rgba(26,34,53,0.9) 100%);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 1.5rem;
+        backdrop-filter: blur(12px);
+      ">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;">
+          <span style="font-size:1.3rem;">🎯</span>
+          <div>
+            <div style="font-size:1rem;font-weight:700;color:#f1f5f9;">Net Promoter Score (NPS)</div>
+            <div style="font-size:0.75rem;color:#64748b;">Derived from CSAT overall scores &nbsp;·&nbsp; Score 5 = Promoter &nbsp;·&nbsp; Score 4 = Passive &nbsp;·&nbsp; Score 1–3 = Detractor</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+
+          <!-- Score Badge -->
+          <div style="text-align:center;min-width:110px;">
+            <div style="
+              width:110px;height:110px;border-radius:50%;
+              background:conic-gradient(${clr} 0deg, rgba(255,255,255,0.06) 0deg);
+              display:flex;flex-direction:column;align-items:center;justify-content:center;
+              border:3px solid ${clr};
+              box-shadow:0 0 24px ${clr}44;
+              position:relative;
+            ">
+              <div style="font-size:1.9rem;font-weight:800;color:${clr};line-height:1;">${npsStr}</div>
+              <div style="font-size:0.65rem;color:#64748b;letter-spacing:0.08em;margin-top:2px;">NPS</div>
+            </div>
+            <div style="margin-top:0.5rem;padding:0.2rem 0.75rem;border-radius:20px;background:${clr}22;border:1px solid ${clr}55;display:inline-block;">
+              <span style="font-size:0.75rem;font-weight:600;color:${clr};">${lbl}</span>
+            </div>
+          </div>
+
+          <!-- Breakdown -->
+          <div>
+            <!-- Stacked bar -->
+            <div style="height:14px;border-radius:7px;overflow:hidden;display:flex;margin-bottom:0.75rem;">
+              <div style="width:${pPct}%;background:linear-gradient(90deg,#10b981,#059669);transition:width 0.6s ease;"
+                   title="Promoters ${pPct}%"></div>
+              <div style="width:${psPct}%;background:linear-gradient(90deg,#f59e0b,#d97706);transition:width 0.6s ease;"
+                   title="Passives ${psPct}%"></div>
+              <div style="width:${dPct}%;background:linear-gradient(90deg,#ef4444,#dc2626);transition:width 0.6s ease;"
+                   title="Detractors ${dPct}%"></div>
+            </div>
+
+            <!-- Group cards -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;">
+              <div style="padding:0.6rem 0.75rem;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);text-align:center;">
+                <div style="font-size:1.2rem;font-weight:700;color:#10b981;">${pPct}%</div>
+                <div style="font-size:0.7rem;color:#10b981;margin:1px 0;">😊 Promoters</div>
+                <div style="font-size:0.65rem;color:#64748b;">${promoters.toLocaleString()} resp.</div>
+              </div>
+              <div style="padding:0.6rem 0.75rem;border-radius:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);text-align:center;">
+                <div style="font-size:1.2rem;font-weight:700;color:#f59e0b;">${psPct}%</div>
+                <div style="font-size:0.7rem;color:#f59e0b;margin:1px 0;">😐 Passives</div>
+                <div style="font-size:0.65rem;color:#64748b;">${passives.toLocaleString()} resp.</div>
+              </div>
+              <div style="padding:0.6rem 0.75rem;border-radius:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);text-align:center;">
+                <div style="font-size:1.2rem;font-weight:700;color:#ef4444;">${dPct}%</div>
+                <div style="font-size:0.7rem;color:#ef4444;margin:1px 0;">😠 Detractors</div>
+                <div style="font-size:0.65rem;color:#64748b;">${detractors.toLocaleString()} resp.</div>
+              </div>
+            </div>
+
+            <div style="margin-top:0.6rem;font-size:0.72rem;color:#475569;">
+              Based on <strong style="color:#94a3b8;">${total.toLocaleString()}</strong> scored responses
+              &nbsp;·&nbsp; NPS = %Promoters − %Detractors
+            </div>
+          </div>
+
+          <!-- Zone reference -->
+          <div style="min-width:130px;">
+            <div style="font-size:0.7rem;color:#64748b;margin-bottom:0.4rem;letter-spacing:0.05em;text-transform:uppercase;">NPS Zones</div>
+            ${zones.map(z => `
+              <div style="
+                display:flex;align-items:center;justify-content:space-between;
+                padding:0.25rem 0.5rem;margin-bottom:0.2rem;border-radius:6px;
+                background:${z.bg};border-left:3px solid ${z.color};
+                ${npsLabel(nps) === z.label ? 'box-shadow:0 0 0 1px ' + z.color + '66;' : ''}
+              ">
+                <span style="font-size:0.65rem;color:${z.color};font-weight:${npsLabel(nps)===z.label?'700':'400'}">${z.label}</span>
+                <span style="font-size:0.6rem;color:#475569;">${z.range}</span>
+              </div>
+            `).join('')}
+          </div>
+
+        </div>
+
+        <!-- Per BU table -->
+        ${buRows.length > 1 ? `
+          <div style="margin-top:1.25rem;border-top:1px solid rgba(255,255,255,0.06);padding-top:1rem;">
+            <div style="font-size:0.75rem;color:#64748b;margin-bottom:0.6rem;letter-spacing:0.04em;text-transform:uppercase;">NPS by Business Unit</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.5rem;">
+              ${buRows.map(({ bu, result }) => {
+                const b = result;
+                const bStr  = (b.nps > 0 ? '+' : '') + b.nps;
+                const bClr  = npsColor(b.nps);
+                const bLbl  = npsLabel(b.nps);
+                const bPPct = ((b.promoters  / b.total) * 100).toFixed(0);
+                const bDPct = ((b.detractors / b.total) * 100).toFixed(0);
+                return `
+                  <div style="
+                    padding:0.6rem 0.75rem;border-radius:10px;
+                    background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+                    border-left:3px solid ${bClr};
+                  ">
+                    <div style="font-size:0.72rem;color:#94a3b8;font-weight:600;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${bu}</div>
+                    <div style="font-size:1.15rem;font-weight:800;color:${bClr};">${bStr}</div>
+                    <div style="font-size:0.62rem;color:#475569;">${bLbl} &nbsp;·&nbsp; 😊${bPPct}% 😠${bDPct}%</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
   }
 
   // ── CSAT Cascade Values ──
@@ -467,6 +690,13 @@
       const facAvg = avg(d.facility);
       const cleanAvg = avg(d.cleanliness);
 
+      // NPS per BU
+      const buNPS = calcNPS(d.records);
+      const buNpsVal = buNPS !== null ? buNPS.nps : null;
+      const buNpsStr = buNpsVal !== null ? (buNpsVal > 0 ? '+' + buNpsVal : String(buNpsVal)) : '—';
+      const buNpsClr = npsColor(buNpsVal);
+      const buNpsLbl = npsLabel(buNpsVal);
+
       const subBar = (label, val, cls) => {
         const pct = val !== null ? ((val / 5) * 100).toFixed(0) : 0;
         const valStr = val !== null ? val.toFixed(2) : '—';
@@ -495,6 +725,10 @@
             <div>
               <div class="member-csat-score ${scoreClass}">${csatStr}</div>
               <div class="member-satisfaction">${satPct}% satisfied</div>
+              <div style="margin-top:0.5rem;padding:0.4rem 0.6rem;border-radius:8px;background:rgba(99,102,241,0.08);text-align:center;">
+                <div style="font-size:1.1rem;font-weight:700;color:${buNpsClr};">${buNpsStr}</div>
+                <div style="font-size:0.65rem;color:#64748b;letter-spacing:0.05em;">NPS · ${buNpsLbl}</div>
+              </div>
             </div>
             <div class="member-sub-scores">
               ${subBar('People', staffAvg, 'ppl')}
@@ -533,6 +767,20 @@
     if (scored.length === 0) return insights;
 
     const avgCSAT = scored.reduce((s, r) => s + r.overall_score, 0) / scored.length;
+
+    // NPS overall insight
+    const npsRes = calcNPS(data);
+    if (npsRes !== null) {
+      const npsStr = npsRes.nps > 0 ? '+' + npsRes.nps : String(npsRes.nps);
+      const pPct = ((npsRes.promoters / npsRes.total) * 100).toFixed(1);
+      const dPct = ((npsRes.detractors / npsRes.total) * 100).toFixed(1);
+      insights.push({
+        icon: '🎯',
+        title: `NPS: ${npsStr} — ${npsLabel(npsRes.nps)}`,
+        description: `From ${npsRes.total.toLocaleString()} scored responses: ${pPct}% Promoters (score 5), ${dPct}% Detractors (score 1–3). NPS is derived from CSAT overall scores.`,
+        color: npsRes.nps >= 50 ? 'green' : npsRes.nps >= 0 ? 'amber' : 'red',
+      });
+    }
 
     // Best & worst performing BU
     const buMap = {};

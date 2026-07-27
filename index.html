@@ -97,6 +97,12 @@
         <!-- Populated by JS -->
       </div>
 
+      <!-- ═══ NPS PANEL ═══ -->
+      <div id="npsPanel" style="margin-top:1.25rem;">
+        <!-- Populated by renderNPSPanel() -->
+      </div>
+
+
       <!-- CSAT Cascade Diagram -->
       <div class="cascade-container animate-in delay-2" id="csatCascade">
 
@@ -590,14 +596,41 @@
 
     <div id="viewSocmed" style="display: none;">
 
-      <!-- ── HEADER & KPI ── -->
       <section>
         <div class="section-header animate-in delay-1">
           <div class="section-icon">📱</div>
           <h2 class="section-title">Social Media Analytics</h2>
           <span class="section-subtitle">Deep Analysis · 150.185 Posts · 10.001 Comments · 5 Platform</span>
         </div>
+        
+        <!-- Filter Bar -->
+        <div class="filter-bar animate-in delay-2" style="margin-top:1rem; flex-wrap:wrap; gap:1rem;">
+          <div class="filter-group">
+            <label class="filter-label" for="sm-filter-bu">Business Unit</label>
+            <select class="filter-select" id="sm-filter-bu">
+              <option value="global">Semua BU</option>
+              <option value="API">API</option>
+              <option value="HIN">HIN</option>
+              <option value="IAS">IAS</option>
+              <option value="IDM - TMII">IDM - TMII</option>
+              <option value="IDM - TWC">IDM - TWC</option>
+              <option value="InJourney">InJourney</option>
+              <option value="ITDC">ITDC</option>
+              <option value="Sarinah">Sarinah</option>
+            </select>
+          </div>
+        </div>
+        
         <div id="sm-kpi-row" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:1rem; margin-top:1rem;"></div>
+        <!-- NSS Overall Summary -->
+        <div id="sm-nss-summary" style="margin-top:1rem;padding:1rem 1.25rem;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:12px;">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+            <span style="font-size:1.1rem;">📊</span>
+            <strong style="color:#f1f5f9;font-size:0.9rem;">Net Sentiment Score (NSS) — Overall</strong>
+            <span style="font-size:0.75rem;color:#64748b;margin-left:auto;">NSS = (Positif − Negatif) / Total × 100</span>
+          </div>
+          <div id="sm-nss-overall-bar" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;"></div>
+        </div>
       </section>
 
       <!-- ── TREN BULANAN ── -->
@@ -773,7 +806,7 @@
   <!-- Load our data and app scripts -->
   <script src="js/app.js"></script>
   <script src="js/charts.js"></script>
-  <script src="js/socmed_charts.js"></script>
   <script src="js/perf_analysis.js"></script>
+  <script src="js/socmed_charts.js?v=2"></script>
 </body>
 </html>
