@@ -1,9 +1,0 @@
-#!/usr/bin/expect -f
-set timeout 10
-spawn sftp -P 22 ftp_survey_sensum@35.219.73.251
-expect "password:"
-send "!AyxJdi\$9\r"
-expect "sftp>"
-send "ls -l Sensum\r"
-expect "sftp>"
-send "exit\r"

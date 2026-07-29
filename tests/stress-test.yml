@@ -1,0 +1,39 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 5
+      arrivalRate: 2
+      name: "Warm up phase"
+    - duration: 10
+      arrivalRate: 5
+      name: "Sustained high load"
+  environments:
+    production:
+      target: 'https://dashboard-cx-one.vercel.app'
+
+scenarios:
+  - name: "Dashboard User Flow"
+    flow:
+      # 1. Load the main CX Performance page
+      - get:
+          url: "/cx-performance"
+      - think: 2
+      # 2. Navigate to Operations Page
+      - get:
+          url: "/operations"
+      - think: 2
+      # 3. Navigate to Performance KPI Page
+      - get:
+          url: "/performance-kpi"
+      - think: 2
+      # 4. Navigate to Social Media Page
+      - get:
+          url: "/social-media"
+
+  - name: "API Sync Webhook (Admin)"
+    weight: 1
+    flow:
+      - post:
+          url: "/api/v1/sync"
+          headers:
+            Authorization: "Bearer local-dev-secret"

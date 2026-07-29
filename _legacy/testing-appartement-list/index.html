@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeLiving - Premium Apartments</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="logo">
+            <i class="fa-solid fa-building"></i> LuxeLiving
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Discover</a></li>
+            <li><a href="#">Locations</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="btn btn-outline">Sign In</button>
+            <button class="btn btn-primary">List Property</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Find Your Dream Apartment Today</h1>
+            <p>Discover hand-picked, premium apartments tailored for your lifestyle in top cities.</p>
+            
+            <div class="search-bar glass">
+                <div class="search-input">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" id="location-input" placeholder="Where do you want to live?">
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-input">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    <select id="price-input">
+                        <option value="any">Any Price</option>
+                        <option value="budget">Under $1500</option>
+                        <option value="mid">$1500 - $3000</option>
+                        <option value="luxury">Above $3000</option>
+                    </select>
+                </div>
+                <button class="btn btn-search" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="section-header">
+            <h2>Trending Apartments</h2>
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="studio">Studio</button>
+                <button class="filter-btn" data-filter="1br">1 Bedroom</button>
+                <button class="filter-btn" data-filter="2br">2 Bedrooms</button>
+            </div>
+        </div>
+
+        <!-- Apartment Grid -->
+        <div class="apartment-grid" id="apartment-grid">
+            
+            <!-- Apartment Card 1 -->
+            <div class="apartment-card" data-category="2br" data-price="luxury">
+                <div class="card-img-wrapper">
+                    <img src="img/apt1.png" alt="Luxury City Skyline Apartment">
+                    <span class="badge featured">Featured</span>
+                    <button class="btn-favorite"><i class="fa-regular fa-heart"></i></button>
+                </div>
+                <div class="card-content">
+                    <div class="card-price">$3,450 <span>/ month</span></div>
+                    <h3 class="card-title">Skyline Luxury Suites</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Downtown Metropolis</p>
+                    <div class="card-amenities">
+                        <span><i class="fa-solid fa-bed"></i> 2 Beds</span>
+                        <span><i class="fa-solid fa-bath"></i> 2 Baths</span>
+                        <span><i class="fa-solid fa-vector-square"></i> 1,200 sqft</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apartment Card 2 -->
+            <div class="apartment-card" data-category="1br" data-price="mid">
+                <div class="card-img-wrapper">
+                    <img src="img/apt2.png" alt="Cozy Loft Apartment">
+                    <button class="btn-favorite"><i class="fa-regular fa-heart"></i></button>
+                </div>
+                <div class="card-content">
+                    <div class="card-price">$1,850 <span>/ month</span></div>
+                    <h3 class="card-title">Urban Brick Loft</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Arts District</p>
+                    <div class="card-amenities">
+                        <span><i class="fa-solid fa-bed"></i> 1 Bed</span>
+                        <span><i class="fa-solid fa-bath"></i> 1 Bath</span>
+                        <span><i class="fa-solid fa-vector-square"></i> 850 sqft</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apartment Card 3 -->
+            <div class="apartment-card" data-category="studio" data-price="luxury">
+                <div class="card-img-wrapper">
+                    <img src="img/apt3.png" alt="Coastal View Apartment">
+                    <span class="badge new">New</span>
+                    <button class="btn-favorite"><i class="fa-regular fa-heart"></i></button>
+                </div>
+                <div class="card-content">
+                    <div class="card-price">$4,200 <span>/ month</span></div>
+                    <h3 class="card-title">Oceanfront Serenity</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Malibu Coast</p>
+                    <div class="card-amenities">
+                        <span><i class="fa-solid fa-bed"></i> Studio</span>
+                        <span><i class="fa-solid fa-bath"></i> 1 Bath</span>
+                        <span><i class="fa-solid fa-vector-square"></i> 700 sqft</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Empty State (Hidden by default) -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-building-circle-xmark"></i>
+            <h3>No apartments found</h3>
+            <p>Try adjusting your search filters.</p>
+        </div>
+
+    </main>
+
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
