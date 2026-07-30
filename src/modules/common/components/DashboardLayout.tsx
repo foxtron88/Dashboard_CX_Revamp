@@ -4,11 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard,
+  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/cx-performance', label: 'CX Performance', icon: BarChart3, description: 'CSAT & Driver Metrics' },
+  { href: '/sensum-csat', label: 'Sensum CSAT', icon: Star, description: 'Facility Survey Analytics' },
   { href: '/operations', label: 'Operations', icon: Users, description: 'Interaksi & Pengunjung' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, description: 'SLA & Operational' },
   { href: '/social-media', label: 'Social Media', icon: Share2, description: 'Sentiment & Platform' },
