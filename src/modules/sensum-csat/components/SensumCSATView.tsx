@@ -6,11 +6,12 @@ import SensumKPICards from './SensumKPICards';
 import SensumCharts from './SensumCharts';
 import SensumFacilityTable from './SensumFacilityTable';
 import SensumVerbatimTable from './SensumVerbatimTable';
+import DriverClassificationManager from './DriverClassificationManager';
 
 const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah', 'Combined'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
-type TabId = 'overview' | 'facilities' | 'verbatim';
+type TabId = 'overview' | 'facilities' | 'verbatim' | 'classification';
 
 export default function SensumCSATView() {
   const { data, loading, error } = useSensumData();
@@ -30,9 +31,10 @@ export default function SensumCSATView() {
   const filtered = useSensumFiltered(data, bu, surveyType, sentiment, fromMonth, toMonth);
 
   const tabs: { id: TabId; label: string; icon: string }[] = [
-    { id: 'overview',   label: 'Overview & Trends',     icon: '📊' },
-    { id: 'facilities', label: 'Facility Rankings',      icon: '🏆' },
-    { id: 'verbatim',   label: 'Verbatim Feedback',      icon: '💬' },
+    { id: 'overview',       label: 'Overview & Trends',         icon: '📊' },
+    { id: 'facilities',     label: 'Facility Rankings',          icon: '🏆' },
+    { id: 'verbatim',       label: 'Verbatim Feedback',          icon: '💬' },
+    { id: 'classification', label: 'Driver Rules & Classification', icon: '⚙️' },
   ];
 
   if (error) return (
@@ -65,76 +67,79 @@ export default function SensumCSATView() {
         )}
       </div>
 
-      {/* Filters */}
-      <div className="glass-card flex flex-wrap items-end gap-4">
-        <div>
-          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
-          <div className="flex flex-wrap gap-1">
-            {BUS.map(b => (
-              <button key={b} onClick={() => setBU(b)}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${bu === b ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30' : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'}`}>
-                {b}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="min-w-[180px]">
-          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Survey Type</p>
-          <select value={surveyType} onChange={e => setSurveyType(e.target.value)}
-            className="w-full text-xs rounded-lg px-3 py-1.5"
-            style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}>
-            {surveyTypes.map(t => <option key={t} value={t}>{t === 'ALL' ? 'All Types' : t}</option>)}
-          </select>
-        </div>
-
-        <div>
-          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Sentiment</p>
-          <div className="flex gap-1">
-            {SENTIMENTS.map(s => (
-              <button key={s} onClick={() => setSentiment(s)}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${sentiment === s ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30' : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'}`}>
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex gap-2">
+      {/* Filters (show on overview, facilities, verbatim) */}
+      {activeTab !== 'classification' && (
+        <div className="glass-card flex flex-wrap items-end gap-4">
           <div>
-            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">From Month</p>
-            <input type="month" value={fromMonth} onChange={e => setFromMonth(e.target.value)}
-              className="text-xs rounded-lg px-2 py-1.5"
-              style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }} />
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
+            <div className="flex flex-wrap gap-1">
+              {BUS.map(b => (
+                <button key={b} onClick={() => setBU(b)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${bu === b ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30' : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'}`}>
+                  {b}
+                </button>
+              ))}
+            </div>
           </div>
+
+          <div className="min-w-[180px]">
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Survey Type</p>
+            <select value={surveyType} onChange={e => setSurveyType(e.target.value)}
+              className="w-full text-xs rounded-lg px-3 py-1.5"
+              style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}>
+              {surveyTypes.map(t => <option key={t} value={t}>{t === 'ALL' ? 'All Types' : t}</option>)}
+            </select>
+          </div>
+
           <div>
-            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">To Month</p>
-            <input type="month" value={toMonth} onChange={e => setToMonth(e.target.value)}
-              className="text-xs rounded-lg px-2 py-1.5"
-              style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }} />
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Sentiment</p>
+            <div className="flex gap-1">
+              {SENTIMENTS.map(s => (
+                <button key={s} onClick={() => setSentiment(s)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${sentiment === s ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30' : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'}`}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <div>
+              <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">From Month</p>
+              <input type="month" value={fromMonth} onChange={e => setFromMonth(e.target.value)}
+                className="text-xs rounded-lg px-2 py-1.5"
+                style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }} />
+            </div>
+            <div>
+              <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">To Month</p>
+              <input type="month" value={toMonth} onChange={e => setToMonth(e.target.value)}
+                className="text-xs rounded-lg px-2 py-1.5"
+                style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }} />
+            </div>
+          </div>
+
+          {(bu !== 'ALL' || surveyType !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
+            <button onClick={() => { setBU('ALL'); setSurveyType('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
+              className="text-xs px-3 py-1.5 rounded-lg text-[var(--accent-danger)] border border-[var(--accent-danger)]/30 hover:bg-[var(--accent-danger)]/10 transition-all">
+              ✕ Reset
+            </button>
+          )}
+
+          <div className="ml-auto text-right">
+            <p className="text-[10px] text-[var(--text-muted)]">Filtered</p>
+            <p className="text-lg font-bold text-[var(--accent-primary-light)]" style={{ fontFamily: 'var(--font-display)' }}>
+              {filtered.length.toLocaleString()}
+            </p>
           </div>
         </div>
+      )}
 
-        {(bu !== 'ALL' || surveyType !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
-          <button onClick={() => { setBU('ALL'); setSurveyType('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
-            className="text-xs px-3 py-1.5 rounded-lg text-[var(--accent-danger)] border border-[var(--accent-danger)]/30 hover:bg-[var(--accent-danger)]/10 transition-all">
-            ✕ Reset
-          </button>
-        )}
-
-        <div className="ml-auto text-right">
-          <p className="text-[10px] text-[var(--text-muted)]">Filtered</p>
-          <p className="text-lg font-bold text-[var(--accent-primary-light)]" style={{ fontFamily: 'var(--font-display)' }}>
-            {filtered.length.toLocaleString()}
-          </p>
-        </div>
-      </div>
-
-      {/* KPI Cards */}
-      {loading
-        ? <div className="grid grid-cols-5 gap-4">{[...Array(5)].map((_, i) => <div key={i} className="glass-card h-32 animate-pulse bg-[var(--glass-bg)]" />)}</div>
-        : <SensumKPICards records={filtered} />
-      }
+      {/* KPI Cards (show on overview, facilities, verbatim) */}
+      {activeTab !== 'classification' && (
+        loading
+          ? <div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <div key={i} className="glass-card h-32 animate-pulse bg-[var(--glass-bg)]" />)}</div>
+          : <SensumKPICards records={filtered} />
+      )}
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-[var(--glass-border)]">
@@ -148,7 +153,8 @@ export default function SensumCSATView() {
       </div>
 
       {/* Tab Content */}
-      {!loading && (
+      {activeTab === 'classification' && <DriverClassificationManager />}
+      {!loading && activeTab !== 'classification' && (
         <>
           {activeTab === 'overview'   && <SensumCharts records={filtered} />}
           {activeTab === 'facilities' && <SensumFacilityTable records={filtered} />}
