@@ -111,13 +111,14 @@ def process_file(bu, fname, fpath, all_records, seen_ids):
                 ppl_cols.append(i)
 
             # Sub-driver: Process — operational flow keywords
-            elif "alur" in hl or "proses" in hl or "antrean" in hl or "akses" in hl or "pembayaran" in hl or "informasi" in hl:
+            elif "alur" in hl or "proses" in hl or "antrean" in hl or "akses" in hl or "pembayaran" in hl or "informasi" in hl or "kecepatan" in hl or "prosedur" in hl:
                 prc_cols.append(i)
 
             # Sub-driver: Premises — physical facility keywords
             # Covers: kelengkapan/kebersihan/kenyamanan/ketersediaan AND
             # API-specific: "Numeric_Fasilitas <FacilityName> (...)" sub-driver columns
-            elif ("kelengkapan" in hl or "kebersihan" in hl or "kenyamanan" in hl or "ketersediaan" in hl
+            # IDM-specific: "Kualitas Foto dan Harga layanan"
+            elif ("kelengkapan" in hl or "kebersihan" in hl or "kenyamanan" in hl or "ketersediaan" in hl or "kualitas" in hl or "harga" in hl
                   or ("fasilitas" in hl and "secara keseluruhan" not in hl and "seberapa puas" not in hl)):
                 prm_cols.append(i)
 
