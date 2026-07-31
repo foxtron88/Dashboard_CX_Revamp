@@ -10,9 +10,9 @@ export interface ClassificationRule {
 }
 
 const DEFAULT_RULES: ClassificationRule = {
-  pplKeywords: ['staff', 'petugas', 'people', 'keramahan', 'pelayanan', 'penampilan', 'sikap', 'kesigapan', 'personil', 'kasir'],
-  prcKeywords: ['alur', 'prosedur', 'kecepatan', 'proses', 'antre', 'process', 'waktu', 'tunggu', 'durasi', 'transaksi', 'akses', 'opsi pembayaran'],
-  prmKeywords: ['fasilitas', 'kebersihan', 'kenyamanan', 'kelengkapan', 'product', 'premise', 'ruangan', 'alat', 'toilet', 'tisu', 'aroma', 'penerangan', 'pencahayaan', 'lokasi', 'informasi', 'sirkulasi', 'ketersediaan', 'kualitas', 'harga'],
+  pplKeywords: ['staff', 'petugas', 'karyawan', 'keramahan', 'pelayanan', 'penampilan', 'kasir', 'personil'],
+  prcKeywords: ['alur', 'proses', 'antrean', 'akses', 'pembayaran', 'informasi', 'prosedur', 'kecepatan', 'waktu', 'transaksi'],
+  prmKeywords: ['fasilitas', 'kebersihan', 'kenyamanan', 'kelengkapan', 'ketersediaan', 'ruangan', 'toilet', 'tisu', 'kondisi', 'kualitas', 'harga'],
   overrides: {}
 };
 

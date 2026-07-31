@@ -1,74 +1,149 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { CSATRecord } from '@/modules/common/types';
 
 interface Props {
   records: CSATRecord[];
 }
 
-function getScore(records: CSATRecord[], field: 'overall_score' | 'staff_score' | 'facility_score' | 'cleanliness_score') {
-  if (!records.length) return 0;
-  const sum = records.reduce((a, r) => a + (r[field] || 0), 0);
-  return Number((sum / records.length).toFixed(2));
-}
-
 function getScoreColor(score: number) {
   if (score >= 4.5) return 'var(--accent-success)';
-  if (score >= 3.5) return 'var(--accent-info)';
-  if (score >= 2.5) return 'var(--accent-warning)';
+  if (score >= 4.0) return 'var(--accent-info)';
+  if (score >= 3.0) return 'var(--accent-warning)';
   return 'var(--accent-danger)';
 }
 
 export default function ExecutiveSummary({ records }: Props) {
-  const overall = getScore(records, 'overall_score');
-  const ppl = getScore(records, 'staff_score');
-  const prc = getScore(records, 'cleanliness_score');
-  const prm = getScore(records, 'facility_score');
+  const stats = useMemo(() => {
+    const calcAvg = (key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
+      const vals = records.map(r => r[key]).filter((v): v is number => v !== null);
+      return {
+        avg: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0,
+        count: vals.length,
+        csatPct: vals.length ? (vals.filter(v => v >= 4).length / vals.length) * 100 : 0,
+      };
+    };
 
-  const drivers = [
-    { label: 'People (PPL)', value: ppl, icon: '👥', sub: 'Staff & Service', gradient: 'from-indigo-500 to-purple-600' },
-    { label: 'Process (PRC)', value: prc, icon: '🔄', sub: 'Cleanliness & Flow', gradient: 'from-cyan-500 to-blue-600' },
-    { label: 'Premises (PRM)', value: prm, icon: '🏢', sub: 'Facility Quality', gradient: 'from-violet-500 to-pink-600' },
+    const overall  = calcAvg('overall_score');
+    const people   = calcAvg('people_score');
+    const process  = calcAvg('process_score');
+    const premises = calcAvg('premises_score');
+
+    const total = records.length;
+    const ratedTotal = records.filter(r => r.overall_score !== null).length;
+    const satisfied = records.filter(r => r.overall_group === 'Satisfied').length;
+    const dissatisfied = records.filter(r => r.overall_group === 'Dissatisfied').length;
+    const neutral = records.filter(r => r.overall_group === 'Neutral').length;
+    const positive = records.filter(r => r.sentiment === 'Positive').length;
+    const negative = records.filter(r => r.sentiment === 'Negative').length;
+    const satRate = ratedTotal > 0 ? (satisfied / ratedTotal) * 100 : 0;
+    const nss = total > 0 ? ((positive - negative) / total) * 100 : 0;
+
+    return {
+      total, ratedTotal, satisfied, dissatisfied, neutral, positive, negative, satRate, nss,
+      overall, people, process, premises
+    };
+  }, [records]);
+
+  const csatPillars = [
+    {
+      label: 'Overall CSAT', val: stats.overall.avg, count: stats.overall.count,
+      csatPct: stats.overall.csatPct,
+      icon: '⭐', badge: 'Master Score',
+      gradient: 'from-emerald-500/20 to-teal-500/10',
+      borderColor: 'border-emerald-500/30',
+      color: getScoreColor(stats.overall.avg),
+    },
+    {
+      label: 'People (PPL)', val: stats.people.avg, count: stats.people.count,
+      csatPct: stats.people.csatPct,
+      icon: '👥', badge: 'Staff & Service',
+      gradient: 'from-indigo-500/20 to-purple-500/10',
+      borderColor: 'border-indigo-500/30',
+      color: getScoreColor(stats.people.avg),
+    },
+    {
+      label: 'Process (PRC)', val: stats.process.avg, count: stats.process.count,
+      csatPct: stats.process.csatPct,
+      icon: '🔄', badge: 'Flow & Operations',
+      gradient: 'from-cyan-500/20 to-blue-500/10',
+      borderColor: 'border-cyan-500/30',
+      color: getScoreColor(stats.process.avg),
+    },
+    {
+      label: 'Premises (PRM)', val: stats.premises.avg, count: stats.premises.count,
+      csatPct: stats.premises.csatPct,
+      icon: '🏢', badge: 'Facility Setup',
+      gradient: 'from-violet-500/20 to-pink-500/10',
+      borderColor: 'border-violet-500/30',
+      color: getScoreColor(stats.premises.avg),
+    },
+  ];
+
+  const operationalCards = [
+    { label: 'Total Responses', value: stats.total.toLocaleString(), icon: '📋', color: 'var(--accent-info)', sub: 'distinct respondents' },
+    { label: 'Satisfaction Rate', value: `${stats.satRate.toFixed(1)}%`, icon: '😊', color: 'var(--accent-success)', sub: `${stats.satisfied.toLocaleString()} satisfied (≥4)` },
+    { label: 'Dissatisfied', value: stats.dissatisfied.toLocaleString(), icon: '😔', color: 'var(--accent-danger)', sub: `${stats.ratedTotal > 0 ? ((stats.dissatisfied / stats.ratedTotal) * 100).toFixed(1) : 0}% of rated` },
+    { label: 'Net Sentiment', value: `${stats.nss > 0 ? '+' : ''}${stats.nss.toFixed(1)}`, icon: '🧠', color: stats.nss >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)', sub: `${stats.positive.toLocaleString()} positive` },
   ];
 
   return (
-    <section className="animate-in">
-      <div className="flex items-center gap-3 mb-6">
-        <span className="text-2xl">📊</span>
-        <div>
-          <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            Executive Summary
-          </h2>
-          <p className="text-sm text-[var(--text-muted)]">{records.length.toLocaleString()} total responses</p>
-        </div>
-      </div>
-
-      {/* Overall CSAT */}
-      <div className="glass-card text-center mb-6">
-        <p className="text-sm text-[var(--text-muted)] uppercase tracking-wider mb-2">Overall CSAT Score</p>
-        <p className="text-5xl font-extrabold gradient-text" style={{ fontFamily: 'var(--font-display)' }}>
-          {overall.toFixed(2)}
+    <section className="space-y-4 animate-in">
+      {/* CSAT Score Pillars */}
+      <div>
+        <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2 flex items-center gap-2">
+          <span>🎯</span> Cascaded CSAT Driver Scores (Overall, People, Process, Premises)
         </p>
-        <p className="text-sm text-[var(--text-secondary)] mt-1">out of 5.00</p>
-        <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2 mt-4 max-w-md mx-auto">
-          <div
-            className="h-2 rounded-full transition-all duration-700"
-            style={{ width: `${(overall / 5) * 100}%`, background: getScoreColor(overall) }}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {csatPillars.map(p => (
+            <div
+              key={p.label}
+              className={`glass-card relative overflow-hidden bg-gradient-to-br ${p.gradient} border ${p.borderColor} transition-all duration-300 hover:scale-[1.02]`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-2xl">{p.icon}</span>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-[var(--text-secondary)] border border-white/10">
+                  {p.badge}
+                </span>
+              </div>
+              <p className="text-xs font-medium text-[var(--text-secondary)] mt-3">{p.label}</p>
+              <div className="flex items-baseline justify-between mt-1">
+                <p className="text-3xl font-extrabold" style={{ color: p.color, fontFamily: 'var(--font-display)' }}>
+                  {p.val > 0 ? p.val.toFixed(2) : '—'}
+                </p>
+                <span className="text-xs text-[var(--text-muted)]">/ 5.00</span>
+              </div>
+              {/* Score Progress Bar */}
+              <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-1.5 mt-3 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${p.val > 0 ? (p.val / 5) * 100 : 0}%`, background: p.color }}
+                />
+              </div>
+              <div className="flex justify-between items-center mt-2">
+                <p className="text-[10px] text-[var(--text-muted)]">
+                  {p.count.toLocaleString()} rated
+                </p>
+                <p className="text-[10px] font-semibold" style={{ color: p.color }}>
+                  CSAT {p.csatPct.toFixed(1)}%
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* 3 Driver Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {drivers.map(d => (
-          <div key={d.label} className="glass-card text-center">
-            <span className="text-3xl">{d.icon}</span>
-            <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-2">{d.label}</p>
-            <p className="text-3xl font-bold mt-1" style={{ color: getScoreColor(d.value), fontFamily: 'var(--font-display)' }}>
-              {d.value.toFixed(2)}
+      {/* Operational Highlights */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {operationalCards.map(c => (
+          <div key={c.label} className="glass-card text-center flex flex-col items-center justify-center p-3">
+            <span className="text-xl">{c.icon}</span>
+            <p className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mt-1">{c.label}</p>
+            <p className="text-2xl font-bold mt-0.5" style={{ color: c.color, fontFamily: 'var(--font-display)' }}>
+              {c.value}
             </p>
-            <p className="text-xs text-[var(--text-muted)] mt-1">{d.sub}</p>
+            <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">{c.sub}</p>
           </div>
         ))}
       </div>

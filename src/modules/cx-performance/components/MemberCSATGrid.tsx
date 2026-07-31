@@ -3,94 +3,113 @@
 import React, { useMemo } from 'react';
 import type { CSATRecord } from '@/modules/common/types';
 
-interface Props {
-  records: CSATRecord[];
-}
+interface Props { records: CSATRecord[]; }
 
-function getScore(recs: CSATRecord[], field: keyof CSATRecord) {
-  if (!recs.length) return 0;
-  const sum = recs.reduce((a, r) => a + (Number(r[field]) || 0), 0);
-  return Number((sum / recs.length).toFixed(2));
-}
+const BU_COLORS: Record<string, string> = {
+  'API':     '#6366f1',
+  'IDM':     '#06b6d4',
+  'IAS':     '#8b5cf6',
+  'ITDC':    '#ec4899',
+  'Sarinah': '#f59e0b',
+};
 
 function getScoreColor(score: number) {
   if (score >= 4.5) return 'var(--accent-success)';
-  if (score >= 3.5) return 'var(--accent-info)';
-  if (score >= 2.5) return 'var(--accent-warning)';
+  if (score >= 4.0) return 'var(--accent-info)';
+  if (score >= 3.0) return 'var(--accent-warning)';
   return 'var(--accent-danger)';
 }
 
 export default function MemberCSATGrid({ records }: Props) {
-  const buScores = useMemo(() => {
-    const groups: Record<string, CSATRecord[]> = {};
-    records.forEach(r => {
-      if (!r.source) return;
-      if (!groups[r.source]) groups[r.source] = [];
-      groups[r.source].push(r);
-    });
+  const buStats = useMemo(() => {
+    const buNames = Array.from(new Set(records.map(r => r.bu))).sort();
+    return buNames.map(bu => {
+      const buRecs = records.filter(r => r.bu === bu);
+      const calcAvg = (key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
+        const vals = buRecs.map(r => r[key]).filter((v): v is number => v !== null);
+        return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+      };
+      const overall = calcAvg('overall_score');
+      const people = calcAvg('people_score');
+      const process = calcAvg('process_score');
+      const premises = calcAvg('premises_score');
+      const ratedTotal = buRecs.filter(r => r.overall_score !== null).length;
+      const satisfied = buRecs.filter(r => r.overall_group === 'Satisfied').length;
+      const csatPct = ratedTotal > 0 ? (satisfied / ratedTotal) * 100 : 0;
 
-    return Object.entries(groups)
-      .map(([bu, recs]) => ({
-        bu,
-        overall: getScore(recs, 'overall_score'),
-        ppl: getScore(recs, 'staff_score'),
-        prc: getScore(recs, 'cleanliness_score'),
-        prm: getScore(recs, 'facility_score'),
-        count: recs.length,
-      }))
-      .sort((a, b) => b.overall - a.overall);
+      return { bu, total: buRecs.length, overall, people, process, premises, csatPct, ratedTotal };
+    });
   }, [records]);
 
   return (
     <section className="mt-10 animate-in">
       <div className="flex items-center gap-3 mb-6">
-        <span className="text-2xl">🏢</span>
+        <span className="text-2xl">🏆</span>
         <div>
           <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            CSAT per Member
+            CSAT per Business Unit
           </h2>
-          <p className="text-sm text-[var(--text-muted)]">Individual Business Unit Performance</p>
+          <p className="text-xs text-[var(--text-muted)]">
+            3P Driver breakdown: People (PPL) · Process (PRC) · Premises (PRM)
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {buScores.map(bu => (
-          <div key={bu.bu} className="glass-card">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-[var(--text-primary)]">{bu.bu}</h3>
-              <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full">
-                {bu.count} responses
-              </span>
-            </div>
-
-            <p className="text-3xl font-bold mb-3" style={{ color: getScoreColor(bu.overall), fontFamily: 'var(--font-display)' }}>
-              {bu.overall.toFixed(2)}
-            </p>
-
-            <div className="space-y-2">
-              {[
-                { label: 'PPL', value: bu.ppl, icon: '👥' },
-                { label: 'PRC', value: bu.prc, icon: '🔄' },
-                { label: 'PRM', value: bu.prm, icon: '🏢' },
-              ].map(d => (
-                <div key={d.label} className="flex items-center justify-between text-sm">
-                  <span className="text-[var(--text-muted)]">{d.icon} {d.label}</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 bg-[var(--bg-tertiary)] rounded-full h-1.5">
-                      <div
-                        className="h-1.5 rounded-full transition-all duration-500"
-                        style={{ width: `${(d.value / 5) * 100}%`, background: getScoreColor(d.value) }}
-                      />
-                    </div>
-                    <span className="text-xs font-medium" style={{ color: getScoreColor(d.value) }}>
-                      {d.value.toFixed(2)}
-                    </span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {buStats.map(s => {
+          const accent = BU_COLORS[s.bu] || '#64748b';
+          return (
+            <div key={s.bu}
+              className="glass-card relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+              style={{ borderColor: `${accent}40` }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                    style={{ background: accent }}>
+                    {s.bu.substring(0, 2)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-[var(--text-primary)]">{s.bu}</p>
+                    <p className="text-[10px] text-[var(--text-muted)]">{s.total.toLocaleString()} responses</p>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Overall Score */}
+              <div className="text-center mb-3 py-2 rounded-lg" style={{ background: `${accent}10` }}>
+                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Overall</p>
+                <p className="text-2xl font-extrabold" style={{ color: getScoreColor(s.overall), fontFamily: 'var(--font-display)' }}>
+                  {s.overall > 0 ? s.overall.toFixed(2) : '—'}
+                </p>
+                <p className="text-[10px] font-semibold" style={{ color: getScoreColor(s.overall) }}>
+                  CSAT {s.csatPct.toFixed(1)}%
+                </p>
+              </div>
+
+              {/* 3P Drivers */}
+              <div className="space-y-2">
+                {[
+                  { label: 'PPL', val: s.people, color: '#6366f1' },
+                  { label: 'PRC', val: s.process, color: '#06b6d4' },
+                  { label: 'PRM', val: s.premises, color: '#ec4899' },
+                ].map(d => (
+                  <div key={d.label} className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold text-[var(--text-muted)] w-8">{d.label}</span>
+                    <div className="flex-1 mx-2 bg-[var(--bg-tertiary)] rounded-full h-1.5 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
+                    </div>
+                    <span className="text-xs font-bold w-8 text-right" style={{ color: getScoreColor(d.val) }}>
+                      {d.val > 0 ? d.val.toFixed(1) : '—'}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

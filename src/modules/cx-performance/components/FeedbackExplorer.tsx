@@ -1,139 +1,138 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { CSATRecord } from '@/modules/common/types';
 
-interface Props {
-  records: CSATRecord[];
-}
+interface Props { records: CSATRecord[]; }
+
+const SENTIMENT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  Positive: { bg: 'rgba(16, 185, 129, 0.15)', text: '#10b981', border: 'rgba(16, 185, 129, 0.3)' },
+  Neutral:  { bg: 'rgba(245, 158, 11, 0.15)', text: '#f59e0b', border: 'rgba(245, 158, 11, 0.3)' },
+  Negative: { bg: 'rgba(239, 68, 68, 0.15)',   text: '#ef4444', border: 'rgba(239, 68, 68, 0.3)' },
+};
 
 const PAGE_SIZE = 20;
 
-function sentimentBadge(s: string) {
-  const colors: Record<string, string> = {
-    Positive: 'bg-emerald-500/20 text-emerald-400',
-    Neutral: 'bg-indigo-500/20 text-indigo-400',
-    Negative: 'bg-red-500/20 text-red-400',
-  };
-  return colors[s] || 'bg-gray-500/20 text-gray-400';
-}
-
 export default function FeedbackExplorer({ records }: Props) {
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
-  const [sortCol, setSortCol] = useState<keyof CSATRecord>('response_date');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+
+  const feedbackRecords = useMemo(() => {
+    return records.filter(r => r.feedback && r.feedback.trim().length > 0);
+  }, [records]);
 
   const filtered = useMemo(() => {
-    let result = records;
-    if (search) {
-      const q = search.toLowerCase();
-      result = result.filter(r =>
-        (r.feedback || '').toLowerCase().includes(q) ||
-        (r.source || '').toLowerCase().includes(q) ||
-        (r.location || '').toLowerCase().includes(q) ||
-        (r.facility_type || '').toLowerCase().includes(q)
-      );
-    }
-    result.sort((a, b) => {
-      const av = a[sortCol] ?? '';
-      const bv = b[sortCol] ?? '';
-      const cmp = av < bv ? -1 : av > bv ? 1 : 0;
-      return sortDir === 'asc' ? cmp : -cmp;
-    });
-    return result;
-  }, [records, search, sortCol, sortDir]);
+    if (!searchTerm.trim()) return feedbackRecords;
+    const term = searchTerm.toLowerCase();
+    return feedbackRecords.filter(r =>
+      r.feedback.toLowerCase().includes(term) ||
+      r.facility_type.toLowerCase().includes(term) ||
+      r.bu.toLowerCase().includes(term) ||
+      r.location.toLowerCase().includes(term)
+    );
+  }, [feedbackRecords, searchTerm]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  const pageData = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  function toggleSort(col: keyof CSATRecord) {
-    if (sortCol === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
-    else { setSortCol(col); setSortDir('desc'); }
-    setPage(1);
-  }
-
-  const thClass = 'p-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider cursor-pointer hover:text-[var(--text-primary)] select-none transition-colors';
-  const sortIndicator = (col: keyof CSATRecord) => sortCol === col ? (sortDir === 'asc' ? ' ↑' : ' ↓') : '';
+  const paged = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   return (
     <section className="mt-10 animate-in">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">💬</span>
-          <div>
-            <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-              Feedback Explorer
-            </h2>
-            <p className="text-sm text-[var(--text-muted)]">{filtered.length.toLocaleString()} results</p>
-          </div>
+      <div className="flex items-center gap-3 mb-6">
+        <span className="text-2xl">💬</span>
+        <div>
+          <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            Feedback Explorer
+          </h2>
+          <p className="text-xs text-[var(--text-muted)]">{feedbackRecords.length.toLocaleString()} responses with feedback text</p>
         </div>
-        <input
-          type="search"
-          placeholder="Search feedback…"
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1); }}
-          className="bg-[var(--bg-tertiary)] border border-[var(--glass-border)] rounded-lg px-4 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-primary)] w-64 transition-all"
-        />
       </div>
 
       <div className="glass-card !p-0 overflow-hidden">
+        {/* Search Bar */}
+        <div className="p-4 border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] flex items-center gap-3">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={e => { setSearchTerm(e.target.value); setPage(0); }}
+            placeholder="Search feedback, facility, BU, location..."
+            className="flex-1 text-sm rounded-lg px-4 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-primary)]/50"
+          />
+          <span className="text-xs text-[var(--text-muted)] whitespace-nowrap">
+            {filtered.length.toLocaleString()} results
+          </span>
+        </div>
+
+        {/* Table */}
         <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-          <table className="w-full">
-            <thead className="sticky top-0 bg-[var(--bg-secondary)]">
-              <tr>
-                <th className={thClass} onClick={() => toggleSort('response_date')}>Date{sortIndicator('response_date')}</th>
-                <th className={thClass} onClick={() => toggleSort('source')}>Unit{sortIndicator('source')}</th>
-                <th className={thClass} onClick={() => toggleSort('location')}>Location{sortIndicator('location')}</th>
-                <th className={thClass} onClick={() => toggleSort('facility_type')}>Facility{sortIndicator('facility_type')}</th>
-                <th className={thClass} onClick={() => toggleSort('overall_score')}>Score{sortIndicator('overall_score')}</th>
-                <th className={thClass} onClick={() => toggleSort('sentiment')}>Sentiment{sortIndicator('sentiment')}</th>
-                <th className="p-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Feedback</th>
+          <table className="w-full text-left text-sm">
+            <thead className="sticky top-0 bg-[var(--bg-secondary)] z-10">
+              <tr className="border-b border-[var(--glass-border)]">
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase w-[80px]">BU</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase w-[120px]">Facility</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase w-[100px]">Location</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase text-center w-[60px]">Score</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase w-[90px]">Sentiment</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Feedback</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase w-[90px]">Date</th>
               </tr>
             </thead>
             <tbody>
-              {pageData.map((r, i) => (
-                <tr key={r._id ?? i} className="border-t border-[var(--glass-border)] hover:bg-[var(--glass-bg)] transition-colors">
-                  <td className="p-3 text-xs text-[var(--text-secondary)] whitespace-nowrap">{r.response_date}</td>
-                  <td className="p-3 text-xs text-[var(--text-primary)] font-medium">{r.source}</td>
-                  <td className="p-3 text-xs text-[var(--text-secondary)]">{r.location}</td>
-                  <td className="p-3 text-xs text-[var(--text-secondary)] max-w-[150px] truncate">{r.facility_type}</td>
-                  <td className="p-3 text-xs text-[var(--text-primary)] font-bold">{r.overall_score}</td>
-                  <td className="p-3">
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${sentimentBadge(r.sentiment)}`}>
-                      {r.sentiment}
-                    </span>
-                  </td>
-                  <td className="p-3 text-xs text-[var(--text-secondary)] max-w-[300px] truncate">{r.feedback}</td>
-                </tr>
-              ))}
+              {paged.map((r, idx) => {
+                const sc = SENTIMENT_COLORS[r.sentiment] || SENTIMENT_COLORS.Neutral;
+                return (
+                  <tr key={`${r.respondent_id}-${idx}`}
+                    className="border-b border-[var(--glass-border)] hover:bg-[var(--glass-bg)] transition-colors">
+                    <td className="p-3 text-xs font-semibold text-[var(--text-primary)]">{r.bu}</td>
+                    <td className="p-3 text-xs text-[var(--text-secondary)] truncate max-w-[120px]" title={r.facility_type}>{r.facility_type || '—'}</td>
+                    <td className="p-3 text-xs text-[var(--text-secondary)] truncate max-w-[100px]">{r.location || '—'}</td>
+                    <td className="p-3 text-center">
+                      {r.overall_score !== null ? (
+                        <span className="text-xs font-bold" style={{ color: r.overall_score >= 4 ? '#10b981' : r.overall_score >= 3 ? '#f59e0b' : '#ef4444' }}>
+                          {r.overall_score}
+                        </span>
+                      ) : '—'}
+                    </td>
+                    <td className="p-3">
+                      {r.sentiment ? (
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: sc.bg, color: sc.text, border: `1px solid ${sc.border}` }}>
+                          {r.sentiment}
+                        </span>
+                      ) : '—'}
+                    </td>
+                    <td className="p-3 text-xs text-[var(--text-primary)] max-w-[350px]">
+                      <p className="line-clamp-2" title={r.feedback}>{r.feedback}</p>
+                    </td>
+                    <td className="p-3 text-[10px] text-[var(--text-muted)] whitespace-nowrap">{r.month || '—'}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-4">
-          <button
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:bg-[var(--glass-bg)] disabled:opacity-30 transition-all cursor-pointer"
-          >
-            ← Prev
-          </button>
-          <span className="text-xs text-[var(--text-muted)]">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:bg-[var(--glass-bg)] disabled:opacity-30 transition-all cursor-pointer"
-          >
-            Next →
-          </button>
-        </div>
-      )}
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="p-3 border-t border-[var(--glass-border)] bg-[var(--bg-secondary)] flex items-center justify-between">
+            <button
+              onClick={() => setPage(Math.max(0, page - 1))}
+              disabled={page === 0}
+              className="text-xs px-3 py-1 rounded-lg border border-[var(--glass-border)] text-[var(--text-secondary)] disabled:opacity-30 hover:bg-[var(--glass-bg)]"
+            >
+              ← Previous
+            </button>
+            <span className="text-xs text-[var(--text-muted)]">
+              Page {page + 1} of {totalPages}
+            </span>
+            <button
+              onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
+              disabled={page >= totalPages - 1}
+              className="text-xs px-3 py-1 rounded-lg border border-[var(--glass-border)] text-[var(--text-secondary)] disabled:opacity-30 hover:bg-[var(--glass-bg)]"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

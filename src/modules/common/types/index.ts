@@ -2,25 +2,27 @@
 
 export interface CSATRecord {
   _id?: number;
-  source: string;          // Business Unit (API, HIN, IAS, etc.)
+  respondent_id: string;
+  synced_at: string;
+  bu: string;               // Business Unit (API, IDM, IAS, ITDC, Sarinah)
+  survey_type: string;       // Baggage Claim, Toilet, etc.
   subholding: string;
   location: string;
+  region: string;
   facility_type: string;
   facility_id: string;
-  overall_score: number;
-  overall_group: string;
-  staff_score: number;
-  facility_score: number;
-  cleanliness_score: number;
-  feedback: string;
-  sentiment: string;
-  tags: string;
-  response_date: string;
-  language: string;
-  channel: string;
+  overall_score: number | null;
+  overall_group: string;     // Satisfied / Neutral / Dissatisfied
+  people_score: number | null;
+  process_score: number | null;
+  premises_score: number | null;
   nps_score: number | null;
-  nps_group: string;
-  survey_name: string;
+  feedback: string;
+  tags: string;
+  sentiment: string;
+  channel: string;
+  language: string;
+  month: string;             // derived: YYYY-MM
 }
 
 export interface ConsolidatedData {

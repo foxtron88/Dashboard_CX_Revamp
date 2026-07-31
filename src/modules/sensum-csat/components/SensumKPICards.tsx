@@ -28,15 +28,16 @@ export default function SensumKPICards({ records }: Props) {
     const premises= calcAvg('premises_score');
 
     const total = records.length;
+    const ratedTotal = records.filter(r => r.overall_score !== null).length;
     const satisfied = records.filter(r => r.overall_group === 'Satisfied').length;
-    const unsatisfied = records.filter(r => r.overall_group === 'Not Satisfied').length;
+    const unsatisfied = records.filter(r => r.overall_group === 'Dissatisfied' || r.overall_group === 'Not Satisfied').length;
     const positive = records.filter(r => r.sentiment === 'Positive').length;
     const negative = records.filter(r => r.sentiment === 'Negative').length;
-    const satRate = total > 0 ? (satisfied / total) * 100 : 0;
+    const satRate = ratedTotal > 0 ? (satisfied / ratedTotal) * 100 : 0;
     const nss = total > 0 ? ((positive - negative) / total) * 100 : 0;
 
     return {
-      total, satisfied, unsatisfied, positive, negative, satRate, nss,
+      total, ratedTotal, satisfied, unsatisfied, positive, negative, satRate, nss,
       overall, people, process, premises
     };
   }, [records]);
@@ -104,7 +105,7 @@ export default function SensumKPICards({ records }: Props) {
       value: stats.unsatisfied.toLocaleString(),
       icon: '😔',
       color: 'var(--accent-danger)',
-      sub: `${stats.total > 0 ? ((stats.unsatisfied / stats.total) * 100).toFixed(1) : 0}% of total`
+      sub: `${stats.ratedTotal > 0 ? ((stats.unsatisfied / stats.ratedTotal) * 100).toFixed(1) : 0}% of rated`
     },
     {
       label: 'Net Sentiment Score',

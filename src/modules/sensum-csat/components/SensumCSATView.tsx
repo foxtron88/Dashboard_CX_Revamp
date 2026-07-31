@@ -8,7 +8,7 @@ import SensumFacilityTable from './SensumFacilityTable';
 import SensumVerbatimTable from './SensumVerbatimTable';
 import DriverClassificationManager from './DriverClassificationManager';
 
-const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
+const BUS = ['ALL', 'API', 'IDM', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
 type TabId = 'overview' | 'facilities' | 'verbatim' | 'classification';
@@ -55,7 +55,7 @@ export default function SensumCSATView() {
               <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
                 Sensum CSAT
               </h1>
-              <p className="text-xs text-[var(--text-muted)]">Facility Customer Satisfaction Survey — 25,002 distinct responses</p>
+              <p className="text-xs text-[var(--text-muted)]">Facility Customer Satisfaction Survey — 11,985 distinct responses</p>
             </div>
           </div>
         </div>

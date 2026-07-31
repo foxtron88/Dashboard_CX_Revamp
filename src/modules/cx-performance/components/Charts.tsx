@@ -1,63 +1,56 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
-  PieChart, Pie, Legend,
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import type { CSATRecord } from '@/modules/common/types';
 
-interface Props {
-  records: CSATRecord[];
-}
-
-const SCORE_COLORS: Record<number, string> = {
-  1: '#ef4444', 2: '#f59e0b', 3: '#eab308', 4: '#3b82f6', 5: '#10b981',
-};
+interface Props { records: CSATRecord[]; }
 
 const SENTIMENT_COLORS: Record<string, string> = {
   Positive: '#10b981',
-  Neutral: '#6366f1',
+  Neutral: '#f59e0b',
   Negative: '#ef4444',
 };
 
+const BU_COLORS: Record<string, string> = {
+  'API':     '#6366f1',
+  'IDM':     '#06b6d4',
+  'IAS':     '#8b5cf6',
+  'ITDC':    '#ec4899',
+  'Sarinah': '#f59e0b',
+};
+
+/* ── CSAT Distribution (Bar Chart) ── */
 export function CSATDistributionChart({ records }: Props) {
   const data = useMemo(() => {
-    const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    records.forEach(r => {
-      const s = Math.round(r.overall_score);
-      if (s >= 1 && s <= 5) counts[s]++;
-    });
-    return Object.entries(counts).map(([score, count]) => ({
-      score: `Score ${score}`,
-      count,
-      fill: SCORE_COLORS[Number(score)],
+    const groups = [
+      { name: 'Very Satisfied (5)', range: [5, 5], color: '#10b981' },
+      { name: 'Satisfied (4)', range: [4, 4.99], color: '#3b82f6' },
+      { name: 'Neutral (3)', range: [3, 3.99], color: '#f59e0b' },
+      { name: 'Dissatisfied (2)', range: [2, 2.99], color: '#f97316' },
+      { name: 'Very Dissatisfied (1)', range: [1, 1.99], color: '#ef4444' },
+    ];
+    return groups.map(g => ({
+      name: g.name,
+      count: records.filter(r => r.overall_score !== null && r.overall_score >= g.range[0] && r.overall_score <= g.range[1]).length,
+      fill: g.color,
     }));
   }, [records]);
 
-  const avg = records.length
-    ? (records.reduce((a, r) => a + r.overall_score, 0) / records.length).toFixed(2)
-    : '0';
-
   return (
-    <div className="glass-card animate-in">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)]">CSAT Score Distribution</h3>
-        <span className="text-xs font-medium px-2 py-1 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)]">
-          Avg: {avg}
-        </span>
-      </div>
-      <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis dataKey="score" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
+    <div className="glass-card">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">CSAT Score Distribution</h3>
+      <ResponsiveContainer width="100%" height={280}>
+        <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <XAxis dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} angle={-15} textAnchor="end" height={60} />
+          <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
           <Tooltip
-            contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+            contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }}
           />
           <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-            {data.map((entry, i) => (
-              <Cell key={i} fill={entry.fill} />
+            {data.map((entry, idx) => (
+              <Cell key={idx} fill={entry.fill} />
             ))}
           </Bar>
         </BarChart>
@@ -66,104 +59,102 @@ export function CSATDistributionChart({ records }: Props) {
   );
 }
 
+/* ── Sentiment Donut ── */
 export function SentimentDonut({ records }: Props) {
   const data = useMemo(() => {
     const counts: Record<string, number> = { Positive: 0, Neutral: 0, Negative: 0 };
-    records.forEach(r => { if (counts[r.sentiment] !== undefined) counts[r.sentiment]++; });
-    return Object.entries(counts).map(([name, value]) => ({ name, value, fill: SENTIMENT_COLORS[name] }));
+    records.forEach(r => {
+      if (r.sentiment && counts[r.sentiment] !== undefined) counts[r.sentiment]++;
+    });
+    return Object.entries(counts)
+      .filter(([, v]) => v > 0)
+      .map(([name, value]) => ({ name, value }));
   }, [records]);
 
-  const total = records.length;
-  const positive = data.find(d => d.name === 'Positive')?.value || 0;
-  const pctPositive = total ? ((positive / total) * 100).toFixed(1) : '0';
+  const total = data.reduce((a, d) => a + d.value, 0);
 
   return (
-    <div className="glass-card animate-in">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)]">Sentiment Breakdown</h3>
-        <span className="text-xs font-medium px-2 py-1 rounded-full bg-[var(--accent-success)]/20 text-[var(--accent-success)]">
-          {pctPositive}% Positive
-        </span>
-      </div>
-      <ResponsiveContainer width="100%" height={260}>
+    <div className="glass-card">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Sentiment Breakdown</h3>
+      <ResponsiveContainer width="100%" height={280}>
         <PieChart>
-          <Pie
-            data={data}
-            cx="50%" cy="50%"
-            innerRadius={60} outerRadius={90}
-            paddingAngle={4}
-            dataKey="value"
-          >
-            {data.map((entry, i) => (
-              <Cell key={i} fill={entry.fill} />
+          <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={3} dataKey="value">
+            {data.map((entry, idx) => (
+              <Cell key={idx} fill={SENTIMENT_COLORS[entry.name] || '#64748b'} />
             ))}
           </Pie>
           <Tooltip
-            contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+            formatter={(value: number, name: string) => [`${value.toLocaleString()} (${total > 0 ? ((value / total) * 100).toFixed(1) : 0}%)`, name]}
+            contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }}
           />
-          <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+          <Legend
+            formatter={(value: string) => <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{value}</span>}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
+/* ── Sentiment By BU (Stacked Bar) ── */
 export function SentimentByBUChart({ records }: Props) {
   const data = useMemo(() => {
-    const groups: Record<string, Record<string, number>> = {};
-    records.forEach(r => {
-      if (!r.source) return;
-      if (!groups[r.source]) groups[r.source] = { Positive: 0, Neutral: 0, Negative: 0 };
-      if (groups[r.source][r.sentiment] !== undefined) groups[r.source][r.sentiment]++;
+    const buNames = Array.from(new Set(records.map(r => r.bu))).filter(Boolean).sort();
+    return buNames.map(bu => {
+      const buRecs = records.filter(r => r.bu === bu);
+      return {
+        bu,
+        Positive: buRecs.filter(r => r.sentiment === 'Positive').length,
+        Neutral: buRecs.filter(r => r.sentiment === 'Neutral').length,
+        Negative: buRecs.filter(r => r.sentiment === 'Negative').length,
+      };
     });
-    return Object.entries(groups).map(([bu, counts]) => ({ bu, ...counts })).sort((a, b) => a.bu.localeCompare(b.bu));
   }, [records]);
 
   return (
-    <div className="glass-card animate-in">
-      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Sentiment Distribution by Business Unit</h3>
+    <div className="glass-card">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Sentiment by Business Unit</h3>
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis dataKey="bu" tick={{ fill: '#94a3b8', fontSize: 10 }} angle={-20} textAnchor="end" height={50} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-          <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
-          <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+        <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <XAxis dataKey="bu" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+          <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+          <Tooltip contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} />
+          <Legend formatter={(value: string) => <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{value}</span>} />
           <Bar dataKey="Positive" stackId="a" fill="#10b981" radius={[0, 0, 0, 0]} />
-          <Bar dataKey="Neutral" stackId="a" fill="#6366f1" />
-          <Bar dataKey="Negative" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Neutral" stackId="a" fill="#f59e0b" />
+          <Bar dataKey="Negative" stackId="a" fill="#ef4444" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
+/* ── Response Volume By BU ── */
 export function ResponseVolumeChart({ records }: Props) {
   const data = useMemo(() => {
-    const monthly: Record<string, number> = {};
-    records.forEach(r => {
-      if (!r.response_date) return;
-      const key = r.response_date.substring(0, 7); // YYYY-MM
-      monthly[key] = (monthly[key] || 0) + 1;
-    });
-    return Object.entries(monthly)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([month, count]) => ({
-        month: new Date(month + '-01').toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
-        count,
-      }));
+    const buNames = Array.from(new Set(records.map(r => r.bu))).filter(Boolean).sort();
+    return buNames.map(bu => ({
+      bu,
+      count: records.filter(r => r.bu === bu).length,
+      fill: BU_COLORS[bu] || '#64748b',
+    }));
   }, [records]);
 
   return (
-    <div className="glass-card animate-in">
-      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Monthly Response Volume</h3>
+    <div className="glass-card">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Response Volume by BU</h3>
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-          <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
-          <Bar dataKey="count" fill="#6366f1" radius={[6, 6, 0, 0]} name="Responses" />
+        <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <XAxis dataKey="bu" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+          <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+          <Tooltip contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} />
+          <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+            {data.map((entry, idx) => (
+              <Cell key={idx} fill={entry.fill} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
