@@ -22,6 +22,7 @@ export default function CXPerformancePage() {
   const { data: records, loading, error } = useCSATData();
   const [bu, setBU] = useState('ALL');
   const [surveyType, setSurveyType] = useState('ALL');
+  const [location, setLocation] = useState('ALL');
   const [sentiment, setSentiment] = useState('ALL');
   const [fromMonth, setFromMonth] = useState('');
   const [toMonth, setToMonth] = useState('');
@@ -32,7 +33,13 @@ export default function CXPerformancePage() {
     return ['ALL', ...types];
   }, [records]);
 
-  const filtered = useFilteredCSAT(records, bu, surveyType, sentiment, fromMonth, toMonth);
+  const locations = useMemo(() => {
+    if (!records) return ['ALL'];
+    const locs = Array.from(new Set(records.map(r => r.location).filter(Boolean))).sort();
+    return ['ALL', ...locs];
+  }, [records]);
+
+  const filtered = useFilteredCSAT(records, bu, surveyType, sentiment, fromMonth, toMonth, location);
 
   if (error) {
     return (
@@ -96,6 +103,15 @@ export default function CXPerformancePage() {
           </select>
         </div>
 
+        <div className="min-w-[180px]">
+          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Location</p>
+          <select value={location} onChange={e => setLocation(e.target.value)}
+            className="w-full text-xs rounded-lg px-3 py-1.5"
+            style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}>
+            {locations.map(loc => <option key={loc} value={loc}>{loc === 'ALL' ? 'All Locations' : loc}</option>)}
+          </select>
+        </div>
+
         <div>
           <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Sentiment</p>
           <div className="flex gap-1">
@@ -123,8 +139,8 @@ export default function CXPerformancePage() {
           </div>
         </div>
 
-        {(bu !== 'ALL' || surveyType !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
-          <button onClick={() => { setBU('ALL'); setSurveyType('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
+        {(bu !== 'ALL' || surveyType !== 'ALL' || location !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
+          <button onClick={() => { setBU('ALL'); setSurveyType('ALL'); setLocation('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
             className="text-xs px-3 py-1.5 rounded-lg text-[var(--accent-danger)] border border-[var(--accent-danger)]/30 hover:bg-[var(--accent-danger)]/10 transition-all">
             ✕ Reset
           </button>

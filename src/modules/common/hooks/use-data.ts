@@ -94,7 +94,8 @@ export function useFilteredCSAT(
   surveyType: string,
   sentiment: string,
   fromMonth: string,
-  toMonth: string
+  toMonth: string,
+  location: string = 'ALL'
 ) {
   return useMemo(() => {
     if (!records) return [];
@@ -102,11 +103,12 @@ export function useFilteredCSAT(
       if (bu !== 'ALL' && r.bu !== bu) return false;
       if (surveyType !== 'ALL' && r.survey_type !== surveyType) return false;
       if (sentiment !== 'ALL' && r.sentiment !== sentiment) return false;
+      if (location !== 'ALL' && r.location !== location) return false;
       if (fromMonth && r.month && r.month < fromMonth) return false;
       if (toMonth && r.month && r.month > toMonth) return false;
       return true;
     });
-  }, [records, bu, surveyType, sentiment, fromMonth, toMonth]);
+  }, [records, bu, surveyType, sentiment, fromMonth, toMonth, location]);
 }
 
 export function useCXPerformanceData() {
