@@ -8,7 +8,7 @@ import SensumFacilityTable from './SensumFacilityTable';
 import SensumVerbatimTable from './SensumVerbatimTable';
 import DriverClassificationManager from './DriverClassificationManager';
 
-const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah', 'Combined'];
+const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
 type TabId = 'overview' | 'facilities' | 'verbatim' | 'classification';
