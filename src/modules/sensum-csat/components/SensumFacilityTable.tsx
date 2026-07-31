@@ -158,7 +158,7 @@ export default function SensumFacilityTable({ records }: Props) {
           <table className="w-full text-left text-sm">
             <thead className="sticky top-0 bg-[var(--bg-secondary)]">
               <tr className="border-b border-[var(--glass-border)]">
-                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Facility Type</th>
+                <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Facility Location</th>
                 <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">BU</th>
                 <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Location</th>
                 <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase text-right">Overall</th>
