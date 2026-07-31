@@ -10,29 +10,31 @@ export interface ClassificationRule {
 }
 
 const DEFAULT_RULES: ClassificationRule = {
-  pplKeywords: ['staff', 'petugas', 'people', 'keramahan', 'pelayanan', 'penampilan', 'sikap', 'kesigapan', 'personil'],
-  prcKeywords: ['alur', 'prosedur', 'kecepatan', 'proses', 'antre', 'process', 'waktu', 'durasi', 'transaksi', 'akses', 'opsi pembayaran'],
-  prmKeywords: ['fasilitas', 'kebersihan', 'kenyamanan', 'kelengkapan', 'product', 'premise', 'ruangan', 'alat', 'toilet', 'tisu', 'aroma', 'penerangan', 'sirkulasi', 'ketersediaan', 'kualitas', 'harga'],
+  pplKeywords: ['staff', 'petugas', 'people', 'keramahan', 'pelayanan', 'penampilan', 'sikap', 'kesigapan', 'personil', 'kasir'],
+  prcKeywords: ['alur', 'prosedur', 'kecepatan', 'proses', 'antre', 'process', 'waktu', 'tunggu', 'durasi', 'transaksi', 'akses', 'opsi pembayaran'],
+  prmKeywords: ['fasilitas', 'kebersihan', 'kenyamanan', 'kelengkapan', 'product', 'premise', 'ruangan', 'alat', 'toilet', 'tisu', 'aroma', 'penerangan', 'pencahayaan', 'lokasi', 'informasi', 'sirkulasi', 'ketersediaan', 'kualitas', 'harga'],
   overrides: {}
 };
 
 const DISCOVERED_QUESTIONS = [
-  { id: '1', name: 'Staff dan Petugas (Penampilan, keramahan, dll)', defaultCategory: 'People' },
-  { id: '2', name: 'People CSAT / Service Attitude', defaultCategory: 'People' },
-  { id: '3', name: 'Alur & Pengelolaan Toilet', defaultCategory: 'Process' },
-  { id: '4', name: 'Proses dan Alur Check In', defaultCategory: 'Process' },
-  { id: '5', name: 'Kecepatan dan Prosedur Keamanan Layanan', defaultCategory: 'Process' },
-  { id: '6', name: 'Kebersihan, Kenyamanan, Keamanan, dan Kecepatan Antre', defaultCategory: 'Process' },
-  { id: '7', name: 'Process CSAT / Queue Management', defaultCategory: 'Process' },
-  { id: '8', name: 'Fasilitas Toilet (Toilet bowl, Tisu, dll)', defaultCategory: 'Premises' },
-  { id: '9', name: 'Fasilitas Baggage Claim (Conveyor Belt, Troli, dll)', defaultCategory: 'Premises' },
-  { id: '10', name: 'Kelengkapan fasilitas, Ketersediaan, Rasa dan Kualitas Produk', defaultCategory: 'Premises' },
-  { id: '11', name: 'Kebersihan, Kenyamanan, dan Opsi Pembayaran', defaultCategory: 'Premises' },
-  { id: '12', name: 'Kebersihan, Kenyamanan, dan Kemudahan Akses', defaultCategory: 'Premises' },
-  { id: '13', name: 'Kebersihan, Kenyamanan, dan Keterawatan Nursery Room', defaultCategory: 'Premises' },
-  { id: '14', name: 'Ketersediaan Tempat Parkir', defaultCategory: 'Premises' },
-  { id: '15', name: 'Variasi dan Ketersediaan Produk', defaultCategory: 'Premises' },
-  { id: '16', name: 'Product or Premise CSAT', defaultCategory: 'Premises' }
+  { id: '1',  name: 'Staff dan Petugas (Penampilan, keramahan, dll)', defaultCategory: 'People' },
+  { id: '2',  name: 'People CSAT / Service Attitude', defaultCategory: 'People' },
+  { id: '3',  name: 'Pelayanan petugas kasir / lift / musholla / kebersihan', defaultCategory: 'People' },
+  { id: '4',  name: 'Alur & Pengelolaan Toilet', defaultCategory: 'Process' },
+  { id: '5',  name: 'Proses dan Alur Check In', defaultCategory: 'Process' },
+  { id: '6',  name: 'Kecepatan dan Prosedur Keamanan Layanan', defaultCategory: 'Process' },
+  { id: '7',  name: 'Kecepatan antrean kasir / proses pembayaran di kasir', defaultCategory: 'Process' },
+  { id: '8',  name: 'Waktu tunggu lift', defaultCategory: 'Process' },
+  { id: '9',  name: 'Process CSAT / Queue Management', defaultCategory: 'Process' },
+  { id: '10', name: 'Fasilitas Toilet (Toilet bowl, Tisu, dll)', defaultCategory: 'Premises' },
+  { id: '11', name: 'Fasilitas Baggage Claim (Conveyor Belt, Troli, dll)', defaultCategory: 'Premises' },
+  { id: '12', name: 'Kelengkapan fasilitas, Ketersediaan, Rasa dan Kualitas Produk', defaultCategory: 'Premises' },
+  { id: '13', name: 'Kebersihan, Kenyamanan, dan Opsi Pembayaran', defaultCategory: 'Premises' },
+  { id: '14', name: 'Kejelasan informasi di dalam/luar area lift', defaultCategory: 'Premises' },
+  { id: '15', name: 'Lokasi fitting room', defaultCategory: 'Premises' },
+  { id: '16', name: 'Pencahayaan fitting room', defaultCategory: 'Premises' },
+  { id: '17', name: 'Atraksi Event / Layana Kesehatan', defaultCategory: 'Premises' },
+  { id: '18', name: 'Product or Premise CSAT', defaultCategory: 'Premises' }
 ];
 
 export default function DriverClassificationManager() {
@@ -240,7 +242,7 @@ export default function DriverClassificationManager() {
             type="text"
             value={testText}
             onChange={e => setTestText(e.target.value)}
-            placeholder="Type any question prompt e.g., 'Kebersihan dan kelengkapan tisu di toilet'..."
+            placeholder="Type any question prompt e.g., 'Kejelasan informasi di area lift'..."
             className="flex-1 text-xs rounded-lg px-3 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]"
           />
           {testResult && (
