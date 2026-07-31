@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useCSATData, useFilteredCSAT } from '@/modules/common/hooks/use-data';
-import { useFilterStore } from '@/modules/common/hooks/filter-store';
-import FilterBar from '@/modules/common/components/FilterBar';
+import { useCSATData } from '@/modules/common/hooks/use-data';
 import ExecutiveSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 import {
@@ -16,19 +14,16 @@ import { CSATTrendChart, CSATHeatmap } from '@/modules/cx-performance/components
 import { FacilityRankings, TagsCloud } from '@/modules/cx-performance/components/FacilityAndTags';
 import FeedbackExplorer from '@/modules/cx-performance/components/FeedbackExplorer';
 
-export default function CXPerformancePage() {
+export default function ExecutiveSummaryPage() {
   const { data, loading, error } = useCSATData();
-  const filters = useFilterStore();
-
   const records = data?.records || [];
-  const filtered = useFilteredCSAT(records, filters);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-[var(--text-muted)]">Loading CX Dashboard…</p>
+          <p className="text-[var(--text-muted)]">Loading Executive Summary…</p>
         </div>
       </div>
     );
@@ -45,14 +40,11 @@ export default function CXPerformancePage() {
 
   return (
     <div className="space-y-6">
-      {/* Filters */}
-      <FilterBar records={records} />
-
-      {/* Executive Summary */}
-      <ExecutiveSummary records={filtered} />
+      {/* Executive Summary Cards */}
+      <ExecutiveSummary records={records} />
 
       {/* CSAT per Member */}
-      <MemberCSATGrid records={filtered} />
+      <MemberCSATGrid records={records} />
 
       {/* Charts Row 1: Satisfaction & Sentiment */}
       <section className="mt-10">
@@ -63,8 +55,8 @@ export default function CXPerformancePage() {
           </h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <CSATDistributionChart records={filtered} />
-          <SentimentDonut records={filtered} />
+          <CSATDistributionChart records={records} />
+          <SentimentDonut records={records} />
         </div>
       </section>
 
@@ -77,8 +69,8 @@ export default function CXPerformancePage() {
           </h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <SentimentByBUChart records={filtered} />
-          <ResponseVolumeChart records={filtered} />
+          <SentimentByBUChart records={records} />
+          <ResponseVolumeChart records={records} />
         </div>
       </section>
 
@@ -90,18 +82,18 @@ export default function CXPerformancePage() {
             Trends & Heatmap
           </h2>
         </div>
-        <CSATTrendChart records={filtered} />
-        <CSATHeatmap records={filtered} />
+        <CSATTrendChart records={records} />
+        <CSATHeatmap records={records} />
       </section>
 
       {/* Facility Rankings */}
-      <FacilityRankings records={filtered} />
+      <FacilityRankings records={records} />
 
       {/* Tags Cloud */}
-      <TagsCloud records={filtered} />
+      <TagsCloud records={records} />
 
       {/* Feedback Explorer */}
-      <FeedbackExplorer records={filtered} />
+      <FeedbackExplorer records={records} />
     </div>
   );
 }

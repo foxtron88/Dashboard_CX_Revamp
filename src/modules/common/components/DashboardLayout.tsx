@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-  { href: '/cx-performance', label: 'CX Performance', icon: BarChart3, description: 'CSAT & Driver Metrics' },
+  { href: '/cx-performance', label: 'Executive Summary', icon: BarChart3, description: 'CSAT & Driver Metrics' },
   { href: '/sensum-csat', label: 'Sensum CSAT', icon: Star, description: 'Facility Survey Analytics' },
   { href: '/operations', label: 'Operations', icon: Users, description: 'Interaksi & Pengunjung' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, description: 'SLA & Operational' },
