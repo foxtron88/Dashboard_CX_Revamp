@@ -122,8 +122,18 @@ export default function OperationsView({ data, months }: Props) {
       if (cc) {
         for (let i = fromIdx; i <= toIdx && i < (cc.volume?.length || 0); i++) {
           callVolume += (cc.volume?.[i] || 0);
-          if (cc.fcr?.[i] !== null && cc.fcr?.[i] !== undefined && cc.fcr?.[i] > 0) { fcrSum += cc.fcr[i]; fcrCount++; }
-          if (cc.service_level?.[i] !== null && cc.service_level?.[i] !== undefined && cc.service_level?.[i] > 0) { slSum += cc.service_level[i]; slCount++; }
+          if (cc.fcr?.[i] !== null && cc.fcr?.[i] !== undefined && cc.fcr?.[i] > 0) {
+            const rawFcr = cc.fcr[i];
+            const fcrVal = rawFcr <= 1.0 ? rawFcr * 100 : rawFcr;
+            fcrSum += fcrVal;
+            fcrCount++;
+          }
+          if (cc.service_level?.[i] !== null && cc.service_level?.[i] !== undefined && cc.service_level?.[i] > 0) {
+            const rawSl = cc.service_level[i];
+            const slVal = rawSl <= 1.0 ? rawSl * 100 : rawSl;
+            slSum += slVal;
+            slCount++;
+          }
         }
       }
     });
@@ -139,8 +149,16 @@ export default function OperationsView({ data, months }: Props) {
         const cc = data[bu]?.performance?.call_center;
         if (cc) {
           volume += (cc.volume?.[mIdx] || 0);
-          if (cc.fcr?.[mIdx]) { fcr += cc.fcr[mIdx]; cntFCR++; }
-          if (cc.service_level?.[mIdx]) { sl += cc.service_level[mIdx]; cntSL++; }
+          if (cc.fcr?.[mIdx]) {
+            const rawFcr = cc.fcr[mIdx];
+            fcr += (rawFcr <= 1.0 ? rawFcr * 100 : rawFcr);
+            cntFCR++;
+          }
+          if (cc.service_level?.[mIdx]) {
+            const rawSl = cc.service_level[mIdx];
+            sl += (rawSl <= 1.0 ? rawSl * 100 : rawSl);
+            cntSL++;
+          }
         }
       });
       return {
