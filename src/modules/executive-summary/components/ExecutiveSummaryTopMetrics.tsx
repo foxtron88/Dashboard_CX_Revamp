@@ -41,7 +41,7 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
   }, [socmedStats]);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-6 animate-in">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mb-6 animate-in">
       {/* 1. Total Visitor Traffic */}
       <div className="glass-card flex flex-col justify-center border-t-2 border-t-indigo-500 p-4">
         <p className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1">
@@ -50,7 +50,7 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
         <div className="text-xl font-bold text-indigo-400" style={{ fontFamily: 'var(--font-display)' }}>
           {opsStats?.overall?.visitors?.toLocaleString() || 0}
         </div>
-        <p className="text-[9px] text-slate-400 mt-1 leading-tight">Total visitors across selected member(s)</p>
+        <p className="text-[9px] text-slate-400 mt-1 leading-tight">Total visitors across member(s)</p>
       </div>
 
       {/* 2. Total Channel Interactions */}
@@ -61,7 +61,7 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
         <div className="text-xl font-bold text-cyan-400" style={{ fontFamily: 'var(--font-display)' }}>
           {opsStats?.overall?.interactions?.toLocaleString() || 0}
         </div>
-        <p className="text-[9px] text-slate-400 mt-1 leading-tight">Across 14 customer contact channels</p>
+        <p className="text-[9px] text-slate-400 mt-1 leading-tight">Across all member contact channels</p>
       </div>
 
       {/* 3. Net Sentiment Score */}
@@ -80,10 +80,30 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
       {/* 4. Post Sentiment */}
       <div className="glass-card flex flex-col justify-center p-3">
         <h3 className="text-[9px] font-semibold text-[var(--text-primary)] mb-1 text-center uppercase tracking-wider">Post Sentiment</h3>
-        <div className="h-[70px] w-full">
+        <div className="h-[90px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={postSentimentData} innerRadius={22} outerRadius={32} paddingAngle={2} dataKey="value" stroke="none">
+              <Pie
+                data={postSentimentData}
+                innerRadius={15}
+                outerRadius={25}
+                paddingAngle={2}
+                dataKey="value"
+                stroke="none"
+                label={({ cx, cy, midAngle, innerRadius, outerRadius, value }) => {
+                  if (!value) return null;
+                  const RADIAN = Math.PI / 180;
+                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5 + 20;
+                  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                  return (
+                    <text x={x} y={y} fill="var(--text-secondary)" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={8}>
+                      {value}
+                    </text>
+                  );
+                }}
+                labelLine={false}
+              >
                 {postSentimentData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS] || '#8884d8'} />
                 ))}
@@ -102,10 +122,30 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
       {/* 5. Comment Sentiment */}
       <div className="glass-card flex flex-col justify-center p-3">
         <h3 className="text-[9px] font-semibold text-[var(--text-primary)] mb-1 text-center uppercase tracking-wider">Comment Sentiment</h3>
-        <div className="h-[70px] w-full">
+        <div className="h-[90px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={commentSentimentData} innerRadius={22} outerRadius={32} paddingAngle={2} dataKey="value" stroke="none">
+              <Pie
+                data={commentSentimentData}
+                innerRadius={15}
+                outerRadius={25}
+                paddingAngle={2}
+                dataKey="value"
+                stroke="none"
+                label={({ cx, cy, midAngle, innerRadius, outerRadius, value }) => {
+                  if (!value) return null;
+                  const RADIAN = Math.PI / 180;
+                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5 + 20;
+                  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                  return (
+                    <text x={x} y={y} fill="var(--text-secondary)" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={8}>
+                      {value}
+                    </text>
+                  );
+                }}
+                labelLine={false}
+              >
                 {commentSentimentData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS] || '#8884d8'} />
                 ))}
@@ -118,23 +158,6 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-red-500 rounded-sm"></div> Negatif</span>
           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-indigo-500 rounded-sm"></div> Netral</span>
           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-sm"></div> Positif</span>
-        </div>
-      </div>
-
-      {/* 6. Top Keywords */}
-      <div className="glass-card flex flex-col justify-center p-3">
-        <h3 className="text-[9px] font-semibold text-[var(--text-primary)] mb-2 text-center uppercase tracking-wider">Top Keywords</h3>
-        <div className="flex flex-wrap gap-1 justify-center">
-          {keywordData.map((kw, i) => (
-            <span
-              key={kw.keyword}
-              className="px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--glass-border)] truncate max-w-[100px]"
-              style={{ opacity: 1 - i * 0.08 }}
-              title={`${kw.keyword} (${kw.post_count.toLocaleString()})`}
-            >
-              {kw.keyword}
-            </span>
-          ))}
         </div>
       </div>
     </div>
