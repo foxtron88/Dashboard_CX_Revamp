@@ -89,9 +89,15 @@ export default function MemberCSATGrid({ records }: Props) {
                 <p className="text-2xl font-extrabold" style={{ color: getScoreColor(s.overall), fontFamily: 'var(--font-display)' }}>
                   {s.overall > 0 ? s.overall.toFixed(2) : '—'}
                 </p>
-                <p className="text-[10px] font-semibold" style={{ color: getScoreColor(s.overall) }}>
-                  CSAT {s.csatPct.toFixed(1)}%
-                </p>
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-[10px] font-semibold" style={{ color: getScoreColor(s.overall) }}>
+                    CSAT {s.csatPct.toFixed(1)}%
+                  </p>
+                  <span className="text-[10px] text-[var(--text-muted)]">|</span>
+                  <p className="text-[10px] font-medium text-[var(--text-muted)]">
+                    Target: 4.40
+                  </p>
+                </div>
               </div>
 
               {/* 3P Drivers */}
@@ -101,15 +107,20 @@ export default function MemberCSATGrid({ records }: Props) {
                   { label: 'PRC', val: s.process, color: '#06b6d4' },
                   { label: 'PRM', val: s.premises, color: '#ec4899' },
                 ].map(d => (
-                  <div key={d.label} className="flex items-center justify-between">
+                  <div key={d.label} className="flex items-center justify-between relative group">
                     <span className="text-[10px] font-semibold text-[var(--text-muted)] w-8">{d.label}</span>
                     <div className="flex-1 mx-2 bg-[var(--bg-tertiary)] rounded-full h-1.5 overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
                     </div>
-                    <span className="text-xs font-bold w-8 text-right" style={{ color: getScoreColor(d.val) }}>
-                      {d.val > 0 ? d.val.toFixed(1) : '—'}
-                    </span>
+                    <div className="flex items-center justify-end gap-1 w-10">
+                      {d.val > 0 && d.val < 4.40 && (
+                        <span className="text-[10px] text-red-500 animate-pulse" title="Below Target (4.40)">⚠️</span>
+                      )}
+                      <span className="text-xs font-bold text-right" style={{ color: getScoreColor(d.val) }}>
+                        {d.val > 0 ? d.val.toFixed(1) : '—'}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
