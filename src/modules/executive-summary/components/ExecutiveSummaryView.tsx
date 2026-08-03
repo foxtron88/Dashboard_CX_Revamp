@@ -4,7 +4,6 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
-import CXPerformanceSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 import {
   SentimentByBUChart,
@@ -361,11 +360,8 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
 
         {csatStats ? (
           <>
-            <BUGroupLabel label="Overall — All Business Units" />
-            <CXPerformanceSummary records={csatStats.filtered} />
-
             {/* Individual Business Units */}
-            <div className="-mt-6">
+            <div className="mt-2">
               <MemberCSATGrid records={csatStats.filtered} />
             </div>
             
