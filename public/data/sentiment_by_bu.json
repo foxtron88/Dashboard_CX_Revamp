@@ -1,0 +1,32 @@
+[
+  {
+    "bu": "API",
+    "Positive": 4881,
+    "Neutral": 1295,
+    "Negative": 1032
+  },
+  {
+    "bu": "IDM",
+    "Positive": 762,
+    "Neutral": 180,
+    "Negative": 147
+  },
+  {
+    "bu": "IJH",
+    "Positive": 0,
+    "Neutral": 0,
+    "Negative": 0
+  },
+  {
+    "bu": "ITDC",
+    "Positive": 2,
+    "Neutral": 2,
+    "Negative": 2
+  },
+  {
+    "bu": "Sarinah",
+    "Positive": 0,
+    "Neutral": 0,
+    "Negative": 0
+  }
+]

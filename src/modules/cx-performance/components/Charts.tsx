@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import type { CSATRecord } from '@/modules/common/types';
 
@@ -98,18 +98,17 @@ export function SentimentDonut({ records }: Props) {
 
 /* ── Sentiment By BU (Stacked Bar) ── */
 export function SentimentByBUChart({ records }: Props) {
-  const data = useMemo(() => {
-    const buNames = Array.from(new Set(records.map(r => r.bu))).filter(Boolean).sort();
-    return buNames.map(bu => {
-      const buRecs = records.filter(r => r.bu === bu);
-      return {
-        bu,
-        Positive: buRecs.filter(r => r.sentiment === 'Positive').length,
-        Neutral: buRecs.filter(r => r.sentiment === 'Neutral').length,
-        Negative: buRecs.filter(r => r.sentiment === 'Negative').length,
-      };
-    });
-  }, [records]);
+  const [data, setData] = useState<{ bu: string; Positive: number; Neutral: number; Negative: number }[]>([]);
+
+  useEffect(() => {
+    fetch('/data/sentiment_by_bu.json')
+      .then(res => res.json())
+      .then(json => {
+        // Only keep BUs that have data, or keep all to show they are 0
+        setData(json);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="glass-card">
