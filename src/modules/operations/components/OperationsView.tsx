@@ -45,7 +45,6 @@ export default function OperationsView({ data, months }: Props) {
   const [monthFrom, setMonthFrom] = useState('ALL');
   const [monthTo, setMonthTo] = useState('ALL');
   const [statistikData, setStatistikData] = useState<any>(null);
-  const [statMemberFilter, setStatMemberFilter] = useState('ALL');
 
   useEffect(() => {
     fetch('/data/datasheet_statistik.json')
@@ -145,20 +144,30 @@ export default function OperationsView({ data, months }: Props) {
     };
   }, [data, months, selectedBU, fromIdx, toIdx]);
 
-  // Analytics for datasheet_statistik Google Sheet Data
+  // Analytics for datasheet_statistik Google Sheet Data (UNIFIED FILTERING)
   const statistikAnalytics = useMemo(() => {
     if (!statistikData || !statistikData.members) return null;
 
     const allMembers = Object.keys(statistikData.members);
-    const selectedMembers = statMemberFilter === 'ALL' ? allMembers : [statMemberFilter];
-    const monthList = statistikData.months || [];
+
+    // Map BU selection to Google Sheet Member names
+    let selectedMembers: string[] = allMembers;
+    if (selectedBU === 'API') selectedMembers = ['API'];
+    else if (selectedBU === 'HIN') selectedMembers = ['HIN'];
+    else if (selectedBU === 'IAS') selectedMembers = ['IAS'];
+    else if (selectedBU === 'IDM - TMII') selectedMembers = ['TMII'];
+    else if (selectedBU === 'IDM - TWC') selectedMembers = ['IDM'];
+    else if (selectedBU === 'ITDC') selectedMembers = ['ITDC'];
+    else if (selectedBU === 'Sarinah') selectedMembers = ['SNH'];
+
+    // Map month selection range
+    const allMonths = statistikData.months || [];
+    const filteredMonths = allMonths.slice(fromIdx, toIdx + 1);
 
     let totalTraffic = 0;
     const channelSums: Record<string, number> = {};
     const monthlyTrafficMap: Record<string, number> = {};
-    monthList.forEach((m: string) => { monthlyTrafficMap[m] = 0; });
-
-    const itemDetails: any[] = [];
+    filteredMonths.forEach((m: string) => { monthlyTrafficMap[m] = 0; });
 
     selectedMembers.forEach(mem => {
       const items = statistikData.members[mem] || [];
@@ -166,7 +175,7 @@ export default function OperationsView({ data, months }: Props) {
         const itemName = it.item;
         let sumItem = 0;
 
-        monthList.forEach((m: string) => {
+        filteredMonths.forEach((m: string) => {
           const valObj = it.monthly[m];
           const num = valObj?.val || 0;
           sumItem += num;
@@ -182,19 +191,10 @@ export default function OperationsView({ data, months }: Props) {
           const cleanChannelName = itemName.replace('Interaksi Per Channel ', '');
           channelSums[cleanChannelName] = (channelSums[cleanChannelName] || 0) + sumItem;
         }
-
-        itemDetails.append ? null : itemDetails.push({
-          member: mem,
-          name: itemName,
-          cleanName: itemName.replace('Interaksi Per Channel ', ''),
-          category: it.kategori,
-          total: sumItem,
-          monthly: it.monthly
-        });
       });
     });
 
-    const trafficChart = monthList.map((m: string) => ({
+    const trafficChart = filteredMonths.map((m: string) => ({
       month: m,
       traffic: monthlyTrafficMap[m] || 0
     }));
@@ -208,13 +208,13 @@ export default function OperationsView({ data, months }: Props) {
 
     return {
       allMembers,
+      selectedMembers,
       totalTraffic,
       totalChannelInteractions,
       trafficChart,
-      channelChart,
-      itemDetails
+      channelChart
     };
-  }, [statistikData, statMemberFilter]);
+  }, [statistikData, selectedBU, fromIdx, toIdx]);
 
   const interactionChartData = Object.entries(aggregated.interactionTotals).map(([name, value]) => ({
     name: name.charAt(0).toUpperCase() + name.slice(1),
@@ -277,41 +277,16 @@ export default function OperationsView({ data, months }: Props) {
       {/* SECTION 1: GOOGLE SHEETS STATISTIK ANALYTICS */}
       {statistikAnalytics && (
         <div className="space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--glass-border)] pb-3">
+          <div className="flex items-center justify-between border-b border-[var(--glass-border)] pb-3">
             <div className="flex items-center gap-2">
               <span className="text-xl">📊</span>
-              <h3 className="text-base font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-                Datasheet Statistik (Google Sheets Live Data)
-              </h3>
-            </div>
-
-            {/* Member Filter */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-[var(--text-muted)] font-medium">Filter Member:</span>
-              <div className="flex flex-wrap gap-1">
-                <button
-                  onClick={() => setStatMemberFilter('ALL')}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
-                    statMemberFilter === 'ALL'
-                      ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
-                      : 'border-[var(--glass-border)] text-[var(--text-muted)] hover:text-white'
-                  }`}
-                >
-                  All Holding ({statistikAnalytics.allMembers.length})
-                </button>
-                {statistikAnalytics.allMembers.map((m: string) => (
-                  <button
-                    key={m}
-                    onClick={() => setStatMemberFilter(m)}
-                    className={`px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
-                      statMemberFilter === m
-                        ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
-                        : 'border-[var(--glass-border)] text-[var(--text-muted)] hover:text-white'
-                    }`}
-                  >
-                    {m}
-                  </button>
-                ))}
+              <div>
+                <h3 className="text-base font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+                  Datasheet Statistik (Google Sheets Live Data)
+                </h3>
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  Filtered for: <span className="font-semibold text-indigo-400">{selectedBU === 'ALL' ? 'All Holding Members' : selectedBU}</span> · Period: <span className="font-semibold text-indigo-400">{months[fromIdx]} – {months[Math.min(toIdx, months.length - 1)]}</span>
+                </p>
               </div>
             </div>
           </div>
