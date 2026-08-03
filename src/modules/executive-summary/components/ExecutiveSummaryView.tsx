@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
 import CXPerformanceSummary from '@/modules/cx-performance/components/ExecutiveSummary';
+import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -375,33 +376,9 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             <BUGroupLabel label="Overall — All Business Units" />
             <CXPerformanceSummary records={csatStats.filtered} />
 
-            <BUGroupLabel label="Individual Business Units" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3">
-              {CX_BUS.map(bu => {
-                const s = csatStats.byBU[bu];
-                return (
-                  <div key={bu} className="glass-card cursor-pointer hover:scale-[1.02] transition-transform"
-                    onClick={() => navigate('/cx-performance')}>
-                    <p className="text-xs font-bold text-[var(--text-secondary)] mb-2">{bu}</p>
-                    <div className="grid grid-cols-2 gap-1">
-                      {[
-                        { label: 'Overall', val: s.overall },
-                        { label: 'People', val: s.people },
-                        { label: 'Process', val: s.process },
-                        { label: 'Premises', val: s.premises },
-                      ].map(m => (
-                        <div key={m.label}>
-                          <p className="text-[9px] text-[var(--text-muted)]">{m.label}</p>
-                          <p className="text-sm font-bold" style={{ color: m.val > 0 ? getScoreColor(m.val) : 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
-                            {m.val > 0 ? m.val.toFixed(2) : '—'}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-[9px] text-[var(--text-muted)] mt-2">{s.count.toLocaleString()} responses</p>
-                  </div>
-                );
-              })}
+            {/* Individual Business Units */}
+            <div className="-mt-6">
+              <MemberCSATGrid records={csatStats.filtered} />
             </div>
           </>
         ) : (
