@@ -15,13 +15,31 @@ interface Props {
 
 const BU_LIST = ['API', 'HIN', 'IAS', 'IDM - TMII', 'IDM - TWC', 'ITDC', 'Sarinah'];
 
+const INTERACTION_CATEGORIES = [
+  { key: 'pengaduan', label: 'Pengaduan', color: '#ef4444' },
+  { key: 'permintaan', label: 'Permintaan/Reservasi/Product Inquiry', color: '#f59e0b' },
+  { key: 'informasi', label: 'Informasi', color: '#3b82f6' },
+  { key: 'apresiasi', label: 'Apresiasi', color: '#10b981' },
+  { key: 'laporan', label: 'Laporan', color: '#8b5cf6' },
+  { key: 'saran', label: 'Saran', color: '#ec4899' },
+  { key: 'pertanyaan', label: 'Pertanyaan', color: '#06b6d4' },
+  { key: 'lost_found', label: 'Lost and Found', color: '#eab308' },
+  { key: 'priority_service', label: 'Priority Service', color: '#14b8a6' },
+];
+
 const CATEGORY_COLORS: Record<string, string> = {
-  pengaduan: '#ef4444',
-  permohonan: '#f59e0b',
-  informasi: '#3b82f6',
-  pertanyaan: '#06b6d4',
-  apresiasi: '#10b981',
-  laporan: '#8b5cf6',
+  'pengaduan': '#ef4444',
+  'permintaan': '#f59e0b',
+  'permohonan': '#f59e0b',
+  'informasi': '#3b82f6',
+  'apresiasi': '#10b981',
+  'laporan': '#8b5cf6',
+  'saran': '#ec4899',
+  'pertanyaan': '#06b6d4',
+  'lost and found': '#eab308',
+  'lost_found': '#eab308',
+  'priority service': '#14b8a6',
+  'priority_service': '#14b8a6',
 };
 
 const CHANNEL_COLORS: Record<string, string> = {
@@ -60,7 +78,7 @@ export default function OperationsView({ data, months }: Props) {
   const aggregated = useMemo(() => {
     const busToUse = selectedBU === 'ALL' ? BU_LIST : [selectedBU];
 
-    const interactionKeys = ['pengaduan', 'permohonan', 'informasi', 'pertanyaan', 'apresiasi', 'laporan'];
+    const interactionKeys = ['pengaduan', 'permohonan', 'permintaan', 'informasi', 'apresiasi', 'laporan', 'saran', 'pertanyaan', 'lost_found', 'priority_service'];
     const interactionTotals: Record<string, number> = {};
     interactionKeys.forEach(k => {
       interactionTotals[k] = 0;
@@ -216,10 +234,18 @@ export default function OperationsView({ data, months }: Props) {
     };
   }, [statistikData, selectedBU, fromIdx, toIdx]);
 
-  const interactionChartData = Object.entries(aggregated.interactionTotals).map(([name, value]) => ({
-    name: name.charAt(0).toUpperCase() + name.slice(1),
-    value,
-  }));
+  const interactionChartData = INTERACTION_CATEGORIES.map(cat => {
+    let val = aggregated.interactionTotals[cat.key] || 0;
+    if (cat.key === 'permintaan') {
+      val += (aggregated.interactionTotals['permohonan'] || 0);
+    }
+    return {
+      name: cat.label,
+      key: cat.key,
+      value: val,
+      color: cat.color
+    };
+  });
 
   return (
     <div className="space-y-8 animate-in">
@@ -431,11 +457,11 @@ export default function OperationsView({ data, months }: Props) {
 
         {/* Category Breakdown Bar Chart */}
         <div className="glass-card">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
             {interactionChartData.map(item => (
               <div key={item.name} className="bg-[var(--bg-tertiary)] rounded-lg p-3 text-center">
                 <p className="text-xs text-[var(--text-muted)]">{item.name}</p>
-                <p className="text-lg font-bold mt-1" style={{ color: CATEGORY_COLORS[item.name.toLowerCase()] || 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+                <p className="text-lg font-bold mt-1" style={{ color: item.color, fontFamily: 'var(--font-display)' }}>
                   {item.value.toLocaleString()}
                 </p>
               </div>
@@ -450,7 +476,7 @@ export default function OperationsView({ data, months }: Props) {
               <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]} name="Volume">
                 {interactionChartData.map((entry, i) => (
-                  <Cell key={i} fill={CATEGORY_COLORS[entry.name.toLowerCase()] || '#6366f1'} />
+                  <Cell key={i} fill={entry.color} />
                 ))}
               </Bar>
             </BarChart>
