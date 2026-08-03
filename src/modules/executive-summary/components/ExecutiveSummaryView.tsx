@@ -6,6 +6,7 @@ import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSatisfactionBars';
+import ExecutiveSummaryTopMetrics from './ExecutiveSummaryTopMetrics';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -355,6 +356,8 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
       <section className="animate-in">
         {csatStats ? (
           <>
+            <ExecutiveSummaryTopMetrics socmedStats={socmedData?.overall || null} opsStats={opsStats || null} />
+            
             {/* Individual Business Units */}
             <div className="mt-2">
               <MemberCSATGrid records={csatStats.filtered} />
