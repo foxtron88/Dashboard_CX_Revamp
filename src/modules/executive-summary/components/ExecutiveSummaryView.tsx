@@ -356,7 +356,7 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
       <section className="animate-in">
         {csatStats ? (
           <>
-            <ExecutiveSummaryTopMetrics socmedStats={socmedData?.overall || null} opsStats={opsStats || null} />
+            <ExecutiveSummaryTopMetrics socmedStats={socmedData?.global || null} opsStats={opsStats || null} />
             
             {/* Individual Business Units */}
             <div className="mt-2">
