@@ -6,7 +6,7 @@ export interface ClassificationRule {
   pplKeywords: string[];
   prcKeywords: string[];
   prmKeywords: string[];
-  overrides: Record<string, 'People' | 'Process' | 'Premises'>;
+  overrides: Record<string, 'Overall' | 'People' | 'Process' | 'Premises'>;
 }
 
 const DEFAULT_RULES: ClassificationRule = {
@@ -17,24 +17,911 @@ const DEFAULT_RULES: ClassificationRule = {
 };
 
 const DISCOVERED_QUESTIONS = [
-  { id: '1',  name: 'Staff dan Petugas (Penampilan, keramahan, dll)', defaultCategory: 'People' },
-  { id: '2',  name: 'People CSAT / Service Attitude', defaultCategory: 'People' },
-  { id: '3',  name: 'Pelayanan petugas kasir / lift / musholla / kebersihan', defaultCategory: 'People' },
-  { id: '4',  name: 'Alur & Pengelolaan Toilet', defaultCategory: 'Process' },
-  { id: '5',  name: 'Proses dan Alur Check In', defaultCategory: 'Process' },
-  { id: '6',  name: 'Kecepatan dan Prosedur Keamanan Layanan', defaultCategory: 'Process' },
-  { id: '7',  name: 'Kecepatan antrean kasir / proses pembayaran di kasir', defaultCategory: 'Process' },
-  { id: '8',  name: 'Waktu tunggu lift', defaultCategory: 'Process' },
-  { id: '9',  name: 'Process CSAT / Queue Management', defaultCategory: 'Process' },
-  { id: '10', name: 'Fasilitas Toilet (Toilet bowl, Tisu, dll)', defaultCategory: 'Premises' },
-  { id: '11', name: 'Fasilitas Baggage Claim (Conveyor Belt, Troli, dll)', defaultCategory: 'Premises' },
-  { id: '12', name: 'Kelengkapan fasilitas, Ketersediaan, Rasa dan Kualitas Produk', defaultCategory: 'Premises' },
-  { id: '13', name: 'Kebersihan, Kenyamanan, dan Opsi Pembayaran', defaultCategory: 'Premises' },
-  { id: '14', name: 'Kejelasan informasi di dalam/luar area lift', defaultCategory: 'Premises' },
-  { id: '15', name: 'Lokasi fitting room', defaultCategory: 'Premises' },
-  { id: '16', name: 'Pencahayaan fitting room', defaultCategory: 'Premises' },
-  { id: '17', name: 'Atraksi Event / Layana Kesehatan', defaultCategory: 'Premises' },
-  { id: '18', name: 'Product or Premise CSAT', defaultCategory: 'Premises' }
+  {
+    "id": "1",
+    "name": "Akses & Pengelolaan Praying Room-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "2",
+    "name": "Akses & Pengelolaan Toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "3",
+    "name": "Akses & Proses Pendapatan Informasi-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan Information Center kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "4",
+    "name": "Alur & Pengelolaan Baggage Claim-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Baggage Claim kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "5",
+    "name": "Alur & Pengelolaan Boarding Lounge-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Boarding Lounge kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "6",
+    "name": "Alur & Pengelolaan Nursery Room-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Nursery Room kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "7",
+    "name": "Alur & Pengelolaan Praying Room-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Praying Room kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "8",
+    "name": "Alur & Pengelolaan Toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "9",
+    "name": "Bagaimana Anda menilai kebersihan kamar Anda?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "10",
+    "name": "Bagaimana Anda menilai kualitas dan fungsi fasilitas dalam kamar (kopi/teh, perlengkapan mandi, minibar)?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "11",
+    "name": "Bagaimana Anda menilai kualitas keseluruhan layanan makan di kamar kami?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "12",
+    "name": "Bagaimana penilaian Anda terhadap kebersihan venue?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "13",
+    "name": "Bagaimana penilaian Anda terhadap kualitas wi-fi di venue?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "14",
+    "name": "Bagaimana penilaian Anda terhadap penataan dan pengaturan ruangan?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "15",
+    "name": "Bagaimana penilaian Anda terhadap penyajian makanan dan minuman yang disajikan selama acara?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "16",
+    "name": "Bagaimana penilaian Anda terhadap peralatan audio visual di venue?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "17",
+    "name": "Bagaimana penilaian Anda terhadap rasa makanan dan minuman yang disajikan selama acara?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "18",
+    "name": "Bagaimana penilaian Anda terhadap suhu ruangan?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "19",
+    "name": "Bagaimana penilaian Anda terhadap toilet venue?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "20",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap Fasilitas Halte kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "21",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap fasilitas Kereta Gantung kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "22",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap fasilitas Toilet kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "23",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap fasiltias Merchandise Store kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "24",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap fasiltias Parkir kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "25",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan Angkutan Keliling (Angling) kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "26",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan Information Center kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "27",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan Pengambilan Foto kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "28",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan Pos Security kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "29",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan Shelter kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "30",
+    "name": "Dari skala 1 - 5, seberapa puas Bapak / Ibu terhadap layanan kuliner {KETERANGAN FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "31",
+    "name": "Fasilitas Baggage Claim (Convetor Belt, Troli, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Baggage Claim kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "32",
+    "name": "Fasilitas Boarding Lounge (Tempat duduk, Layar Informasi, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Boarding Lounge kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "33",
+    "name": "Fasilitas Check-In (Counter Check-In, Timbangan Bagasi, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Check-In kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "34",
+    "name": "Fasilitas Information Center\u00a0-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan Information Center kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "35",
+    "name": "Fasilitas Kasir (Opsi pembayaran, Peralatan kasir, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "36",
+    "name": "Fasilitas Lift (Tombol, Interior lift, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Lift kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "37",
+    "name": "Fasilitas Musholla (Tempat wudhu, Peralatan sholat, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "38",
+    "name": "Fasilitas Nursery Room (Meja ganti, Wastafel, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Nursery Room kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "39",
+    "name": "Fasilitas Praying Room (Tempat wudhu, Peralatan sholat, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Praying Room kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "40",
+    "name": "Fasilitas SCP (X - Ray, Tray, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Security Check Point kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "41",
+    "name": "Fasilitas Toilet (Toilet bowl, Tisu, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "42",
+    "name": "Fasilitas Toilet\u00a0 (Toilet bowl, tisu, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "43",
+    "name": "Kebersihan area musholla-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "44",
+    "name": "Kebersihan area toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "45",
+    "name": "Kebersihan, Kenyamanan, Keamanan dan Alur parkir-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Parkiran kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "46",
+    "name": "Kebersihan, Kenyamanan, Keamanan, dan Kecepatan Antre-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling - {KETERANGAN FASILITAS}  kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "47",
+    "name": "Kebersihan, Kenyamanan, Keamanan, dan Kecepatan Antre-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "48",
+    "name": "Kebersihan, Kenyamanan, Keamanan, dan Kecepatan Antre-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shuttle kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "49",
+    "name": "Kebersihan, Kenyamanan, Keamanan, dan Kemudahan Akses-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kereta Gantung kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "50",
+    "name": "Kebersihan, Kenyamanan, dan Alur Museum-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Museum kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "51",
+    "name": "Kebersihan, Kenyamanan, dan Keamanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "52",
+    "name": "Kebersihan, Kenyamanan, dan Keamanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "53",
+    "name": "Kebersihan, Kenyamanan, dan Keamanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {TIPE FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "54",
+    "name": "Kebersihan, Kenyamanan, dan Keamanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di{KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "55",
+    "name": "Kebersihan, Kenyamanan, dan Kemudahan Akses Informasi-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Information Center kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "56",
+    "name": "Kebersihan, Kenyamanan, dan Kemudahan Akses-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Halte kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "57",
+    "name": "Kebersihan, Kenyamanan, dan Kemudahan Akses-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Merchandise Store kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "58",
+    "name": "Kebersihan, Kenyamanan, dan Kemudahan Akses-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shuttle kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "59",
+    "name": "Kebersihan, Kenyamanan, dan Keteraturan Alur Tunggu Shelter-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shelter kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "60",
+    "name": "Kebersihan, Kenyamanan, dan Keterawatan Nursery Room-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Nursery Room kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "61",
+    "name": "Kebersihan, Kenyamanan, dan Opsi Pembayaran-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "62",
+    "name": "Kecepatan antrean kasir-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "63",
+    "name": "Kecepatan dan Prosedur Keamanan Layanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Security kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "64",
+    "name": "Kecepatan proses pembayaran di kasir-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "65",
+    "name": "Kecukupan/antrean fasilitas toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "66",
+    "name": "Kejelasan informasi pembayaran (harga, promo, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "67",
+    "name": "Kejelasan informasi program Sarinah Club-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "68",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Halte kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "69",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Information Center kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "70",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kereta Gantung kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "71",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Museum kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "72",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Nursery Room kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "73",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shelter kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "74",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shuttle kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "75",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "76",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "77",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {TIPE FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "78",
+    "name": "Kelengkapan dan Ketersediaan Fasilitas-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di{KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "79",
+    "name": "Kelengkapan dan Ketersediaan Sarana Keamanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Security kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "80",
+    "name": "Kelengkapan fasilitas Musholla (tempat wudhu, loker penyimpanan barang)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "81",
+    "name": "Kelengkapan fasilitas pendukung (sabun, tisu, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "82",
+    "name": "Kelengkapan fasilitas, Ketersediaan, Rasa dan Kualitas Produk-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {KETERANGAN FASILITAS} kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "83",
+    "name": "Kemudahan Pengambilan Foto, Durasi Pemrosesan Foto, dan Kebersihan Tempat Pengambilan Foto-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Pengambilan Foto kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "84",
+    "name": "Kenyamanan Musholla untuk beribadah-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "85",
+    "name": "Kenyamanan penggunaan fasilitas toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "86",
+    "name": "Ketersediaan Tempat Parkir-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Parkiran kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "87",
+    "name": "Ketersediaan dan Kelengkapan Angkutan Keliling-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling - {KETERANGAN FASILITAS}  kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "88",
+    "name": "Ketersediaan dan Kelengkapan Angkutan Keliling-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "89",
+    "name": "Ketersediaan dan Kelengkapan Shuttle-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shuttle kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "90",
+    "name": "Ketersediaan perlengkapan ibadah (sarung, mukena, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "91",
+    "name": "Kualitas Foto dan Harga layanan-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Pengambilan Foto kami",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "92",
+    "name": "NPS",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "93",
+    "name": "Overall CSAT",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "94",
+    "name": "Overall Satisfaction",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "95",
+    "name": "Pelayanan petugas kasir-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "96",
+    "name": "Pelayanan petugas kebersihan toilet-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "97",
+    "name": "Pelayanan petugas musholla-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "98",
+    "name": "People CSAT",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "99",
+    "name": "People-3PS",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "100",
+    "name": "People-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan kami",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "101",
+    "name": "Process CSAT",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "102",
+    "name": "Process-3PS",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "103",
+    "name": "Process-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan kami",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "104",
+    "name": "Product or Premise CSAT",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "105",
+    "name": "Product or Premises-3PS",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "106",
+    "name": "Product or Premises-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan kami",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "107",
+    "name": "Product/Premise-3PS",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "108",
+    "name": "Proses & Alur Transaksi-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "109",
+    "name": "Proses & Pengelolaan Lift-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Lift kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "110",
+    "name": "Proses dan Alur Check-In-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Check-In kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "111",
+    "name": "Proses pemeriksaan dan Alur SCP-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Security Check Point kami",
+    "defaultCategory": "Process"
+  },
+  {
+    "id": "112",
+    "name": "Seberapa besar kemungkinan Anda merekomendasikan{NAMA LOKASI} kepada teman atau kolega?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "113",
+    "name": "Seberapa besar kemungkinan Anda merekomendasikan{NAMA LOKASI} untuk menjadi venue acara di masa mendatang?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "114",
+    "name": "Seberapa nyamankah kamar Anda selama menginap?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "115",
+    "name": "Seberapa puas Anda dengan keseluruhan pengalaman acara di{NAMA LOKASI}?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "116",
+    "name": "Seberapa puas Anda dengan keseluruhan pengalaman selama menginap di {NAMA LOKASI}?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "117",
+    "name": "Seberapa puas Anda dengan pelayanan dari staf sales kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "118",
+    "name": "Seberapa puas Anda dengan pelayanan dari staf service kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "119",
+    "name": "Seberapa puas Bapak / Ibu layanan Information Center kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "120",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Boarding Lounge kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "121",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Halte kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "122",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Kereta Gantung kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "123",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Lift kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "124",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Merchandise Store kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "125",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Museum kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "126",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Musholla kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "127",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Nursery Room kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "128",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Parkir kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "129",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Praying Room kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "130",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Shelter kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "131",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Shuttle kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "132",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas Toilet kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "133",
+    "name": "Seberapa puas Bapak / Ibu terhadap fasilitas {KETERANGAN FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "134",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Angkutan Keliling (Angling) kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "135",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Angkutan Keliling - {KETERANGAN FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "136",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Baggage Claim  kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "137",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Check-In kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "138",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Information Center kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "139",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Kasir kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "140",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Pengambilan Foto kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "141",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Pos Security kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "142",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan Security Check Point (SCP) kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "143",
+    "name": "Seberapa puas Bapak / Ibu terhadap layanan kuliner {KETERANGAN FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "144",
+    "name": "Seberapa puas Bapak / Ibu terhadap pelayanan di {KETERANGAN FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "145",
+    "name": "Seberapa puas Bapak / Ibu terhadap {TIPE FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "146",
+    "name": "Seberapa puaskah Anda dengan kejelasan dan ketepatan tagihan Anda?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "147",
+    "name": "Seberapa puaskah Anda dengan keramahan staf kami selama Anda menginap?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "148",
+    "name": "Seberapa puaskah Anda dengan kondisi dan kebersihan fasilitas hotel kami?",
+    "defaultCategory": "Premises"
+  },
+  {
+    "id": "149",
+    "name": "Seberapa puaskah Anda dengan koneksi Wi-Fi di kamar Anda?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "150",
+    "name": "Seberapa puaskah Anda dengan pengalaman kedatangan Anda?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "151",
+    "name": "Seberapa puaskah Anda dengan pengalaman kepergian Anda?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "152",
+    "name": "Seberapa puaskah Anda dengan suhu ruangan selama menginap?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "153",
+    "name": "Secara keseluruhan bagaimanakah tingkat kepuasan Bapak / Ibu terhadap fasilitas Shuttle kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "154",
+    "name": "Secara keseluruhan bagaimanakah tingkat kepuasan Bapak / Ibu terhadap {TIPE FASILITAS} kami?",
+    "defaultCategory": "Overall"
+  },
+  {
+    "id": "155",
+    "name": "Staff (penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "156",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling - {KETERANGAN FASILITAS}  kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "157",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Angkutan Keliling kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "158",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Baggage Claim kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "159",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Boarding Lounge kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "160",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Check-In kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "161",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Halte kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "162",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Information Center kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "163",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kasir kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "164",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Kereta Gantung kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "165",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Lift kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "166",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Merchandise Store kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "167",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Museum kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "168",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Musholla kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "169",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Nursery Room kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "170",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Parkiran kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "171",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Pengambilan Foto kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "172",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Pos Security kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "173",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Security Check Point kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "174",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shelter kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "175",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Shuttle kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "176",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Toilet kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "177",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di layanan Information Center kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "178",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {KETERANGAN FASILITAS} kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "179",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di {TIPE FASILITAS} kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "180",
+    "name": "Staff dan Petugas (Penampilan, keramahan, dll)-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di{KETERANGAN FASILITAS} kami",
+    "defaultCategory": "People"
+  },
+  {
+    "id": "181",
+    "name": "Variasi dan Ketersediaan Produk-Berikan penilaian Anda terhadap kepuasan Anda dengan hal-hal berikut di Merchandise Store kami",
+    "defaultCategory": "Premises"
+  }
 ];
 
 export default function DriverClassificationManager() {
@@ -88,7 +975,7 @@ export default function DriverClassificationManager() {
     }
   };
 
-  const handleOverride = (questionName: string, category: 'People' | 'Process' | 'Premises') => {
+  const handleOverride = (questionName: string, category: 'Overall' | 'People' | 'Process' | 'Premises') => {
     saveRules({
       ...rules,
       overrides: { ...rules.overrides, [questionName]: category }
@@ -296,10 +1183,11 @@ export default function DriverClassificationManager() {
                       onChange={e => handleOverride(q.name, e.target.value as any)}
                       className="text-xs font-semibold rounded-lg px-2.5 py-1 border bg-[var(--glass-bg)]"
                       style={{
-                        color: activeCategory === 'People' ? '#6366f1' : activeCategory === 'Process' ? '#06b6d4' : '#ec4899',
-                        borderColor: activeCategory === 'People' ? '#6366f140' : activeCategory === 'Process' ? '#06b6d440' : '#ec489940'
+                        color: activeCategory === 'Overall' ? '#eab308' : activeCategory === 'People' ? '#6366f1' : activeCategory === 'Process' ? '#06b6d4' : '#ec4899',
+                        borderColor: activeCategory === 'Overall' ? '#eab30840' : activeCategory === 'People' ? '#6366f140' : activeCategory === 'Process' ? '#06b6d440' : '#ec489940'
                       }}
                     >
+                      <option value="Overall">🌟 Overall CSAT</option>
                       <option value="People">👥 People (PPL)</option>
                       <option value="Process">🔄 Process (PRC)</option>
                       <option value="Premises">🏢 Premises (PRM)</option>
