@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
-import {
-  SentimentByBUChart,
-  ResponseVolumeChart,
-} from '@/modules/cx-performance/components/Charts';
+import { ResponseVolumeChart } from '@/modules/cx-performance/components/Charts';
+import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSatisfactionBars';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -373,8 +371,8 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
                   Business Unit Deep Dive
                 </h3>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <SentimentByBUChart records={csatStats.filtered} />
+              <div className="flex flex-col gap-4">
+                <DriverSatisfactionBars records={csatStats.filtered} />
                 <ResponseVolumeChart records={csatStats.filtered} />
               </div>
             </div>
