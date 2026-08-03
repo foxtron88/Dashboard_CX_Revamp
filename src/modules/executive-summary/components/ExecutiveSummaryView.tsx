@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
+import CXPerformanceSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -160,7 +161,7 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
     for (const bu of CX_BUS) {
       byBU[bu] = compute(filtered.filter(r => r.bu === bu));
     }
-    return { overall, byBU };
+    return { overall, byBU, filtered };
   }, [csatRecords, fromMonth, toMonth]);
 
   // ─── OPERATIONS ────────────────────────────────────────────────────────────
@@ -365,28 +366,14 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
         </p>
       </div>
 
-      {/* ── 1. CX PERFORMANCE ─────────────────────────────────────────────── */}
+      {/* ── 1. CSAT HOLDING PERFORMANCE ─────────────────────────────────────────────── */}
       <section className="animate-in">
-        <SectionHeader icon="📊" title="CX Performance" href="/cx-performance" onNavigate={navigate} />
+        <SectionHeader icon="📊" title="CSAT Holding Performance" href="/cx-performance" onNavigate={navigate} />
 
         {csatStats ? (
           <>
             <BUGroupLabel label="Overall — All Business Units" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { label: 'Overall CSAT', val: csatStats.overall.overall, badge: 'Master Score', icon: '⭐' },
-                { label: 'People (PPL)', val: csatStats.overall.people, badge: 'Staff & Service', icon: '👥' },
-                { label: 'Process (PRC)', val: csatStats.overall.process, badge: 'Flow & Ops', icon: '🔄' },
-                { label: 'Premises (PRM)', val: csatStats.overall.premises, badge: 'Facility', icon: '🏢' },
-              ].map(p => (
-                <ScoreCard key={p.label} label={p.label} badge={p.badge} icon={p.icon}
-                  value={p.val > 0 ? p.val.toFixed(2) : '—'}
-                  sub={`/ 5.00 · ${csatStats.overall.count.toLocaleString()} responses`}
-                  color={p.val > 0 ? getScoreColor(p.val) : undefined}
-                  onClick={() => navigate('/cx-performance')}
-                />
-              ))}
-            </div>
+            <CXPerformanceSummary records={csatStats.filtered} />
 
             <BUGroupLabel label="Individual Business Units" />
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3">
