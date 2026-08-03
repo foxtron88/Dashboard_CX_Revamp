@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell,
-  LineChart, Line, ComposedChart, Area,
+  LineChart, Line, ComposedChart, Area, PieChart, Pie, AreaChart
 } from 'recharts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -24,10 +24,35 @@ const CATEGORY_COLORS: Record<string, string> = {
   laporan: '#8b5cf6',
 };
 
+const CHANNEL_COLORS: Record<string, string> = {
+  'Interaksi Per Channel Whatsapp': '#25D366',
+  'Interaksi Per Channel Telepon': '#3b82f6',
+  'Interaksi Per Channel Live Chat': '#06b6d4',
+  'Interaksi Per Channel Instagram': '#E1306C',
+  'Interaksi Per Channel Google Review': '#ea4335',
+  'Interaksi Per Channel SP4N Lapor!': '#f59e0b',
+  'Interaksi Per Channel Survey Sensum': '#8b5cf6',
+  'Interaksi Per Channel Kotak Saran': '#ec4899',
+  'Interaksi Per Channel Email': '#6366f1',
+  'Interaksi Per Channel Voice (Omnix)': '#14b8a6',
+  'Interaksi Per Channel Website Inquiry (CMS)': '#a855f7',
+  'Interaksi Per Channel Twitter': '#1DA1F2',
+  'Interaksi Per Channel Customer Service': '#f97316'
+};
+
 export default function OperationsView({ data, months }: Props) {
   const [selectedBU, setSelectedBU] = useState('ALL');
   const [monthFrom, setMonthFrom] = useState('ALL');
   const [monthTo, setMonthTo] = useState('ALL');
+  const [statistikData, setStatistikData] = useState<any>(null);
+  const [statMemberFilter, setStatMemberFilter] = useState('ALL');
+
+  useEffect(() => {
+    fetch('/data/datasheet_statistik.json')
+      .then(res => res.json())
+      .then(d => setStatistikData(d))
+      .catch(err => console.error('Failed to load datasheet_statistik.json:', err));
+  }, []);
 
   const fromIdx = monthFrom === 'ALL' ? 0 : Number(monthFrom);
   const toIdx = monthTo === 'ALL' ? months.length - 1 : Number(monthTo);
@@ -36,7 +61,6 @@ export default function OperationsView({ data, months }: Props) {
   const aggregated = useMemo(() => {
     const busToUse = selectedBU === 'ALL' ? BU_LIST : [selectedBU];
 
-    // Sum interactions
     const interactionKeys = ['pengaduan', 'permohonan', 'informasi', 'pertanyaan', 'apresiasi', 'laporan'];
     const interactionTotals: Record<string, number> = {};
     interactionKeys.forEach(k => {
@@ -49,7 +73,6 @@ export default function OperationsView({ data, months }: Props) {
       });
     });
 
-    // Sum visitors & total interactions
     let totalVisitors = 0;
     let totalInteractions = 0;
     busToUse.forEach(bu => {
@@ -61,7 +84,6 @@ export default function OperationsView({ data, months }: Props) {
       }
     });
 
-    // Monthly visitor vs interaction chart data
     const monthlyChart = months.slice(fromIdx, toIdx + 1).map((m, idx) => {
       const mIdx = fromIdx + idx;
       let visitors = 0;
@@ -73,42 +95,41 @@ export default function OperationsView({ data, months }: Props) {
       return { month: m, visitors, interactions };
     });
 
-    // Call center aggregated
     let callVolume = 0;
     let fcrSum = 0;
     let slSum = 0;
     let ccCount = 0;
     busToUse.forEach(bu => {
-      const cc = data[bu]?.call_center;
-      if (!cc) return;
-      for (let i = fromIdx; i <= toIdx && i < (cc.volume?.length || 0); i++) {
-        callVolume += (cc.volume?.[i] || 0);
-        fcrSum += (cc.fcr?.[i] || 0);
-        slSum += (cc.service_level?.[i] || 0);
-        ccCount++;
+      const cc = data[bu]?.performance?.call_center;
+      if (cc) {
+        for (let i = fromIdx; i <= toIdx && i < (cc.volume?.length || 0); i++) {
+          callVolume += (cc.volume?.[i] || 0);
+          if (cc.fcr?.[i] !== null && cc.fcr?.[i] !== undefined) { fcrSum += cc.fcr[i]; ccCount++; }
+          if (cc.service_level?.[i] !== null && cc.service_level?.[i] !== undefined) { slSum += cc.service_level[i]; }
+        }
       }
     });
 
-    // Monthly call center chart
     const callCenterChart = months.slice(fromIdx, toIdx + 1).map((m, idx) => {
       const mIdx = fromIdx + idx;
-      let vol = 0;
+      let volume = 0;
       let fcr = 0;
       let sl = 0;
       let cnt = 0;
       busToUse.forEach(bu => {
-        const cc = data[bu]?.call_center;
-        if (!cc) return;
-        vol += cc.volume?.[mIdx] || 0;
-        fcr += cc.fcr?.[mIdx] || 0;
-        sl += cc.service_level?.[mIdx] || 0;
-        cnt++;
+        const cc = data[bu]?.performance?.call_center;
+        if (cc) {
+          volume += (cc.volume?.[mIdx] || 0);
+          if (cc.fcr?.[mIdx]) fcr += cc.fcr[mIdx];
+          if (cc.service_level?.[mIdx]) sl += cc.service_level[mIdx];
+          cnt++;
+        }
       });
       return {
         month: m,
-        volume: vol,
-        fcr: cnt ? Number((fcr / cnt).toFixed(1)) : 0,
-        serviceLevel: cnt ? Number((sl / cnt).toFixed(1)) : 0,
+        volume,
+        fcr: cnt ? Math.round(fcr / cnt) : 0,
+        serviceLevel: cnt ? Math.round(sl / cnt) : 0,
       };
     });
 
@@ -124,159 +145,379 @@ export default function OperationsView({ data, months }: Props) {
     };
   }, [data, months, selectedBU, fromIdx, toIdx]);
 
-  const selectClass = `
-    bg-[var(--bg-tertiary)] border border-[var(--glass-border)] rounded-lg px-3 py-2
-    text-sm text-[var(--text-primary)] outline-none
-    focus:border-[var(--accent-primary)] transition-all duration-200
-  `;
+  // Analytics for datasheet_statistik Google Sheet Data
+  const statistikAnalytics = useMemo(() => {
+    if (!statistikData || !statistikData.members) return null;
 
-  const kpiCards = [
-    { label: 'Total Pengunjung', value: aggregated.totalVisitors.toLocaleString(), icon: '👥', color: 'var(--accent-info)' },
-    { label: 'Total Interaksi', value: aggregated.totalInteractions.toLocaleString(), icon: '📞', color: 'var(--accent-secondary)' },
-    { label: 'Call Volume', value: aggregated.callVolume.toLocaleString(), icon: '☎️', color: 'var(--accent-tertiary)' },
-    { label: 'Avg FCR', value: `${aggregated.avgFCR}%`, icon: '✅', color: 'var(--accent-success)' },
-    { label: 'Avg Service Level', value: `${aggregated.avgSL}%`, icon: '⚡', color: 'var(--accent-warning)' },
-  ];
+    const allMembers = Object.keys(statistikData.members);
+    const selectedMembers = statMemberFilter === 'ALL' ? allMembers : [statMemberFilter];
+    const monthList = statistikData.months || [];
 
-  const interactionChartData = Object.entries(aggregated.interactionTotals)
-    .map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value }))
-    .sort((a, b) => b.value - a.value);
+    let totalTraffic = 0;
+    const channelSums: Record<string, number> = {};
+    const monthlyTrafficMap: Record<string, number> = {};
+    monthList.forEach((m: string) => { monthlyTrafficMap[m] = 0; });
+
+    const itemDetails: any[] = [];
+
+    selectedMembers.forEach(mem => {
+      const items = statistikData.members[mem] || [];
+      items.forEach((it: any) => {
+        const itemName = it.item;
+        let sumItem = 0;
+
+        monthList.forEach((m: string) => {
+          const valObj = it.monthly[m];
+          const num = valObj?.val || 0;
+          sumItem += num;
+
+          if (itemName === 'Jumlah Pengunjung') {
+            monthlyTrafficMap[m] += num;
+          }
+        });
+
+        if (itemName === 'Jumlah Pengunjung') {
+          totalTraffic += sumItem;
+        } else if (itemName.startsWith('Interaksi Per Channel')) {
+          const cleanChannelName = itemName.replace('Interaksi Per Channel ', '');
+          channelSums[cleanChannelName] = (channelSums[cleanChannelName] || 0) + sumItem;
+        }
+
+        itemDetails.append ? null : itemDetails.push({
+          member: mem,
+          name: itemName,
+          cleanName: itemName.replace('Interaksi Per Channel ', ''),
+          category: it.kategori,
+          total: sumItem,
+          monthly: it.monthly
+        });
+      });
+    });
+
+    const trafficChart = monthList.map((m: string) => ({
+      month: m,
+      traffic: monthlyTrafficMap[m] || 0
+    }));
+
+    const channelChart = Object.entries(channelSums)
+      .map(([channel, total]) => ({ name: channel, value: total }))
+      .filter(c => c.value > 0)
+      .sort((a, b) => b.value - a.value);
+
+    const totalChannelInteractions = channelChart.reduce((acc, c) => acc + c.value, 0);
+
+    return {
+      allMembers,
+      totalTraffic,
+      totalChannelInteractions,
+      trafficChart,
+      channelChart,
+      itemDetails
+    };
+  }, [statistikData, statMemberFilter]);
+
+  const interactionChartData = Object.entries(aggregated.interactionTotals).map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value,
+  }));
 
   return (
-    <div className="space-y-6">
-      {/* Filters */}
-      <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
-        <div className="flex flex-col">
-          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</label>
-          <select className={selectClass} value={selectedBU} onChange={e => setSelectedBU(e.target.value)}>
-            <option value="ALL">All Business Units</option>
-            {BU_LIST.map(bu => <option key={bu} value={bu}>{bu}</option>)}
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">Month From</label>
-          <select className={selectClass} value={monthFrom} onChange={e => setMonthFrom(e.target.value)}>
-            <option value="ALL">All Months</option>
-            {months.map((m, i) => <option key={i} value={i}>{m}</option>)}
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">Month To</label>
-          <select className={selectClass} value={monthTo} onChange={e => setMonthTo(e.target.value)}>
-            <option value="ALL">All Months</option>
-            {months.map((m, i) => <option key={i} value={i}>{m}</option>)}
-          </select>
-        </div>
-      </div>
-
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">📊</span>
+    <div className="space-y-8 animate-in">
+      {/* Header Banner */}
+      <div className="glass-card flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-blue-900/20 via-indigo-900/20 to-purple-900/20 border-indigo-500/20">
         <div>
           <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            Interaksi & Pengunjung Analytics
+            👥 Operations & Omnichannel Traffic Analytics
           </h2>
-          <p className="text-sm text-[var(--text-muted)]">Data dari Statistik Operasional CX Performance</p>
+          <p className="text-xs text-[var(--text-muted)] mt-1">
+            Analyzing visitor traffic volume, contact center channels, and operational KPIs from Google Sheets & Sensum Data.
+          </p>
+        </div>
+
+        {/* Global BU & Month Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
+            <select
+              value={selectedBU}
+              onChange={e => setSelectedBU(e.target.value)}
+              className="text-xs rounded-lg px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)] font-semibold"
+            >
+              <option value="ALL">All Business Units</option>
+              {BU_LIST.map(bu => <option key={bu} value={bu}>{bu}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">From Month</p>
+            <select
+              value={monthFrom}
+              onChange={e => setMonthFrom(e.target.value)}
+              className="text-xs rounded-lg px-2.5 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]"
+            >
+              <option value="ALL">Start</option>
+              {months.map((m, idx) => <option key={m} value={idx}>{m}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">To Month</p>
+            <select
+              value={monthTo}
+              onChange={e => setMonthTo(e.target.value)}
+              className="text-xs rounded-lg px-2.5 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]"
+            >
+              <option value="ALL">End</option>
+              {months.map((m, idx) => <option key={m} value={idx}>{m}</option>)}
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-in">
-        {kpiCards.map(kpi => (
-          <div key={kpi.label} className="glass-card text-center">
-            <span className="text-2xl">{kpi.icon}</span>
-            <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-2">{kpi.label}</p>
-            <p className="text-2xl font-bold mt-1" style={{ color: kpi.color, fontFamily: 'var(--font-display)' }}>
-              {kpi.value}
-            </p>
-          </div>
-        ))}
-      </div>
+      {/* SECTION 1: GOOGLE SHEETS STATISTIK ANALYTICS */}
+      {statistikAnalytics && (
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--glass-border)] pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">📊</span>
+              <h3 className="text-base font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+                Datasheet Statistik (Google Sheets Live Data)
+              </h3>
+            </div>
 
-      {/* Interaction Kategori */}
-      <div className="glass-card animate-in">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-2">🗂️ Kategorisasi Interaksi</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-          {interactionChartData.map(item => (
-            <div key={item.name} className="bg-[var(--bg-tertiary)] rounded-lg p-3 text-center">
-              <p className="text-xs text-[var(--text-muted)]">{item.name}</p>
-              <p className="text-lg font-bold mt-1" style={{ color: CATEGORY_COLORS[item.name.toLowerCase()] || 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                {item.value.toLocaleString()}
+            {/* Member Filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[var(--text-muted)] font-medium">Filter Member:</span>
+              <div className="flex flex-wrap gap-1">
+                <button
+                  onClick={() => setStatMemberFilter('ALL')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
+                    statMemberFilter === 'ALL'
+                      ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                      : 'border-[var(--glass-border)] text-[var(--text-muted)] hover:text-white'
+                  }`}
+                >
+                  All Holding ({statistikAnalytics.allMembers.length})
+                </button>
+                {statistikAnalytics.allMembers.map((m: string) => (
+                  <button
+                    key={m}
+                    onClick={() => setStatMemberFilter(m)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
+                      statMemberFilter === m
+                        ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                        : 'border-[var(--glass-border)] text-[var(--text-muted)] hover:text-white'
+                    }`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Stat KPI Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card bg-gradient-to-br from-indigo-950/40 to-slate-900/40 border-indigo-500/30">
+              <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Total Visitor Traffic</p>
+              <p className="text-2xl font-bold text-indigo-400 mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+                {statistikAnalytics.totalTraffic.toLocaleString()}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">Total visitors across selected member(s)</p>
+            </div>
+
+            <div className="glass-card bg-gradient-to-br from-cyan-950/40 to-slate-900/40 border-cyan-500/30">
+              <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Total Channel Interactions</p>
+              <p className="text-2xl font-bold text-cyan-400 mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+                {statistikAnalytics.totalChannelInteractions.toLocaleString()}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">Across 14 customer contact channels</p>
+            </div>
+
+            <div className="glass-card bg-gradient-to-br from-emerald-950/40 to-slate-900/40 border-emerald-500/30">
+              <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Top Interaction Channel</p>
+              <p className="text-xl font-bold text-emerald-400 mt-1 truncate" style={{ fontFamily: 'var(--font-display)' }}>
+                {statistikAnalytics.channelChart[0]?.name || 'N/A'}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">
+                {statistikAnalytics.channelChart[0]?.value.toLocaleString() || 0} total interactions
               </p>
             </div>
-          ))}
+
+            <div className="glass-card bg-gradient-to-br from-purple-950/40 to-slate-900/40 border-purple-500/30">
+              <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Active Channels Tracked</p>
+              <p className="text-2xl font-bold text-purple-400 mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+                {statistikAnalytics.channelChart.length} Channels
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">WA, Call Center, Sensum, IG, Live Chat, etc.</p>
+            </div>
+          </div>
+
+          {/* Charts Row 1: Traffic Trend & Channel Volume Breakdown */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Monthly Visitor Traffic Area Chart */}
+            <div className="glass-card">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                    📈 Monthly Visitor Traffic Trend (Jan 2025 - Jun 2026)
+                  </h4>
+                  <p className="text-[11px] text-[var(--text-muted)]">Visitor volume evolution over 18 months</p>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={statistikAnalytics.trafficChart}>
+                  <defs>
+                    <linearGradient id="trafficGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={v => (v / 1e6).toFixed(1) + 'M'} />
+                  <Tooltip
+                    contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+                    formatter={(val: any) => [val.toLocaleString() + ' Visitors', 'Pengunjung']}
+                  />
+                  <Area type="monotone" dataKey="traffic" stroke="#6366f1" strokeWidth={2.5} fill="url(#trafficGradient)" name="Jumlah Pengunjung" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Omnichannel Interaction Distribution Bar Chart */}
+            <div className="glass-card">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                    📱 Omnichannel Contact Volume by Channel
+                  </h4>
+                  <p className="text-[11px] text-[var(--text-muted)]">Total interactions per channel across selected member(s)</p>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={statistikAnalytics.channelChart} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <YAxis dataKey="name" type="category" width={140} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <Tooltip
+                    contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+                    formatter={(val: any) => [val.toLocaleString() + ' Interaksi', 'Volume']}
+                  />
+                  <Bar dataKey="value" radius={[0, 4, 4, 0]} name="Volume">
+                    {statistikAnalytics.channelChart.map((entry: any, i: number) => (
+                      <Cell key={i} fill={CHANNEL_COLORS['Interaksi Per Channel ' + entry.name] || '#06b6d4'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Interaction Volumes per Kategori</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={interactionChartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-            <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]} name="Volume">
-              {interactionChartData.map((entry, i) => (
-                <Cell key={i} fill={CATEGORY_COLORS[entry.name.toLowerCase()] || '#6366f1'} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      )}
 
-      {/* Pengunjung vs Interaksi */}
-      <div className="glass-card animate-in">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">📈 Jumlah Pengunjung vs Total Interaksi (Bulanan)</h3>
-        <ResponsiveContainer width="100%" height={320}>
-          <ComposedChart data={aggregated.monthlyChart}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-            <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-            <YAxis yAxisId="left" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <YAxis yAxisId="right" orientation="right" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
-            <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
-            <Area yAxisId="left" type="monotone" dataKey="visitors" fill="#6366f120" stroke="#6366f1" strokeWidth={2} name="Pengunjung" />
-            <Line yAxisId="right" type="monotone" dataKey="interactions" stroke="#06b6d4" strokeWidth={2} dot={{ r: 3 }} name="Interaksi" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
+      {/* SECTION 2: SENSUM OPERATIONS & CATEGORIES */}
+      <div className="space-y-6 pt-4 border-t border-[var(--glass-border)]">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">⚙️</span>
+          <h3 className="text-base font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            Sensum Feedback & Interaction Category Analytics
+          </h3>
+        </div>
 
-      {/* Call Center Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="glass-card animate-in">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Call Center Performance</h3>
+        {/* Top KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="glass-card">
+            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Total Pengunjung</p>
+            <p className="text-2xl font-bold text-[var(--accent-primary-light)] mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+              {aggregated.totalVisitors.toLocaleString()}
+            </p>
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">Periode terpilih</p>
+          </div>
+
+          <div className="glass-card">
+            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Total Interaksi</p>
+            <p className="text-2xl font-bold text-[var(--accent-info)] mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+              {aggregated.totalInteractions.toLocaleString()}
+            </p>
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">Semua kategori interaksi</p>
+          </div>
+
+          <div className="glass-card">
+            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">Call Center Volume</p>
+            <p className="text-2xl font-bold text-[var(--accent-success)] mt-1" style={{ fontFamily: 'var(--font-display)' }}>
+              {aggregated.callVolume.toLocaleString()}
+            </p>
+            <p className="text-[10px] text-[var(--text-muted)] mt-1">FCR: {aggregated.avgFCR}% | SL: {aggregated.avgSL}%</p>
+          </div>
+        </div>
+
+        {/* Category Breakdown Bar Chart */}
+        <div className="glass-card">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+            {interactionChartData.map(item => (
+              <div key={item.name} className="bg-[var(--bg-tertiary)] rounded-lg p-3 text-center">
+                <p className="text-xs text-[var(--text-muted)]">{item.name}</p>
+                <p className="text-lg font-bold mt-1" style={{ color: CATEGORY_COLORS[item.name.toLowerCase()] || 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+                  {item.value.toLocaleString()}
+                </p>
+              </div>
+            ))}
+          </div>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Interaction Volumes per Kategori</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={aggregated.callCenterChart}>
+            <BarChart data={interactionChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-              <YAxis yAxisId="left" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <YAxis yAxisId="right" orientation="right" domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+              <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+              <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
-              <Bar yAxisId="left" dataKey="volume" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Call Volume" />
-              <Line yAxisId="right" type="monotone" dataKey="fcr" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} name="FCR %" />
-              <Line yAxisId="right" type="monotone" dataKey="serviceLevel" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} name="Service Level %" />
-            </ComposedChart>
+              <Bar dataKey="value" radius={[6, 6, 0, 0]} name="Volume">
+                {interactionChartData.map((entry, i) => (
+                  <Cell key={i} fill={CATEGORY_COLORS[entry.name.toLowerCase()] || '#6366f1'} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Call Center KPIs */}
-        <div className="glass-card animate-in">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Call Center KPIs</h3>
-          <div className="space-y-4">
-            {[
-              { label: 'Total Call Volume', value: aggregated.callVolume.toLocaleString(), color: '#8b5cf6', pct: 100 },
-              { label: 'First Call Resolution (FCR)', value: `${aggregated.avgFCR}%`, color: '#10b981', pct: Number(aggregated.avgFCR) },
-              { label: 'Service Level', value: `${aggregated.avgSL}%`, color: '#f59e0b', pct: Number(aggregated.avgSL) },
-            ].map(kpi => (
-              <div key={kpi.label} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-[var(--text-secondary)]">{kpi.label}</span>
-                  <span className="text-lg font-bold" style={{ color: kpi.color, fontFamily: 'var(--font-display)' }}>{kpi.value}</span>
+        {/* Call Center Performance */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="glass-card">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Call Center Performance</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <ComposedChart data={aggregated.callCenterChart}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                <YAxis yAxisId="left" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                <YAxis yAxisId="right" orientation="right" domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                <Bar yAxisId="left" dataKey="volume" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Call Volume" />
+                <Line yAxisId="right" type="monotone" dataKey="fcr" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} name="FCR %" />
+                <Line yAxisId="right" type="monotone" dataKey="serviceLevel" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} name="Service Level %" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="glass-card">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Call Center KPIs</h3>
+            <div className="space-y-4">
+              {[
+                { label: 'Total Call Volume', value: aggregated.callVolume.toLocaleString(), color: '#8b5cf6', pct: 100 },
+                { label: 'First Call Resolution (FCR)', value: `${aggregated.avgFCR}%`, color: '#10b981', pct: Number(aggregated.avgFCR) },
+                { label: 'Service Level', value: `${aggregated.avgSL}%`, color: '#f59e0b', pct: Number(aggregated.avgSL) },
+              ].map(kpi => (
+                <div key={kpi.label} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-[var(--text-secondary)]">{kpi.label}</span>
+                    <span className="text-lg font-bold" style={{ color: kpi.color, fontFamily: 'var(--font-display)' }}>{kpi.value}</span>
+                  </div>
+                  <div className="w-full bg-[var(--bg-primary)] rounded-full h-2">
+                    <div className="h-2 rounded-full transition-all duration-700" style={{ width: `${kpi.pct}%`, background: kpi.color }} />
+                  </div>
                 </div>
-                <div className="w-full bg-[var(--bg-primary)] rounded-full h-2">
-                  <div className="h-2 rounded-full transition-all duration-700" style={{ width: `${kpi.pct}%`, background: kpi.color }} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
