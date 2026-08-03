@@ -90,14 +90,15 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
                 paddingAngle={2}
                 dataKey="value"
                 stroke="none"
-                label={({ cx, cy, midAngle, innerRadius, outerRadius, value }) => {
+                label={({ cx, cy, midAngle, innerRadius, outerRadius, value, name }) => {
                   if (!value) return null;
                   const RADIAN = Math.PI / 180;
-                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5 + 20;
+                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5 + 23;
                   const x = cx + radius * Math.cos(-midAngle * RADIAN);
                   const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                  const color = COLORS[name as keyof typeof COLORS] || 'var(--text-secondary)';
                   return (
-                    <text x={x} y={y} fill="var(--text-secondary)" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={8}>
+                    <text x={x} y={y} fill={color} textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={9} fontWeight="bold">
                       {value}
                     </text>
                   );
