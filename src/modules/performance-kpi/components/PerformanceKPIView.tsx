@@ -11,14 +11,16 @@ import ComplaintSLA from './ComplaintSLA';
 interface Props {
   data: Record<string, any>;
   months: string[];
+  initialFrom?: string;
+  initialTo?: string;
 }
 
 const BU_LIST = ['API', 'HIN', 'IAS', 'IDM - TMII', 'IDM - TWC', 'ITDC', 'Sarinah'];
 
-export default function PerformanceKPIView({ data, months }: Props) {
+export default function PerformanceKPIView({ data, months, initialFrom, initialTo }: Props) {
   const [selectedBU, setSelectedBU] = useState('ALL');
-  const [monthFrom, setMonthFrom] = useState('ALL');
-  const [monthTo, setMonthTo] = useState('ALL');
+  const [monthFrom, setMonthFrom] = useState(initialFrom ?? 'ALL');
+  const [monthTo, setMonthTo] = useState(initialTo ?? 'ALL');
 
   const fromIdx = monthFrom === 'ALL' ? 0 : Number(monthFrom);
   const toIdx = monthTo === 'ALL' ? months.length - 1 : Number(monthTo);

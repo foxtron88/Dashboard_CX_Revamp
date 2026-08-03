@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { useCSATData, useFilteredCSAT } from '@/modules/common/hooks/use-data';
+import { useSearchParams } from 'next/navigation';
 import ExecutiveSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 import {
@@ -18,14 +19,15 @@ import FeedbackExplorer from '@/modules/cx-performance/components/FeedbackExplor
 const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
-export default function CXPerformancePage() {
+function CXPerformanceContent() {
+  const searchParams = useSearchParams();
   const { data: records, loading, error } = useCSATData();
   const [bu, setBU] = useState('ALL');
   const [surveyType, setSurveyType] = useState('ALL');
   const [location, setLocation] = useState('ALL');
   const [sentiment, setSentiment] = useState('ALL');
-  const [fromMonth, setFromMonth] = useState('');
-  const [toMonth, setToMonth] = useState('');
+  const [fromMonth, setFromMonth] = useState(searchParams.get('from') || '');
+  const [toMonth, setToMonth] = useState(searchParams.get('to') || '');
 
   const surveyTypes = useMemo(() => {
     if (!records) return ['ALL'];
@@ -220,5 +222,20 @@ export default function CXPerformancePage() {
       {/* Feedback Explorer */}
       <FeedbackExplorer records={filtered} />
     </div>
+  );
+}
+
+export default function CXPerformancePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-[60vh]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-[var(--text-muted)]">Loading CX Performance Data…</p>
+        </div>
+      </div>
+    }>
+      <CXPerformanceContent />
+    </Suspense>
   );
 }

@@ -4,10 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard,
+  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star,
 } from 'lucide-react';
 
 const navItems = [
+  { href: '/executive-summary', label: 'Executive Summary', icon: Star, description: 'Landing Page Overview' },
   { href: '/cx-performance', label: 'CX Performance', icon: BarChart3, description: 'CSAT & 3P Driver Analytics' },
   { href: '/operations', label: 'Operations', icon: Users, description: 'Interaksi & Pengunjung' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, description: 'SLA & Operational' },
@@ -24,7 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-64 bg-[var(--bg-secondary)] border-r border-[var(--glass-border)] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
         {/* Logo */}
         <div className="p-5 border-b border-[var(--glass-border)]">
-          <Link href="/cx-performance" className="flex items-center gap-3 no-underline">
+          <Link href="/executive-summary" className="flex items-center gap-3 no-underline">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center text-white font-bold text-sm shadow-lg">
               CX
             </div>

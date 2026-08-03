@@ -11,6 +11,8 @@ import {
 interface Props {
   data: Record<string, any>;
   months: string[];
+  initialFrom?: string;
+  initialTo?: string;
 }
 
 const BU_LIST = ['API', 'HIN', 'IAS', 'IDM - TMII', 'IDM - TWC', 'ITDC', 'Sarinah'];
@@ -58,8 +60,9 @@ const CHANNEL_COLORS: Record<string, string> = {
   'Interaksi Per Channel Customer Service': '#f97316'
 };
 
-export default function OperationsView({ data, months }: Props) {
+export default function OperationsView({ data, months, initialFrom, initialTo }: Props) {
   const [selectedBU, setSelectedBU] = useState('ALL');
+<<<<<<< HEAD
   const [monthFrom, setMonthFrom] = useState('ALL');
   const [monthTo, setMonthTo] = useState('ALL');
   const [statistikData, setStatistikData] = useState<any>(null);
@@ -70,6 +73,10 @@ export default function OperationsView({ data, months }: Props) {
       .then(d => setStatistikData(d))
       .catch(err => console.error('Failed to load datasheet_statistik.json:', err));
   }, []);
+=======
+  const [monthFrom, setMonthFrom] = useState(initialFrom ?? 'ALL');
+  const [monthTo, setMonthTo] = useState(initialTo ?? 'ALL');
+>>>>>>> 3afc181 (feat: add Executive Summary landing page with date range filter and scorecard navigation)
 
   const fromIdx = monthFrom === 'ALL' ? 0 : Number(monthFrom);
   const toIdx = monthTo === 'ALL' ? months.length - 1 : Number(monthTo);
