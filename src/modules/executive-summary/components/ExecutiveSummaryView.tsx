@@ -354,8 +354,6 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
 
       {/* ── 1. CSAT HOLDING PERFORMANCE ─────────────────────────────────────────────── */}
       <section className="animate-in">
-        <SectionHeader icon="📊" title="CSAT Holding Performance" href="/cx-performance" onNavigate={navigate} />
-
         {csatStats ? (
           <>
             {/* Individual Business Units */}
@@ -365,14 +363,8 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             
             {/* BU Deep Dive Charts */}
             <div className="mt-8">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-xl">🏢</span>
-                <h3 className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-                  Business Unit Deep Dive
-                </h3>
-              </div>
               <div className="flex flex-col gap-4">
-                <DriverSatisfactionBars records={csatStats.filtered} />
+                <DriverSatisfactionBars records={csatStats.filtered} hideDimensionToggle={true} />
                 <ResponseVolumeChart records={csatStats.filtered} />
               </div>
             </div>

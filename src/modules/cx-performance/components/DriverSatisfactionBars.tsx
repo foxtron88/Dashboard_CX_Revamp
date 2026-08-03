@@ -3,7 +3,10 @@
 import React, { useMemo, useState } from 'react';
 import type { CSATRecord } from '@/modules/common/types';
 
-interface Props { records: CSATRecord[]; }
+interface Props {
+  records: CSATRecord[];
+  hideDimensionToggle?: boolean;
+}
 
 type Driver = 'overall_score' | 'people_score' | 'process_score' | 'premises_score';
 type Dimension = 'bu' | 'facility_type';
@@ -24,7 +27,7 @@ interface RowStat {
   avg: number;
 }
 
-export default function DriverSatisfactionBars({ records }: Props) {
+export default function DriverSatisfactionBars({ records, hideDimensionToggle }: Props) {
   const [driver, setDriver] = useState<Driver>('people_score');
   const [dimension, setDimension] = useState<Dimension>('bu');
   const [topN, setTopN] = useState(10);
@@ -99,26 +102,28 @@ export default function DriverSatisfactionBars({ records }: Props) {
         </div>
 
         {/* Dimension Toggle */}
-        <div>
-          <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
-            Group By
-          </p>
-          <div className="flex gap-1">
-            {([['bu', '🏢 Business Unit'], ['facility_type', '📍 Facility Type']] as const).map(([val, label]) => (
-              <button
-                key={val}
-                onClick={() => setDimension(val)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                  dimension === val
-                    ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30'
-                    : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+        {!hideDimensionToggle && (
+          <div>
+            <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
+              Group By
+            </p>
+            <div className="flex gap-1">
+              {([['bu', '🏢 Business Unit'], ['facility_type', '📍 Facility Type']] as const).map(([val, label]) => (
+                <button
+                  key={val}
+                  onClick={() => setDimension(val)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                    dimension === val
+                      ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30'
+                      : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Top N */}
         {dimension === 'facility_type' && (
