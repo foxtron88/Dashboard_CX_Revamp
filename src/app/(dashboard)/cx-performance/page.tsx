@@ -4,7 +4,6 @@ import React, { useState, useMemo, Suspense } from 'react';
 import { useCSATData, useFilteredCSAT } from '@/modules/common/hooks/use-data';
 import { useSearchParams } from 'next/navigation';
 import ExecutiveSummary from '@/modules/cx-performance/components/ExecutiveSummary';
-import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
 import {
   CSATDistributionChart,
   SentimentDonut,
@@ -166,9 +165,6 @@ function CXPerformanceContent() {
 
       {/* Executive Summary & 3P Driver Cards */}
       <ExecutiveSummary records={filtered} />
-
-      {/* CSAT per Member */}
-      <MemberCSATGrid records={filtered} />
 
       {/* Charts Row 1: Satisfaction & Sentiment */}
       <section className="mt-10">
