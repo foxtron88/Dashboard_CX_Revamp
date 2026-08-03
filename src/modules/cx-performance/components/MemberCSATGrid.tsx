@@ -8,6 +8,7 @@ interface Props { records: CSATRecord[]; }
 const BU_COLORS: Record<string, string> = {
   'API':     '#6366f1',
   'IDM':     '#06b6d4',
+  'IJH':     '#10b981',
   'IAS':     '#8b5cf6',
   'ITDC':    '#ec4899',
   'Sarinah': '#f59e0b',

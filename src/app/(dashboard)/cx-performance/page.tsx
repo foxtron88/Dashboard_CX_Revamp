@@ -15,7 +15,7 @@ import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSa
 import { FacilityRankings, TagsCloud } from '@/modules/cx-performance/components/FacilityAndTags';
 import FeedbackExplorer from '@/modules/cx-performance/components/FeedbackExplorer';
 
-const BUS = ['ALL', 'API', 'IDM', 'IAS', 'ITDC', 'Sarinah'];
+const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
 export default function CXPerformancePage() {

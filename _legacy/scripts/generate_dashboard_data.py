@@ -5,7 +5,7 @@ from datetime import datetime
 
 BASE = "/Users/erwanramadhani/Documents/Dashboard_CX/_legacy/data/Sensum_Raw/Sensum"
 OUT_FILE = "/Users/erwanramadhani/Documents/Dashboard_CX/public/data/sensum_csat.csv"
-TARGET_BUS = ["API", "IAS", "IDM", "ITDC", "Sarinah"]
+TARGET_BUS = ["API", "IAS", "IDM", "IJH", "ITDC", "Sarinah"]
 
 SCHEMA = [
     "respondent_id", "synced_at", "bu", "survey_type", "subholding",
