@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
-import { ResponseVolumeChart } from '@/modules/cx-performance/components/Charts';
 import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSatisfactionBars';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -365,7 +364,6 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             <div className="mt-8">
               <div className="flex flex-col gap-4">
                 <DriverSatisfactionBars records={csatStats.filtered} hideDimensionToggle={true} />
-                <ResponseVolumeChart records={csatStats.filtered} />
               </div>
             </div>
           </>
