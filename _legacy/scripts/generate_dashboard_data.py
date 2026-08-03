@@ -208,6 +208,7 @@ def main():
     all_records = []
     seen_ids = set()
     
+    # 1. Process individual BU raw subfolders
     for bu in TARGET_BUS:
         bu_path = os.path.join(BASE, bu)
         if not os.path.isdir(bu_path): continue
@@ -216,6 +217,20 @@ def main():
         for fname in sorted(csv_files):
             process_file(bu, fname, os.path.join(bu_path, fname), all_records, seen_ids)
             
+    # 2. Process Combined folder
+    combined_dir = os.path.join(BASE, "Combined")
+    if os.path.isdir(combined_dir):
+        csv_files = [f for f in os.listdir(combined_dir) if f.lower().endswith(".csv")]
+        for fname in sorted(csv_files):
+            if "IDM" in fname: bu = "IDM"
+            elif "ITDC" in fname: bu = "ITDC"
+            elif "Sarinah" in fname: bu = "Sarinah"
+            elif "IJH" in fname: bu = "IJH"
+            elif "API" in fname: bu = "API"
+            elif "IAS" in fname: bu = "IAS"
+            else: continue
+            process_file(bu, fname, os.path.join(combined_dir, fname), all_records, seen_ids)
+
     # Write to final CSV
     os.makedirs(os.path.dirname(OUT_FILE), exist_ok=True)
     with open(OUT_FILE, "w", encoding="utf-8-sig", newline="") as f:
