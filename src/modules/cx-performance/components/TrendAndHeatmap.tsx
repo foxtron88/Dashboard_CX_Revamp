@@ -51,7 +51,7 @@ export function CSATTrendChart({ records }: Props) {
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
           <XAxis dataKey="month" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} />
           <YAxis domain={[1, 5]} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
-          <Tooltip contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} />
+          <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
           <Legend formatter={(value: string) => <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{value}</span>} />
           {buNames.map(bu => (
             <Line

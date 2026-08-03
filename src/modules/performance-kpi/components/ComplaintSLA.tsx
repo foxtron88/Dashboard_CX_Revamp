@@ -117,7 +117,7 @@ export default function ComplaintSLA({ data, months, selectedBU, fromIdx, toIdx 
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
             <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
             <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+            <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
             <Legend wrapperStyle={{ fontSize: 12, paddingTop: 10 }} />
             <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
             <Bar dataKey="progress" stackId="a" fill="#f59e0b" name="In Progress" />

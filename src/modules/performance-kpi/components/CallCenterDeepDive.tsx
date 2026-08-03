@@ -109,7 +109,7 @@ export default function CallCenterDeepDive({ data, months, selectedBU, fromIdx, 
               <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
               <YAxis yAxisId="left" tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <YAxis yAxisId="right" orientation="right" domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
               <Legend wrapperStyle={{ fontSize: 12, paddingTop: 10 }} />
               <Area yAxisId="left" type="monotone" dataKey="volume" fill="#6366f120" stroke="#6366f1" strokeWidth={2} name="Volume" />
               <Line yAxisId="right" type="monotone" dataKey="fcr" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} name="FCR (%)" />

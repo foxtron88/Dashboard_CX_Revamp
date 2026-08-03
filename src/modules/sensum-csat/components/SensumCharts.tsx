@@ -158,7 +158,7 @@ export default function SensumCharts({ records }: Props) {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
               <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
               <YAxis domain={[1, 5]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} />
               <Legend wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
               <Line type="monotone" dataKey="Overall"  stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} name="Overall CSAT" connectNulls />
               <Line type="monotone" dataKey="People"   stroke="#6366f1" strokeWidth={2} dot={{ r: 2 }} name="People (PPL)" connectNulls />
@@ -175,7 +175,7 @@ export default function SensumCharts({ records }: Props) {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
               <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <YAxis type="category" dataKey="score" tick={{ fill: '#94a3b8', fontSize: 13 }} width={36} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} />
               <Bar dataKey="count" radius={[0, 6, 6, 0]} name="Responses">
                 {scoreDist.map((entry, i) => (
                   <Cell key={i} fill={['#ef4444','#f97316','#f59e0b','#06b6d4','#10b981'][i]} />
@@ -209,7 +209,7 @@ export default function SensumCharts({ records }: Props) {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
               <XAxis dataKey="bu" tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <YAxis domain={[0, 5]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v) => [`${v} / 5.00`, buMetric.replace('_score','').toUpperCase()]} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} formatter={(v) => [`${v} / 5.00`, buMetric.replace('_score','').toUpperCase()]} />
               <Bar dataKey="score" radius={[6, 6, 0, 0]} name="Score">
                 {byBU.map((entry, i) => (
                   <Cell key={i} fill={SCORE_BAR_COLOR(entry.score)} />
@@ -228,7 +228,7 @@ export default function SensumCharts({ records }: Props) {
                   <Cell key={i} fill={entry.fill} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} />
               <Legend verticalAlign="bottom" height={36} wrapperStyle={{ fontSize: 12 }} />
             </PieChart>
           </ResponsiveContainer>
@@ -241,7 +241,7 @@ export default function SensumCharts({ records }: Props) {
               <PolarGrid stroke="rgba(255,255,255,0.1)" />
               <PolarAngleAxis dataKey="driver" tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#94a3b8', fontSize: 10 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} />
               <Radar name="Score" dataKey="score" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.5} />
             </RadarChart>
           </ResponsiveContainer>
@@ -274,7 +274,7 @@ export default function SensumCharts({ records }: Props) {
             <XAxis dataKey="type" tick={{ fill: '#94a3b8', fontSize: 10 }} interval={0} angle={-15} textAnchor="end" height={50} />
             <YAxis yAxisId="left" domain={[0, 5]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
             <YAxis yAxisId="right" orientation="right" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <Tooltip contentStyle={TOOLTIP_STYLE} />
+            <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={TOOLTIP_STYLE} />
             <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
             <Bar yAxisId="left" dataKey="score" name={`${typeMetric.replace('_score','').toUpperCase()} Score`} radius={[6, 6, 0, 0]}>
               {bySurveyType.map((entry, i) => (

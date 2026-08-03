@@ -59,7 +59,7 @@ export default function BranchServicePerformance({ data, selectedBU, fromIdx, to
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
             <XAxis dataKey="bu" tick={{ fill: '#94a3b8', fontSize: 11 }} />
             <YAxis domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+            <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
             <Legend wrapperStyle={{ fontSize: 12, paddingTop: 10 }} />
             <Bar dataKey="overall" name="Overall (%)" fill="#06b6d4" radius={[4, 4, 0, 0]} />
             <Bar dataKey="people" name="People (%)" fill="#8b5cf6" radius={[4, 4, 0, 0]} />

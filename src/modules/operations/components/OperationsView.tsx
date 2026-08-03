@@ -379,8 +379,8 @@ export default function OperationsView({ data, months }: Props) {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                   <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={v => (v / 1e6).toFixed(1) + 'M'} />
-                  <Tooltip
-                    contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+                  <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }}
+                    contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }}
                     formatter={(val: any) => [val.toLocaleString() + ' Visitors', 'Pengunjung']}
                   />
                   <Area type="monotone" dataKey="traffic" stroke="#6366f1" strokeWidth={2.5} fill="url(#trafficGradient)" name="Jumlah Pengunjung" />
@@ -403,8 +403,8 @@ export default function OperationsView({ data, months }: Props) {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                   <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                   <YAxis dataKey="name" type="category" width={140} tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <Tooltip
-                    contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
+                  <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }}
+                    contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }}
                     formatter={(val: any) => [val.toLocaleString() + ' Interaksi', 'Volume']}
                   />
                   <Bar dataKey="value" radius={[0, 4, 4, 0]} name="Volume">
@@ -473,7 +473,7 @@ export default function OperationsView({ data, months }: Props) {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
               <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 11 }} />
               <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+              <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]} name="Volume">
                 {interactionChartData.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
@@ -493,7 +493,7 @@ export default function OperationsView({ data, months }: Props) {
                 <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                 <YAxis yAxisId="left" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <YAxis yAxisId="right" orientation="right" domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }} />
+                <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, color: "#ffffff" }} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
                 <Bar yAxisId="left" dataKey="volume" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Call Volume" />
                 <Line yAxisId="right" type="monotone" dataKey="fcr" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} name="FCR %" />
