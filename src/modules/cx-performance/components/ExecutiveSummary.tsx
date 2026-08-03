@@ -99,7 +99,6 @@ export default function ExecutiveSummary({ records }: Props) {
     { label: 'Total Responses', value: stats.total.toLocaleString(), icon: '📋', color: 'var(--accent-info)', sub: 'distinct respondents' },
     { label: 'Satisfaction Rate', value: `${stats.satRate.toFixed(1)}%`, icon: '😊', color: 'var(--accent-success)', sub: `${stats.satisfied.toLocaleString()} satisfied (≥4)` },
     { label: 'Dissatisfied', value: stats.dissatisfied.toLocaleString(), icon: '😔', color: 'var(--accent-danger)', sub: `${stats.ratedTotal > 0 ? ((stats.dissatisfied / stats.ratedTotal) * 100).toFixed(1) : 0}% of rated` },
-    { label: 'Net Sentiment', value: `${stats.nss > 0 ? '+' : ''}${stats.nss.toFixed(1)}`, icon: '🧠', color: stats.nss >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)', sub: `${stats.positive.toLocaleString()} positive` },
   ];
 
   return (
@@ -159,7 +158,7 @@ export default function ExecutiveSummary({ records }: Props) {
       </div>
 
       {/* Operational Highlights */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {operationalCards.map(c => (
           <div key={c.label} className="glass-card text-center flex flex-col items-center justify-center p-3">
             <span className="text-xl">{c.icon}</span>

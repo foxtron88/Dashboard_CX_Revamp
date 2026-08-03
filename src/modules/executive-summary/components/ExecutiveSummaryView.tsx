@@ -6,6 +6,10 @@ import type { CSATRecord } from '@/modules/common/types';
 import type { SocmedData } from '@/modules/common/hooks/use-socmed-data';
 import CXPerformanceSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 import MemberCSATGrid from '@/modules/cx-performance/components/MemberCSATGrid';
+import {
+  SentimentByBUChart,
+  ResponseVolumeChart,
+} from '@/modules/cx-performance/components/Charts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -363,6 +367,20 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             {/* Individual Business Units */}
             <div className="-mt-6">
               <MemberCSATGrid records={csatStats.filtered} />
+            </div>
+            
+            {/* BU Deep Dive Charts */}
+            <div className="mt-8">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-xl">🏢</span>
+                <h3 className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+                  Business Unit Deep Dive
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <SentimentByBUChart records={csatStats.filtered} />
+                <ResponseVolumeChart records={csatStats.filtered} />
+              </div>
             </div>
           </>
         ) : (

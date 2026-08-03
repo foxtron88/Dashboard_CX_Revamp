@@ -7,8 +7,6 @@ import ExecutiveSummary from '@/modules/cx-performance/components/ExecutiveSumma
 import {
   CSATDistributionChart,
   SentimentDonut,
-  SentimentByBUChart,
-  ResponseVolumeChart,
 } from '@/modules/cx-performance/components/Charts';
 import { CSATTrendChart, CSATHeatmap } from '@/modules/cx-performance/components/TrendAndHeatmap';
 import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSatisfactionBars';
@@ -162,19 +160,7 @@ function CXPerformanceContent() {
         </div>
       </section>
 
-      {/* Charts Row 2: BU Deep Dive */}
-      <section className="mt-10">
-        <div className="flex items-center gap-3 mb-6">
-          <span className="text-2xl">🏢</span>
-          <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            Business Unit Deep Dive
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <SentimentByBUChart records={filtered} />
-          <ResponseVolumeChart records={filtered} />
-        </div>
-      </section>
+
 
       {/* Driver Satisfaction Bars */}
       <DriverSatisfactionBars records={filtered} />
