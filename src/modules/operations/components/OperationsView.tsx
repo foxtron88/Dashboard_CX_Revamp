@@ -324,7 +324,9 @@ export default function OperationsView({ data, months }: Props) {
               <p className="text-2xl font-bold text-purple-400 mt-1" style={{ fontFamily: 'var(--font-display)' }}>
                 {statistikAnalytics.channelChart.length} Channels
               </p>
-              <p className="text-[10px] text-slate-400 mt-1">WA, Call Center, Sensum, IG, Live Chat, etc.</p>
+              <p className="text-[10px] text-slate-400 mt-1 truncate" title={statistikAnalytics.channelChart.map((c: any) => c.name).join(', ')}>
+                {statistikAnalytics.channelChart.map((c: any) => c.name).join(', ') || 'No active channels'}
+              </p>
             </div>
           </div>
 
