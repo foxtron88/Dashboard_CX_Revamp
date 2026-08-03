@@ -103,41 +103,35 @@ def process_file(bu, fname, fpath, all_records, seen_ids):
         ov_cols, ppl_cols, prm_cols, prc_cols = [], [], [], []
         for i, col in enumerate(h):
             hl = col.lower().strip()
-            if not hl.startswith("numeric_"):
-                continue
-
-            # Sub-driver: People — always has "staff / petugas / karyawan"
-            if "staff" in hl or "petugas" in hl or "karyawan" in hl:
-                ppl_cols.append(i)
-
-            # Sub-driver: Process — operational flow keywords
-            elif "alur" in hl or "proses" in hl or "antrean" in hl or "akses" in hl or "pembayaran" in hl or "informasi" in hl or "kecepatan" in hl or "prosedur" in hl:
-                prc_cols.append(i)
-
-            # Sub-driver: Premises — physical facility keywords
-            # Covers: kelengkapan/kebersihan/kenyamanan/ketersediaan AND
-            # API-specific: "Numeric_Fasilitas <FacilityName> (...)" sub-driver columns
-            # IDM-specific: "Kualitas Foto dan Harga layanan"
-            elif ("kelengkapan" in hl or "kebersihan" in hl or "kenyamanan" in hl or "ketersediaan" in hl or "kualitas" in hl or "harga" in hl
-                  or ("fasilitas" in hl and "secara keseluruhan" not in hl and "seberapa puas" not in hl)):
-                prm_cols.append(i)
-
-            # Overall: generic satisfaction question — "secara keseluruhan" OR "seberapa puas"
-            # (includes "{tipe fasilitas}" placeholder variants)
-            elif "secara keseluruhan" in hl or "seberapa puas" in hl:
+            
+            # Overall CSAT questions (Numeric_Overall Satisfaction, Numeric_Overall CSAT, Overall Satisfaction, Overall CSAT, etc.)
+            if ("overall" in hl or "secara keseluruhan" in hl or "seberapa puas" in hl) and not hl.startswith("group_"):
                 ov_cols.append(i)
+            elif hl.startswith("numeric_"):
+                # Sub-driver: People — always has "staff / petugas / karyawan / people"
+                if "staff" in hl or "petugas" in hl or "karyawan" in hl or "people" in hl:
+                    ppl_cols.append(i)
+
+                # Sub-driver: Process — operational flow keywords
+                elif "alur" in hl or "proses" in hl or "antrean" in hl or "akses" in hl or "pembayaran" in hl or "informasi" in hl or "kecepatan" in hl or "prosedur" in hl or "process" in hl:
+                    prc_cols.append(i)
+
+                # Sub-driver: Premises — physical facility keywords
+                elif ("kelengkapan" in hl or "kebersihan" in hl or "kenyamanan" in hl or "ketersediaan" in hl or "kualitas" in hl or "harga" in hl or "premises" in hl or "product" in hl
+                      or ("fasilitas" in hl and "secara keseluruhan" not in hl and "seberapa puas" not in hl)):
+                    prm_cols.append(i)
                     
         # Fallback for IJH (NPS, overall is sometimes not caught if pattern misses)
         if bu == "IJH" and not ov_cols:
-            idx1 = find_col("Numeric_Seberapa puas Anda dengan keseluruhan")
+            idx1 = find_col("Numeric_Seberapa puas Anda dengan keseluruhan", "Numeric_NPS", "NPS")
             if idx1 is not None: ov_cols.append(idx1)
             
-        nps_idx = find_col("Numeric_NPS", "Numeric_Recommend", "Numeric_Seberapa besar kemungkinan")
+        nps_idx = find_col("Numeric_NPS", "NPS", "Numeric_Recommend", "Numeric_Seberapa besar kemungkinan")
         
         # Feedback and Sentiment
-        fb_idx = find_col("Silakan berikan saran", "saran dan masukan", "Ceritakan pengalaman", "Mohon berikan masukan", "saran / masukan")
-        fbs_idx = find_col("Sentiment_Silakan", "Sentiment_Ceritakan", "Sentiment_Mohon", "Sentiment_saran")
-        tags_idx = find_col("Tags_Silakan", "Tags_Ceritakan", "Tags_Mohon", "Tags_saran")
+        fb_idx = find_col("Silakan berikan saran", "saran dan masukan", "Ceritakan pengalaman", "Mohon berikan masukan", "saran / masukan", "Saran dan Masukan")
+        fbs_idx = find_col("Sentiment_Silakan", "Sentiment_Ceritakan", "Sentiment_Mohon", "Sentiment_saran", "Sentiment_Saran dan Masukan")
+        tags_idx = find_col("Tags_Silakan", "Tags_Ceritakan", "Tags_Mohon", "Tags_saran", "Tags_Saran dan Masukan")
         
         chan_idx = find_col("Channel Type")
         lang_idx = find_col("Response Language")
@@ -152,28 +146,22 @@ def process_file(bu, fname, fpath, all_records, seen_ids):
                 
             # If IJH, naming might contain tipe fasilitas
             t_fas = safe(row, tipe_idx)
+            if not t_fas:
+                t_fas = safe(row, find_col("KETERANGAN FASILITAS"))
             if bu == "IJH" and not t_fas:
                 naming = safe(row, find_col("NAMING"))
                 if naming:
                     t_fas = naming.split("-")[0].strip() if "-" in naming else naming
                     
             ov_score = get_avg_valid(row, ov_cols)
-            # if no overall score but we have others, still keep it? Yes, we want all responses.
-            # However, if we don't have any score, maybe skip.
             ppl_score = get_avg_valid(row, ppl_cols)
             prm_score = get_avg_valid(row, prm_cols)
             prc_score = get_avg_valid(row, prc_cols)
             nps = score_to_numeric(safe(row, nps_idx))
             
             if not (ov_score or ppl_score or prm_score or prc_score or nps):
-                # Try getting raw CSAT if numeric is missing
-                csat_raw_idx = find_col("Seberapa puas")
-                if csat_raw_idx is not None and safe(row, csat_raw_idx):
-                    # We have a raw text answer, but let's just keep the row anyway if it has feedback
-                    pass
-                else:
-                    if not safe(row, fb_idx):
-                        continue
+                if not safe(row, fb_idx):
+                    continue
                         
             sync_val = safe(row, sync_idx)
             
@@ -208,16 +196,7 @@ def main():
     all_records = []
     seen_ids = set()
     
-    # 1. Process individual BU raw subfolders
-    for bu in TARGET_BUS:
-        bu_path = os.path.join(BASE, bu)
-        if not os.path.isdir(bu_path): continue
-        
-        csv_files = [f for f in os.listdir(bu_path) if f.lower().endswith(".csv")]
-        for fname in sorted(csv_files):
-            process_file(bu, fname, os.path.join(bu_path, fname), all_records, seen_ids)
-            
-    # 2. Process Combined folder
+    # Process ONLY the Combined directory (the latest consolidated dataset)
     combined_dir = os.path.join(BASE, "Combined")
     if os.path.isdir(combined_dir):
         csv_files = [f for f in os.listdir(combined_dir) if f.lower().endswith(".csv")]
