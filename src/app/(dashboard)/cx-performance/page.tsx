@@ -71,24 +71,6 @@ function CXPerformanceContent() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #06b6d4)' }}>📊</div>
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-                CX Performance & CSAT Analytics
-              </h1>
-              <p className="text-xs text-[var(--text-muted)]">
-                Executive Summary — {records?.length.toLocaleString() || 0} distinct responses across 5 Business Units
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Filters */}
       <div className="glass-card flex flex-wrap items-end gap-4">
         <div>

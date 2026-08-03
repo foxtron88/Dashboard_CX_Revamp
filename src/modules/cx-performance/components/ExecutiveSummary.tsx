@@ -15,6 +15,20 @@ function getScoreColor(score: number) {
 }
 
 export default function ExecutiveSummary({ records }: Props) {
+  const currentBU = useMemo(() => {
+    const uniqueBUs = new Set(records.map(r => r.bu));
+    return uniqueBUs.size === 1 ? Array.from(uniqueBUs)[0] : 'ALL';
+  }, [records]);
+
+  const targetCSAT = useMemo(() => {
+    const BU_TARGETS: Record<string, number | null> = {
+      'IAS': 4.50,
+      'HIN': 4.40,
+    };
+    // Default holding target is 4.50, otherwise BU specific or null
+    return currentBU === 'ALL' ? 4.50 : (BU_TARGETS[currentBU] || null);
+  }, [currentBU]);
+
   const stats = useMemo(() => {
     const calcAvg = (key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
       const vals = records.map(r => r[key]).filter((v): v is number => v !== null);
@@ -49,7 +63,7 @@ export default function ExecutiveSummary({ records }: Props) {
   const csatPillars = [
     {
       label: 'Overall CSAT', val: stats.overall.avg, count: stats.overall.count,
-      csatPct: stats.overall.csatPct,
+      csatPct: stats.overall.csatPct, target: targetCSAT,
       icon: '⭐', badge: 'Master Score',
       gradient: 'from-emerald-500/20 to-teal-500/10',
       borderColor: 'border-emerald-500/30',
@@ -57,7 +71,7 @@ export default function ExecutiveSummary({ records }: Props) {
     },
     {
       label: 'People (PPL)', val: stats.people.avg, count: stats.people.count,
-      csatPct: stats.people.csatPct,
+      csatPct: stats.people.csatPct, target: targetCSAT,
       icon: '👥', badge: 'Staff & Service',
       gradient: 'from-indigo-500/20 to-purple-500/10',
       borderColor: 'border-indigo-500/30',
@@ -65,7 +79,7 @@ export default function ExecutiveSummary({ records }: Props) {
     },
     {
       label: 'Process (PRC)', val: stats.process.avg, count: stats.process.count,
-      csatPct: stats.process.csatPct,
+      csatPct: stats.process.csatPct, target: targetCSAT,
       icon: '🔄', badge: 'Flow & Operations',
       gradient: 'from-cyan-500/20 to-blue-500/10',
       borderColor: 'border-cyan-500/30',
@@ -73,7 +87,7 @@ export default function ExecutiveSummary({ records }: Props) {
     },
     {
       label: 'Premises (PRM)', val: stats.premises.avg, count: stats.premises.count,
-      csatPct: stats.premises.csatPct,
+      csatPct: stats.premises.csatPct, target: targetCSAT,
       icon: '🏢', badge: 'Facility Setup',
       gradient: 'from-violet-500/20 to-pink-500/10',
       borderColor: 'border-violet-500/30',
@@ -109,10 +123,20 @@ export default function ExecutiveSummary({ records }: Props) {
               </div>
               <p className="text-xs font-medium text-[var(--text-secondary)] mt-3">{p.label}</p>
               <div className="flex items-baseline justify-between mt-1">
-                <p className="text-3xl font-extrabold" style={{ color: p.color, fontFamily: 'var(--font-display)' }}>
-                  {p.val > 0 ? p.val.toFixed(2) : '—'}
-                </p>
-                <span className="text-xs text-[var(--text-muted)]">/ 5.00</span>
+                <div className="flex items-end gap-2">
+                  <p className="text-3xl font-extrabold" style={{ color: p.color, fontFamily: 'var(--font-display)' }}>
+                    {p.val > 0 ? p.val.toFixed(2) : '—'}
+                  </p>
+                  <span className="text-xs text-[var(--text-muted)] mb-1">/ 5.00</span>
+                </div>
+                {p.target && (
+                  <div className="flex flex-col items-end">
+                    <span className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">Target</span>
+                    <span className="text-xs font-bold" style={{ color: p.val >= p.target ? 'var(--accent-success)' : 'var(--text-secondary)' }}>
+                      {p.target.toFixed(2)}
+                    </span>
+                  </div>
+                )}
               </div>
               {/* Score Progress Bar */}
               <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-1.5 mt-3 overflow-hidden">

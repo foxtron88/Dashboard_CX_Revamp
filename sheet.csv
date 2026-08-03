@@ -1,0 +1,151 @@
+MEMBER,PARAMETERS,Unit,Target,Jan 2025,Feb 2025,Mar 2025,Apr 2025,May 2025,Jun 2025,Jul 2025,Aug 2025,Sep 2025,Oct 2025,Nov 2025,Dec 2025,Jan 2026,Feb 2026,Mar 2026,Apr 2026,MEI 2026,JUNI 2026
+API,CSAT -  Overall ,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"4,31","4,28","4,52","4,72",4.49,4.36,4.42,4.54,4.52,4.48
+API,CSAT - People,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"4,51","4,50","4,66","4,78",4.65,4.58,4.63,4.75,4.68,"4,71"
+API,CSAT - Process,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"4,67","4,32","4,58","4,72",4.54,4.49,4.5,4.67,4.58,"4,61"
+API,CSAT - Premises,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"4,30","4,34","4,60","4,73",4.57,4.43,4.55,4.71,4.62,"4,62"
+API,Customer Satisfaction (ACI),Scale 1-5,4.77,4.97,4.97,4.97,4.98,4.98,4.98,4.99,4.99,4.99,5,5,5,5,5,5,NULL,NULL,NULL
+API,Customer Satisfaction (INACA),Scale 1-5,4.72,4.77,4.77,4.77,4.77,4.77,4.77,4.77,4.77,4.77,4.77,4.77,4.77,"4,79","4,80","4,81","4,82","4,83","4,84"
+API,Service Performance - Overall,Percentage (%),90,95.52,91.24,96.67,98.97,99.49,99.57,98.91,99.63,94.81,99.7,95.41,99.39,98.92,98.81,98.89,99.73,97.91,98.48
+API,Service Performance - People,Percentage (%),90,99.71,99.66,99.76,99.83,99.39,99.59,99.73,99.95,99.88,99.94,99.7,99.17,99.45,99.12,99.51,99.59,99.67,99.39
+API,Service Performance - Process,Percentage (%),90,87.5,75,91.25,97.5,100,100,97.5,100,85,100,87.5,100,97.5,97.5,97.5,100,95,96.25
+API,Service Performance - Premises,Percentage (%),90,99.36,99.06,99.01,99.59,99.09,99.13,99.49,98.94,99.56,99.15,99.02,99,99.8,99.81,99.65,99.61,99.06,99.8
+API,Call Center Performance - Volume of Call,Numbers,NULL,2946,2233,2204,1996,1348,1002,1649,1741,1909,2008,2052,2439,2782,2028,2497,1701,1571,1664
+API,Call Center Performance - First Call Resolution,Percentage (%),70,89,87.81,88.74,81.32,74.1,76.91,71.06,71.28,71.81,71.93,69.33,69.99,72.59,73.28,74.17,NULL,NULL,NULL
+API,Call Center Performance - Service Level,Percentage (%),90,98.67,97.58,98.05,98.6,99.55,99.74,99.58,99.31,99.06,99.15,98.98,99.26,97.51,98.46,98.44,99,98.59,97.29
+API,Call Center Performance - Call Waiting Time,Avg. Time Duration,0:00:30,0:00:14,0:00:14,0:00:14,0:00:14,0:00:14,0:00:14,0:00:14,0:00:14,0:00:14,0:00:15,0:00:14,0:00:15,0:00:14,0:00:14,0:00:14,0:00:15,0:00:17,0:00:19
+API,Call Center Performance - Abandoned Call Rate,Percentage (%),5,2.34,2.42,1.95,1.4,0.45,0.4,0.42,0.69,0.94,0.85,1.02,0.74,2.16,1.38,1,1,1.41,2.71
+API,Social Media Performance - Volume of Interaction,Numbers,NULL,6763,8665,11639,8707,8477,7617,8417,5436,6728,7558,9326,5476,9364,8710,9300,6944,5108,5535
+API,Social Media Performance - Net Sentiment Score,Percentage (%),NULL,0.03%,0.08%,0.22%,0.14%,0.53%,0.04%,0.08%,0.90%,0.03%,0.09%,1.95%,2.94%,1.15%,1.01%,1.39%,0.92%,1.56%,NULL
+API,Social Media Performance - Average Response Time,Hours,NULL,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,NULL
+API,Social Media Performance - Respons to Sentiment Ratio,"0,00 - 1,00",NULL,0.58,0.59,0.71,0.71,0.75,0.76,0.61,0.68,0.69,0.75,0.76,0.75,0.85,0.81,0.88,0.87,0.81,0.87
+API,Complaint Handling Performance - Total Complaint,Numbers,NULL,126,129,140,185,177,150,123,111,111,111,123,109,101,84,87,89,75,65
+API,Complaint Handling Performance - Completed,Numbers,NULL,126,129,140,185,177,150,123,111,111,111,123,109,101,84,87,89,75,62
+API,Complaint Handling Performance - Progress,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3
+API,Complaint Handling Performance - Untouch,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+API,Complaint Handling Performance - Complaint Resolution Rate,Percentage (%),92,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,95.38461538
+API,Complaint Handling Performance - Average Time Resolution,Day,7,8,5,4,4,3,4,2,4,3,2,1,1,2,2,4,NULL,NULL,NULL
+IAS,CSAT - Overall,Scale 1-5,4.5,NULL,NULL,4.56,4.48,4.75,4.66,4.62,4.17,4.71,4.68,4.76,4.71,4.69,4.73,4.77,4.78,4.74,4.8
+IAS,CSAT - QR Code Survey,Scale 1-5,4.5,NULL,NULL,4.56,4.48,4.75,4.66,4.62,4.17,4.71,4.68,4.76,4.71,4.69,4.73,4.77,4.78,4.74,4.8
+IAS,CSAT - Lounge,Scale 1-5,4.5,NULL,NULL,4.62,3.62,4.68,4.57,4.65,4.75,4.65,4.66,4.68,4.6,4.81,4.85,4.78,4.78,4.78,4.82
+IAS,CSAT - Toilet,Scale 1-5,4.5,NULL,NULL,4.2,N/A,N/A,N/A,4.69,2.56,4.66,4.55,4.44,4.57,4.42,4.65,4.41,4.5,4.53,4.58
+IAS,CSAT - BSS,Scale 1-5,4.5,NULL,NULL,4.74,4.81,4.81,4.82,4.85,4.89,4.92,4.91,4.94,4.94,4.83,4.9,4.83,4.99,4.97,5
+IAS,CSAT - Cargo Terminal,Scale 1-5,4.5,NULL,NULL,4.66,5,N/A,4.6,4.29,4.49,4.61,4.61,4.99,4.72,4.96,4.07,4.85,4.89,4.75,4.84
+IAS,Call Center Performance (Gapura Angkasa) - Volume of Call,Numbers,NULL,28,35,33,28,22,17,41,12,19,26,20,36,19,17,20,55,36,39
+IAS,Call Center Performance (Gapura Angkasa) - First Call Resolution,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IAS,Call Center Performance (Gapura Angkasa) - Service Level,Percentage (%),NULL,82.14%,88.57%,78.79%,89.29%,90.91%,82.35%,85.37%,75.00%,84.21%,73.08%,55.00%,80.56%,68.42%,76.47%,80.00%,52.73%,38.89%,58.35%
+IAS,Social Media Monitoring - Volume of Interaction,Numbers,NULL,6654,913,6525,4462,4440,1907,1315,7910,7931,12795,6674,14652,7629,8793,8469,18275,7757,18039
+IAS,Social Media Monitoring - Net Sentiment Score,Percentage (%),% Positive (Maximize),55.56%,50%,37%,34.48%,49.32%,41.76%,48.67%,75%,67.70%,46.17%,66.86%,43.29%,47.55%,60.17%,83.53%,75.88%,91.94%,86.60%
+IAS,Social Media Monitoring - Average Response Time,Hours,NULL,1,0,7,10,13,5,5,12,4,5,10,13,14,13,9,11,9,14
+IAS,Social Media Monitoring - Response to Sentiment Ratio,0.00 - 1.00,"0,2-0,7 (Maximize)",0.09,0,0.35,0.3,0.7,0.45,0.74,0.21,0.56,0.69,0.74,0.4,0.3,0.83,0.11,0.26,0.52,0.74
+IAS,Complaint Handling - Total Complaint,Numbers,NULL,3,3,62,28,102,120,109,62,90,13,3,2,44,29,101,71,136,92
+IAS,Complaint Handling -  Completed,Numbers,NULL,3,3,62,28,102,120,109,62,90,13,3,2,44,29,96,66,134,84
+IAS,Complaint Handling - Progress,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,2,8
+IAS,Complaint Handling - Untouch,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+IAS,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,95%,93%,99%,91%
+IAS,Complaint Handling - Average Time Resolution,Day,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0.7,0.25,0.37,0.3,0.2,0.1
+SRN,CSAT - Overall,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.41,3.25,4.41,4.25,3.9,3.75,4.28,4.5
+SRN,CSAT - People,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.67,4.5,4.25,5,4.7,3.37,4.2,4.55
+SRN,CSAT - Process,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.37,3.5,4.25,4.5,4.7,3.37,4.6,4.55
+SRN,CSAT - Premises,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.5,4.16,4.14,4,4.6,3.33,4.2,4.59
+SRN,Social Media Monitoring - Volume of Interaction,Numbers,NULL,4800,8100,1400,3000,1900,6700,4000,5800,1000,4900,2400,6000,10500,3500,4500,1300,5900,9200
+SRN,Social Media Monitoring - Net Sentiment Score,Percentage (%),NULL,63.92%,15.79%,72.06%,54.68%,11.18%,4.09%,54.65%,20.12%,21.14%,13.88%,9.28%,40.07%,46.62%,11.78%,21.48%,47.02%,29.21%,22.06%
+SRN,Social Media Monitoring - Average Response Time,Hours,NULL,15,13,25,31,152,14,21,12,24,21,35,6,30,11,8,8,4,11
+SRN,Social Media Monitoring - Respons to Sentiment Ratio,"0,00 - 1,00",NULL,0.28,0.67,0.1,0.05,0.07,0.35,0.13,0.23,0.27,0.24,0.01,0.25,0.23,0.21,0.58,0.07,0.29,0.11
+SRN,Complaint Handling - Total Complaint,Numbers,NULL,4,8,6,10,8,8,2,3,5,5,5,6,6,1,5,1,2,2
+SRN,Complaint Handling - Completed,Numbers,NULL,4,8,6,9,8,8,2,3,5,5,5,6,6,1,5,1,2,2
+SRN,Complaint Handling - Progress,Numbers,NULL,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+SRN,Complaint Handling - Untouch,Numbers,NULL,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SRN,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,100%,100%,100%,90%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%
+SRN,Complaint Handling - Average Time Resolution,Day,NULL,1,1,1.5,2.5,1,8,1,1,1,6,29,1,1,1,8,1,3.5,3.5
+HIN,CSAT - Overall,Scale 1-5,"4,4",0,0,0,0,0,0,0,0,4.63,4.56,4.58,4.55,4.59,4.64,4.64,4.7,4.65,4.68
+HIN,CSAT - People,Scale 1-5,"4,4",0,0,0,0,0,0,0,0,4.81,4.71,4.73,4.69,4.79,4.79,4.78,4.79,4.79,4.79
+HIN,CSAT - Process,Scale 1-5,"4,4",0,0,0,0,0,0,0,0,4.68,4.62,4.61,4.53,4.59,4.68,4.67,4.7,4.67,4.7
+HIN,CSAT - Premises,Scale 1-5,"4,4",0,0,0,0,0,0,0,0,4.54,4.53,4.48,4.44,4.57,4.56,4.56,4.62,4.57,4.62
+HIN,Call Center Performance - Volume of Call,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+HIN,Call Center Performance - First Call Resolution,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+HIN,Call Center Performance - Service Level,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+HIN,Social Media Monitoring (The Meru Sanur dan Bali Beach Hotel) -  Volume of Interaction,Numbers,NULL,2100,418,491,1500,1000,1600,393,1300,390,519,838,568,968,676,448,699,1900,2600
+HIN,Social Media Monitoring (The Meru Sanur dan Bali Beach Hotel) - Net Sentiment Score,Percentage (%),NULL,20.69%,-20.00%,76.40%,35.29%,17.24%,20.75%,5.88%,38.89%,21.88%,37.21%,38.10%,9.38%,"22,86%","23,33%","44,44%","41,18%","40,63%","26,32%"
+HIN,Social Media Monitoring (The Meru Sanur dan Bali Beach Hotel) - Average Response Time,Hours,NULL,0,0,9,33,0,0,0,61,48,42,52,0,37,0,0,0,57,0
+HIN,Social Media Monitoring (The Meru Sanur dan Bali Beach Hotel) - Respons to Sentiment Ratio,"0,00 - 1,00",NULL,0,0,0.09,0.33,0.2,0,0,0.14,0.29,0.38,0.25,0,"0,3",0,0,0,"0,08",0
+HIN,Complaint Handling - Total Complaint,Numbers,NULL,686,497,535,1085,837,1318,1242,1144,965,1007,726,802,361,288,394,288,274,403
+HIN,Complaint Handling - Completed,Numbers,NULL,686,497,535,1085,837,1318,1242,1144,965,1007,726,802,361,288,394,288,274,403
+HIN,Complaint Handling - Progress,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+HIN,Complaint Handling - Untouch,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+HIN,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%
+HIN,Complaint Handling - Average Time Resolution,Day,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+HIN,Rating (Merusaka Nusa Dua) - Kepuasan Menginap,Scale 1-5,4.5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.58,4.58,4.58,4.58,4.58,4.58,4.58,4.63,4.64,4.44
+HIN,Rating (Merusaka Nusa Dua) - Arrival,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.57,4.57,4.57,4.57,4.57,4.57,4.57,4.43,4.57,4.44
+HIN,Rating (Merusaka Nusa Dua) - Keramahan Staff,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.78,4.78,4.78,4.78,4.78,4.78,4.78,4.87,4.87,4.72
+HIN,Rating (Merusaka Nusa Dua) - Kebersihan Kamar,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.64,4.64,4.64,4.64,4.64,4.64,4.64,4.85,4.76,4.68
+HIN,Rating (Merusaka Nusa Dua) - Kenyamanan Kamar,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.56,4.56,4.56,4.56,4.56,4.56,4.56,4.61,4.54,4.51
+HIN,Rating (Merusaka Nusa Dua) - Fasilitas Kamar,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.37,4.37,4.37,4.37,4.37,4.37,4.37,4.35,4.33,4.24
+HIN,Rating (Merusaka Nusa Dua) - Kualitas Makanan,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.53,4.73,4.74,4.56,4.67,4.83,4.55,4.5,4.13,4.89
+HIN,Rating (Merusaka Nusa Dua) - Kebersihan Fasilitas,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.61,4.65,4.6,4.59,4.69,4.8,4.74,4.74,4.71,4.56
+HIN,Rating (Merusaka Nusa Dua) - Departure,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.71,4.73,4.75,4.55,4.71,4.85,4.7,4.72,4.8,4.62
+HIN,Rating (The Meru Sanur) - Hotel Rating,Scale 1-5,4.5,4.8,4.7,4.8,4.8,4.6,4.7,4.5,4.6,4.5,4.8,4.8,4.6,4.9,4.9,4.8,"4,9",4.81,4.6
+HIN,Rating (The Meru Sanur) - Arrival Experience Rating,Scale 1-5,NULL,5,4.7,4.7,4.4,4.5,4.5,4.3,4.5,4.7,4.7,4.7,4.5,4.3,4.5,4.3,4.7,4.5,4.5
+HIN,Rating (The Meru Sanur) - Guest Room Rating,Scale 1-5,NULL,4.5,4.8,4.6,4.7,4.6,4.7,4.6,4.6,4.8,4.7,4.7,4.7,4.7,4.5,4.7,4.8,4.8,4.7
+HIN,Rating (The Meru Sanur) - Cleanliness Rating,Scale 1-5,NULL,4.7,4.9,4.8,4.7,4.7,4.7,4.6,4.7,4.8,4.7,4.7,4.8,4.6,4.7,"4,8",4.8,4.8,4.8
+HIN,Rating (The Meru Sanur) - F&B Rating,Scale 1-5,NULL,4.4,4.4,4.4,4.1,4,4.2,4.1,4.2,4.4,4.3,4.5,4.1,4.1,"4,4",4.2,4.3,4.2,4.3
+HIN,Rating (The Meru Sanur) - Departure Experience Rating,Scale 1-5,NULL,4.6,4.7,4.7,4.4,4.5,4.4,4.6,4.6,4.6,4.5,4.8,4.5,4.6,4.7,4.7,4.8,4.7,4.7
+HIN,Rating (The Meru Sanur) - Staff & Service Rating,Scale 1-5,NULL,4.6,4.8,4.8,4.5,4.7,4.6,4.6,4.7,4.6,4.7,4.8,4.7,4.4,4.7,4.6,4.7,4.7,4.7
+HIN,Rating (The Meru Sanur) - Recreation Rating,Scale 1-5,NULL,4.3,4.6,4.5,4.3,4.4,4.3,4.4,4.4,4.6,4.3,4.7,4.3,4.4,4.4,4.2,4.4,4.5,4.6
+HIN,Rating (The Meru Sanur) - Maintenance & Upkeep Rating,Scale 1-5,4.6,4.3,4.8,4.6,4.4,4.5,4.5,4.5,4.5,4.7,4.6,4.6,4.2,4.1,4.7,4.5,4.6,4.6,4.6
+HIN,Rating (Bali Beach Hotel) - Hotel Rating,Scale 1-5,4.5,4.7,4.7,4.7,4.6,4.6,4.7,4.4,4.5,4.7,4.6,4.7,4.7,4.8,4.7,4.7,"4,8",4.74,4.5
+HIN,Rating (Bali Beach Hotel) - Arrival Experience Rating,Scale 1-5,NULL,4.8,4.8,4.7,4.6,4.5,4.5,4.3,4.4,4.7,4.7,4.6,4.5,4.5,4.7,"4,5",4.4,4.5,4.4
+HIN,Rating (Bali Beach Hotel) - Guest Room Rating,Scale 1-5,NULL,4.6,4.6,4.3,4.6,4.5,4.6,4.3,4.5,4.6,4.6,4.5,4.6,4.4,4.5,4.5,4.6,4.5,4.3
+HIN,Rating (Bali Beach Hotel) - Cleanliness Rating,Scale 1-5,NULL,4.7,4.8,4.6,4.7,4.6,4.5,4.4,4.7,4.7,4.8,4.7,4.6,4.5,4.4,4.6,4.6,4.6,4.6
+HIN,Rating (Bali Beach Hotel) - F&B Rating,Scale 1-5,NULL,4.5,4.7,4.5,4.3,4.2,4.3,4.2,4.4,4.4,4.6,4.5,4.1,4.1,4.4,4.4,4.3,4.4,4.4
+HIN,Rating (Bali Beach Hotel) - Departure Experience Rating,Scale 1-5,NULL,4.7,4.6,4.7,4.7,4.6,4.6,4.5,4.6,4.8,4.7,4.8,4.6,4.5,4.7,4.7,4.7,4.7,4.7
+HIN,Rating (Bali Beach Hotel) - Staff & Service Rating,Scale 1-5,NULL,4.7,4.8,4.6,4.7,4.6,4.7,4.6,4.8,4.8,4.8,4.8,4.7,4.7,4.8,4.7,4.8,4.8,4.7
+HIN,Rating (Bali Beach Hotel) - Recreation Rating,Scale 1-5,NULL,4.8,4.7,4.3,4.5,4.4,4.3,4.4,4.4,4.5,4.6,4.5,4.5,4.3,4.5,4.6,4.6,4.6,4.7
+HIN,Rating (Bali Beach Hotel) - Maintenance & Upkeep Rating,Scale 1-5,4.5,4.6,4.7,4.6,4.6,4.4,4.4,4.3,4.5,4.6,4.5,4.5,4.3,4.4,4.5,4.5,4.5,4.5,4.2
+IDM-TWC,CSAT - Overall,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.71,4.71,3.175,3.84,4.18,4.37
+IDM-TWC,CSAT - People,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.81,4.77,3.65,4.025,4.25,4.48
+IDM-TWC,CSAT - Process,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.73,4.7,3.525,3.55,4.25,4.35
+IDM-TWC,CSAT - Premises,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.72,4.65,3.7,3.66,3.9,4.2
+IDM-TWC,Call Center Performance - Volume of Call,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,127,95,121,91,101,84
+IDM-TWC,Call Center Performance - First Call Resolution,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Call Center Performance - Service Level,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Social Media Monitoring - Volume of Interaction,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,12.5K,19.9K,22.2K,20.4K,183.4K,122.1K
+IDM-TWC,Social Media Monitoring - Net Sentiment Score,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,12.57%,12.71%,11.15%,8.09%,8.51%,18.41%
+IDM-TWC,Social Media Monitoring - Average Response Time,Hours,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Social Media Monitoring - Response to Sentiment Ratio,"0,00 - 1,00",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.12,0.06,0.08,0.11,0.09,0.05
+IDM-TWC,Complaint Handling - Total Complaint,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,118,35,58,30,44,43
+IDM-TWC,Complaint Handling -  Completed,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Complaint Handling - Progress,Numbers,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Complaint Handling - Untouch,Numbers,x,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TWC,Complaint Handling - Average Time Resolution,Day,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TMII,CSAT - Overall,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.56,4.66,4.64,4.74,4.72,4.78,4.75,4.68,4.7
+IDM-TMII,CSAT - People,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.67,4.76,4.73,4.82,4.78,4.8,4.8,4.76,4.8
+IDM-TMII,CSAT - Process,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.68,4.74,4.64,4.76,4.67,4.75,4.74,4.65,4.76
+IDM-TMII,CSAT - Premises,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.53,4.68,4.63,4.76,4.71,4.76,4.68,4.66,4.7
+IDM-TMII,Call Center Performance - Volume of Call,Numbers,NULL,475,595,674,952,275,"1,006","1,235",621,712,708,493,439,428,190,272,220,229,210
+IDM-TMII,Call Center Performance - First Call Resolution,Percentage (%),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TMII,Call Center Performance - Service Level,Percentage (%),NULL,2%,60%,35%,66%,25%,70%,25%,52%,49%,51%,43%,72%,66%,65%,70%,87%,81%,77%
+IDM-TMII,Social Media Monitoring - Volume of Interaction,Numbers,NULL,75.3K,25.1K,64.7K,319.5K,94.3K,31.5K,20.1K,05.2K,18.4K,17.7K,18.2K,75.3K,12.5K,19.9K,22.2K,20.4K,183.4K,122.1K
+IDM-TMII,Social Media Monitoring - Net Sentiment Score,Percentage (%),NULL,9.32%,19.95%,8.92%,9.30%,9.02%,0.82%,4.17%,7.21%,18.52%,6.90%,11.34%,4.94%,12.57%,12.71%,11.15%,8.09%,8.51%,18.41%
+IDM-TMII,Social Media Monitoring - Average Response Time,Hours,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+IDM-TMII,Social Media Monitoring - Response to Sentiment Ratio,"0,00 - 1,00",NULL,0.26,0.06,0.43,0.1,0.11,0.25,0.11,0.46,0.1,0.21,0.24,0.16,0.12,0.06,0.08,0.11,0.09,0.05
+IDM-TMII,Complaint Handling - Total Complaint,Numbers,NULL,23,24,14,3,109,106,128,96,88,116,80,129,88,48,78,84,85,95
+IDM-TMII,Complaint Handling -  Completed,Numbers,NULL,23,24,14,3,109,106,128,96,88,116,80,129,88,48,78,84,85,95
+IDM-TMII,Complaint Handling - Progress,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+IDM-TMII,Complaint Handling - Untouch,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+IDM-TMII,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%
+IDM-TMII,Complaint Handling - Average Time Resolution,Day,NULL,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+ITDC,CSAT - Overall,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.75,3.67,4.67,1,3,4.5,4.5,4,5
+ITDC,CSAT - People,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.75,4,4.67,1,3,5,4.5,5,5
+ITDC,CSAT - Process,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.75,4.33,4.33,1,3,4.5,4.5,5,5
+ITDC,CSAT - Premises,Scale 1-5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4.75,3.67,4.33,1,3,4.5,4.5,5,5
+ITDC,Social Media Monitoring - Volume of Interaction,Numbers,NULL,"55,400","48,830","62,320","765,544","1,806,885","1,201,571","3,205,926","3,619,231","6,804,712","11,014,888","1,702,441","2,603,558","2,723,112","2,337,556","2,261,757","108,151","251,631","145,954"
+ITDC,Social Media Monitoring - Net Sentiment Score,Percentage (%),NULL,5.21%,8.21%,3.51%,15.97%,13.19%,11.13%,7.92%,10.16%,16.78%,17.26%,20%,27.91%,59.14%,42.06%,38.35%,47.79%,30.54%,44%
+ITDC,Social Media Monitoring - Average Response Time,Hours,NULL,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,26.05,7.67,8.8,9.2,16.63,9.2
+ITDC,Social Media Monitoring - Response to Sentiment Ratio,"0,00 - 1,00",NULL,0.11,0.03,0.08,0.03,0.02,0.01,0.03,0.02,0.01,0.01,0.02,0.05,0.05,0.31,0.04,0.11,0.168,0.13
+ITDC,Complaint Handling - Total Complaint,Numbers,NULL,1,7,3,4,4,2,3,1,18,10,5,6,14,7,3,17,13,7
+ITDC,Complaint Handling -  Completed,Numbers,NULL,1,7,3,4,4,2,3,1,18,10,5,5,14,7,3,17,13,6
+ITDC,Complaint Handling - Progress,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1
+ITDC,Complaint Handling - Untouch,Numbers,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ITDC,Complaint Handling - Complaint Resolution Rate,Percentage (%),NULL,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,100%,83.33%,100.00%,100.00%,100.00%,100.00%,100.00%,85.71%
+ITDC,Complaint Handling - Average Time Resolution,Day,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL

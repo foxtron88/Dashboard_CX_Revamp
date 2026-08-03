@@ -324,22 +324,6 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #06b6d4)' }}>⭐</div>
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-                Executive Summary
-              </h1>
-              <p className="text-xs text-[var(--text-muted)]">Landing overview — key scorecards from all modules</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Date Range Filter */}
       <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
         <div className="flex flex-col">
