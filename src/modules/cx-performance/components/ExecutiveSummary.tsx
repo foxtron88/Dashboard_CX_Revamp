@@ -20,14 +20,7 @@ export default function ExecutiveSummary({ records }: Props) {
     return uniqueBUs.size === 1 ? Array.from(uniqueBUs)[0] : 'ALL';
   }, [records]);
 
-  const targetCSAT = useMemo(() => {
-    const BU_TARGETS: Record<string, number | null> = {
-      'IAS': 4.50,
-      'HIN': 4.40,
-    };
-    // Default holding target is 4.50, otherwise BU specific or null
-    return currentBU === 'ALL' ? 4.50 : (BU_TARGETS[currentBU] || null);
-  }, [currentBU]);
+  const targetCSAT = 4.40;
 
   const stats = useMemo(() => {
     const calcAvg = (key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
@@ -116,9 +109,16 @@ export default function ExecutiveSummary({ records }: Props) {
             >
               <div className="flex items-center justify-between">
                 <span className="text-2xl">{p.icon}</span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-[var(--text-secondary)] border border-white/10">
-                  {p.badge}
-                </span>
+                <div className="flex items-center gap-2">
+                  {p.val > 0 && p.target && p.val < p.target && (
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 flex items-center gap-1 animate-pulse" title="CSAT Below Target">
+                      ⚠️ Below Target
+                    </span>
+                  )}
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-[var(--text-secondary)] border border-white/10">
+                    {p.badge}
+                  </span>
+                </div>
               </div>
               <p className="text-xs font-medium text-[var(--text-secondary)] mt-3">{p.label}</p>
               <div className="flex items-baseline justify-between mt-1">

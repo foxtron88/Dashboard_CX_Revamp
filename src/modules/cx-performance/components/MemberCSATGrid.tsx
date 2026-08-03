@@ -79,7 +79,12 @@ export default function MemberCSATGrid({ records }: Props) {
               </div>
 
               {/* Overall Score */}
-              <div className="text-center mb-3 py-2 rounded-lg" style={{ background: `${accent}10` }}>
+              <div className="text-center mb-3 py-2 rounded-lg relative" style={{ background: `${accent}10` }}>
+                {s.overall > 0 && s.overall < 4.40 && (
+                  <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title="Below Target (4.40)">
+                    <span>⚠️</span> Below Target
+                  </div>
+                )}
                 <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Overall</p>
                 <p className="text-2xl font-extrabold" style={{ color: getScoreColor(s.overall), fontFamily: 'var(--font-display)' }}>
                   {s.overall > 0 ? s.overall.toFixed(2) : '—'}
