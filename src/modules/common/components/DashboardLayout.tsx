@@ -13,12 +13,24 @@ const navItems = [
   { href: '/operations', label: 'Operations', icon: Users, emoji: '👥', description: 'Interaksi & Pengunjung', gradient: 'linear-gradient(135deg, #0ea5e9, #10b981)' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, emoji: '📈', description: 'SLA & Operational', gradient: 'linear-gradient(135deg, #ec4899, #f43f5e)' },
   { href: '/social-media', label: 'Social Media', icon: Share2, emoji: '📱', description: 'Sentiment & Platform', gradient: 'linear-gradient(135deg, #8b5cf6, #d946ef)' },
-  { href: '/data-management', label: 'Data Management', icon: Database, emoji: '⚙️', description: 'Integration Controls', gradient: 'linear-gradient(135deg, #64748b, #94a3b8)' },
+  { 
+    href: '/data-management', 
+    label: 'Data Management', 
+    icon: Database, 
+    emoji: '⚙️', 
+    description: 'Integration Controls', 
+    gradient: 'linear-gradient(135deg, #64748b, #94a3b8)',
+    subItems: [
+      { href: '/data-management', label: 'Question Management' },
+      { href: '/data-management/csat-target', label: 'CSAT Target Score' }
+    ]
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const [expandedMenus, setExpandedMenus] = React.useState<string[]>(['/data-management']);
 
   return (
     <div className="flex min-h-screen">
@@ -47,25 +59,68 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <nav className="flex-1 p-3 space-y-1">
           <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest px-3 pt-3 pb-2">Analytics</p>
           {navItems.map(item => {
-            const isActive = pathname === item.href;
+            const hasSub = !!item.subItems;
+            const isExpanded = expandedMenus.includes(item.href);
+            const isActive = pathname === item.href || (hasSub && item.subItems!.some(sub => pathname === sub.href));
+            
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm no-underline transition-all duration-200
-                  ${isActive
-                    ? 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary-light)] border border-[var(--accent-primary)]/20'
-                    : 'text-[var(--text-secondary)] hover:bg-[var(--glass-bg)] hover:text-[var(--text-primary)]'
-                  }
-                `}
-              >
-                <item.icon className="w-4 h-4 shrink-0" />
-                <div>
-                  <div className="font-medium leading-tight">{item.label}</div>
-                  <div className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5">{item.description}</div>
+              <div key={item.href}>
+                <div
+                  onClick={() => {
+                    if (hasSub) {
+                      setExpandedMenus(prev => 
+                        prev.includes(item.href) ? prev.filter(p => p !== item.href) : [...prev, item.href]
+                      );
+                    }
+                  }}
+                  className={`
+                    flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 cursor-pointer
+                    ${!hasSub && isActive
+                      ? 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary-light)] border border-[var(--accent-primary)]/20'
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--glass-bg)] hover:text-[var(--text-primary)]'
+                    }
+                  `}
+                >
+                  {hasSub ? (
+                    <div className="flex items-center gap-3 flex-1 w-full">
+                      <item.icon className="w-4 h-4 shrink-0" />
+                      <div className="flex-1">
+                        <div className="font-medium leading-tight">{item.label}</div>
+                        <div className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5">{item.description}</div>
+                      </div>
+                      <div className={`text-xs transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>▶</div>
+                    </div>
+                  ) : (
+                    <Link href={item.href} className="flex items-center gap-3 flex-1 w-full no-underline text-inherit">
+                      <item.icon className="w-4 h-4 shrink-0" />
+                      <div className="flex-1">
+                        <div className="font-medium leading-tight">{item.label}</div>
+                        <div className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5">{item.description}</div>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
+
+                {hasSub && isExpanded && (
+                  <div className="ml-9 mt-1 space-y-1 border-l border-[var(--glass-border)] pl-2">
+                    {item.subItems!.map(sub => (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        className={`
+                          block px-3 py-1.5 rounded-lg text-xs no-underline transition-all duration-200
+                          ${pathname === sub.href
+                            ? 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary-light)]'
+                            : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--glass-bg)]'
+                          }
+                        `}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             );
           })}
         </nav>
@@ -92,7 +147,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Menu className="w-5 h-5" />
             </button>
             {(() => {
-              const currentNav = navItems.find(item => item.href === pathname);
+              let currentNav = navItems.find(item => item.href === pathname);
+              let subLabel = '';
+              if (!currentNav) {
+                // Check in subItems
+                navItems.forEach(item => {
+                  if (item.subItems) {
+                    const foundSub = item.subItems.find(sub => sub.href === pathname);
+                    if (foundSub) {
+                      currentNav = item;
+                      subLabel = foundSub.label;
+                    }
+                  }
+                });
+              }
               if (currentNav) {
                 return (
                   <>
@@ -102,7 +170,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </div>
                     <div>
                       <h1 className="text-lg font-bold text-[var(--text-primary)] leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
-                        {currentNav.label}
+                        {currentNav.label} {subLabel && <span className="text-[var(--text-muted)] font-normal text-sm ml-2">› {subLabel}</span>}
                       </h1>
                       <p className="text-[10px] text-[var(--text-muted)] leading-tight">{currentNav.description}</p>
                     </div>

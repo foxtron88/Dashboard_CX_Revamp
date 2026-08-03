@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import type { CSATRecord } from '@/modules/common/types';
+import { useCSATTarget } from '@/modules/common/hooks/use-csat-target';
 
 interface Props { records: CSATRecord[]; }
 
@@ -22,6 +23,8 @@ function getScoreColor(score: number) {
 }
 
 export default function MemberCSATGrid({ records }: Props) {
+  const { target } = useCSATTarget();
+
   const buStats = useMemo(() => {
     const buNames = Array.from(new Set(records.map(r => r.bu))).sort();
     return buNames.map(bu => {
@@ -80,8 +83,8 @@ export default function MemberCSATGrid({ records }: Props) {
 
               {/* Overall Score */}
               <div className="text-center mb-3 py-2 rounded-lg relative" style={{ background: `${accent}10` }}>
-                {s.overall > 0 && s.overall < 4.40 && (
-                  <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title="Below Target (4.40)">
+                {s.overall > 0 && s.overall < target && (
+                  <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>
                     <span>⚠️</span> Below Target
                   </div>
                 )}
@@ -95,7 +98,7 @@ export default function MemberCSATGrid({ records }: Props) {
                   </p>
                   <span className="text-[10px] text-[var(--text-muted)]">|</span>
                   <p className="text-[10px] font-medium text-[var(--text-muted)]">
-                    Target: 4.40
+                    Target: {target.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -114,8 +117,8 @@ export default function MemberCSATGrid({ records }: Props) {
                         style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
                     </div>
                     <div className="flex items-center justify-end gap-1 w-10">
-                      {d.val > 0 && d.val < 4.40 && (
-                        <span className="text-[10px] text-red-500 animate-pulse" title="Below Target (4.40)">⚠️</span>
+                      {d.val > 0 && d.val < target && (
+                        <span className="text-[10px] text-red-500 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>⚠️</span>
                       )}
                       <span className="text-xs font-bold text-right" style={{ color: getScoreColor(d.val) }}>
                         {d.val > 0 ? d.val.toFixed(1) : '—'}
