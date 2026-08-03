@@ -114,8 +114,8 @@ function CXPerformanceContent() {
           </div>
         </div>
 
-        {(bu !== 'ALL' || surveyType !== 'ALL' || location !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
-          <button onClick={() => { setBU('ALL'); setSurveyType('ALL'); setLocation('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
+        {(bu !== 'ALL' || location !== 'ALL' || sentiment !== 'ALL' || fromMonth || toMonth) && (
+          <button onClick={() => { setBU('ALL'); setLocation('ALL'); setSentiment('ALL'); setFromMonth(''); setToMonth(''); }}
             className="text-xs px-3 py-1.5 rounded-lg text-[var(--accent-danger)] border border-[var(--accent-danger)]/30 hover:bg-[var(--accent-danger)]/10 transition-all">
             ✕ Reset
           </button>
