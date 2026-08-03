@@ -926,6 +926,11 @@ const DISCOVERED_QUESTIONS = [
 
 export default function DriverClassificationManager() {
   const [rules, setRules] = useState<ClassificationRule>(DEFAULT_RULES);
+  const [questions, setQuestions] = useState(DISCOVERED_QUESTIONS);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
+
   const [newPplTag, setNewPplTag] = useState('');
   const [newPrcTag, setNewPrcTag] = useState('');
   const [newPrmTag, setNewPrmTag] = useState('');
@@ -934,10 +939,11 @@ export default function DriverClassificationManager() {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('csat_driver_classification_rules');
-      if (stored) {
-        setRules(JSON.parse(stored));
-      }
+      const storedRules = localStorage.getItem('csat_driver_classification_rules');
+      if (storedRules) setRules(JSON.parse(storedRules));
+
+      const storedQs = localStorage.getItem('csat_driver_questions_list');
+      if (storedQs) setQuestions(JSON.parse(storedQs));
     } catch {}
   }, []);
 
@@ -945,6 +951,15 @@ export default function DriverClassificationManager() {
     setRules(updated);
     try {
       localStorage.setItem('csat_driver_classification_rules', JSON.stringify(updated));
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 2500);
+    } catch {}
+  };
+
+  const saveQuestions = (updatedQs: typeof DISCOVERED_QUESTIONS) => {
+    setQuestions(updatedQs);
+    try {
+      localStorage.setItem('csat_driver_questions_list', JSON.stringify(updatedQs));
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 2500);
     } catch {}
@@ -982,6 +997,69 @@ export default function DriverClassificationManager() {
     });
   };
 
+  // Bulk Selection Handlers
+  const filteredQuestions = questions.filter(q => {
+    const activeCat = rules.overrides[q.name] || q.defaultCategory;
+    const matchesCategory = categoryFilter === 'ALL' || activeCat === categoryFilter;
+    const matchesSearch = !searchQuery || q.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const isAllSelected = filteredQuestions.length > 0 && filteredQuestions.every(q => selectedIds.includes(q.id));
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds(selectedIds.filter(id => !filteredQuestions.some(fq => fq.id === id)));
+    } else {
+      const visibleIds = filteredQuestions.map(q => q.id);
+      setSelectedIds(Array.from(new Set([...selectedIds, ...visibleIds])));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter(i => i !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const handleSingleDelete = (id: string, name: string) => {
+    if (confirm(`Are you sure you want to delete question: "${name}"?`)) {
+      const updated = questions.filter(q => q.id !== id);
+      saveQuestions(updated);
+      setSelectedIds(selectedIds.filter(i => i !== id));
+    }
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedIds.length === 0) return;
+    if (confirm(`Are you sure you want to delete ${selectedIds.length} selected question(s)?`)) {
+      const updated = questions.filter(q => !selectedIds.includes(q.id));
+      saveQuestions(updated);
+      setSelectedIds([]);
+    }
+  };
+
+  const handleBulkAssign = (category: 'Overall' | 'People' | 'Process' | 'Premises') => {
+    if (selectedIds.length === 0) return;
+    const updatedOverrides = { ...rules.overrides };
+    questions.forEach(q => {
+      if (selectedIds.includes(q.id)) {
+        updatedOverrides[q.name] = category;
+      }
+    });
+    saveRules({ ...rules, overrides: updatedOverrides });
+  };
+
+  const handleResetQuestions = () => {
+    if (confirm('Reset question list to default discovered questions (181 questions)?')) {
+      saveQuestions(DISCOVERED_QUESTIONS);
+      saveRules(DEFAULT_RULES);
+      setSelectedIds([]);
+    }
+  };
+
   const classifyText = (text: string) => {
     if (!text.trim()) return null;
     const l = text.toLowerCase();
@@ -1002,6 +1080,7 @@ export default function DriverClassificationManager() {
   };
 
   const testResult = classifyText(testText);
+
 
   return (
     <div className="space-y-6 animate-in">
@@ -1145,57 +1224,191 @@ export default function DriverClassificationManager() {
         </div>
       </div>
 
-      {/* Question Header Overrides Table */}
+      {/* Question Header Overrides & Bulk Management Table */}
       <div className="glass-card !p-0 overflow-hidden">
-        <div className="p-4 border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] flex items-center justify-between">
+        {/* Table Header & Search Controls */}
+        <div className="p-4 border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Discovered Question Headers & Manual Overrides</h3>
-            <p className="text-[11px] text-[var(--text-muted)]">Override default classification for specific survey question headers</p>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+              📋 Discovered Question Headers ({questions.length})
+            </h3>
+            <p className="text-[11px] text-[var(--text-muted)]">
+              Manage, search, bulk assign, or delete survey question headers
+            </p>
           </div>
-          <button
-            onClick={() => saveRules(DEFAULT_RULES)}
-            className="text-xs px-3 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30"
-          >
-            Reset to Defaults
-          </button>
+
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Search Input */}
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="🔍 Search questions..."
+              className="text-xs rounded-lg px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)] min-w-[200px]"
+            />
+
+            {/* Category Filter */}
+            <select
+              value={categoryFilter}
+              onChange={e => setCategoryFilter(e.target.value)}
+              className="text-xs font-semibold rounded-lg px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]"
+            >
+              <option value="ALL">All Categories ({questions.length})</option>
+              <option value="Overall">🌟 Overall</option>
+              <option value="People">👥 People</option>
+              <option value="Process">🔄 Process</option>
+              <option value="Premises">🏢 Premises</option>
+            </select>
+
+            {/* Reset Button */}
+            <button
+              onClick={handleResetQuestions}
+              className="text-xs px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30 font-medium transition-all"
+            >
+              ↺ Reset List
+            </button>
+          </div>
         </div>
 
+        {/* Bulk Action Bar (Visible when items selected) */}
+        {selectedIds.length > 0 && (
+          <div className="px-4 py-3 bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-slate-900/40 border-b border-indigo-500/30 flex flex-wrap items-center justify-between gap-3 animate-in">
+            <div className="flex items-center gap-2 text-xs font-semibold text-indigo-300">
+              <span className="w-5 h-5 rounded-full bg-indigo-500/30 border border-indigo-400 flex items-center justify-center text-[10px]">
+                {selectedIds.length}
+              </span>
+              <span>Question(s) Selected</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Bulk Assign Category */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] text-indigo-200 font-medium">Assign to:</span>
+                <button
+                  onClick={() => handleBulkAssign('Overall')}
+                  className="px-2.5 py-1 text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-md hover:bg-amber-500/30"
+                >
+                  🌟 Overall
+                </button>
+                <button
+                  onClick={() => handleBulkAssign('People')}
+                  className="px-2.5 py-1 text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-md hover:bg-indigo-500/30"
+                >
+                  👥 People
+                </button>
+                <button
+                  onClick={() => handleBulkAssign('Process')}
+                  className="px-2.5 py-1 text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-md hover:bg-cyan-500/30"
+                >
+                  🔄 Process
+                </button>
+                <button
+                  onClick={() => handleBulkAssign('Premises')}
+                  className="px-2.5 py-1 text-xs font-medium bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-md hover:bg-pink-500/30"
+                >
+                  🏢 Premises
+                </button>
+              </div>
+
+              <div className="h-4 w-px bg-white/20" />
+
+              {/* Bulk Delete Button */}
+              <button
+                onClick={handleBulkDelete}
+                className="px-3 py-1.5 text-xs font-bold bg-red-600 hover:bg-red-500 text-white rounded-lg shadow-lg flex items-center gap-1.5 transition-all"
+              >
+                <span>🗑️</span> Delete Selected ({selectedIds.length})
+              </button>
+
+              {/* Deselect All */}
+              <button
+                onClick={() => setSelectedIds([])}
+                className="text-xs px-2.5 py-1.5 text-slate-300 hover:text-white"
+              >
+                Clear Selection
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Table */}
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-[var(--glass-border)] bg-[var(--bg-secondary)]">
-              <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">#</th>
-              <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Survey Question Header</th>
-              <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Default Class</th>
-              <th className="p-3 text-xs font-medium text-[var(--text-muted)] uppercase">Active Pillar Assignment</th>
+            <tr className="border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] text-[11px] text-[var(--text-muted)] uppercase tracking-wider">
+              <th className="p-3 w-10 text-center">
+                <input
+                  type="checkbox"
+                  checked={isAllSelected}
+                  onChange={toggleSelectAll}
+                  className="rounded border-slate-600 bg-slate-800 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                />
+              </th>
+              <th className="p-3 w-12">#</th>
+              <th className="p-3">Survey Question Header</th>
+              <th className="p-3 w-36">Default Class</th>
+              <th className="p-3 w-48">Active Pillar Assignment</th>
+              <th className="p-3 w-20 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
-            {DISCOVERED_QUESTIONS.map((q, idx) => {
-              const activeCategory = rules.overrides[q.name] || q.defaultCategory;
-              return (
-                <tr key={q.id} className="border-b border-[var(--glass-border)] hover:bg-[var(--glass-bg)] transition-colors">
-                  <td className="p-3 text-xs text-[var(--text-muted)]">{idx + 1}</td>
-                  <td className="p-3 font-medium text-xs text-[var(--text-primary)]">{q.name}</td>
-                  <td className="p-3 text-xs text-[var(--text-muted)]">{q.defaultCategory}</td>
-                  <td className="p-3">
-                    <select
-                      value={activeCategory}
-                      onChange={e => handleOverride(q.name, e.target.value as any)}
-                      className="text-xs font-semibold rounded-lg px-2.5 py-1 border bg-[var(--glass-bg)]"
-                      style={{
-                        color: activeCategory === 'Overall' ? '#eab308' : activeCategory === 'People' ? '#6366f1' : activeCategory === 'Process' ? '#06b6d4' : '#ec4899',
-                        borderColor: activeCategory === 'Overall' ? '#eab30840' : activeCategory === 'People' ? '#6366f140' : activeCategory === 'Process' ? '#06b6d440' : '#ec489940'
-                      }}
-                    >
-                      <option value="Overall">🌟 Overall CSAT</option>
-                      <option value="People">👥 People (PPL)</option>
-                      <option value="Process">🔄 Process (PRC)</option>
-                      <option value="Premises">🏢 Premises (PRM)</option>
-                    </select>
-                  </td>
-                </tr>
-              );
-            })}
+            {filteredQuestions.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="p-8 text-center text-xs text-[var(--text-muted)]">
+                  No questions match your current search/filter.
+                </td>
+              </tr>
+            ) : (
+              filteredQuestions.map((q, idx) => {
+                const activeCategory = rules.overrides[q.name] || q.defaultCategory;
+                const isSelected = selectedIds.includes(q.id);
+
+                return (
+                  <tr
+                    key={q.id}
+                    className={`border-b border-[var(--glass-border)] transition-colors ${
+                      isSelected ? 'bg-indigo-950/30' : 'hover:bg-[var(--glass-bg)]'
+                    }`}
+                  >
+                    <td className="p-3 text-center">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelect(q.id)}
+                        className="rounded border-slate-600 bg-slate-800 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      />
+                    </td>
+                    <td className="p-3 text-xs text-[var(--text-muted)]">{idx + 1}</td>
+                    <td className="p-3 font-medium text-xs text-[var(--text-primary)]">{q.name}</td>
+                    <td className="p-3 text-xs text-[var(--text-muted)]">{q.defaultCategory}</td>
+                    <td className="p-3">
+                      <select
+                        value={activeCategory}
+                        onChange={e => handleOverride(q.name, e.target.value as any)}
+                        className="text-xs font-semibold rounded-lg px-2.5 py-1 border bg-[var(--glass-bg)]"
+                        style={{
+                          color: activeCategory === 'Overall' ? '#eab308' : activeCategory === 'People' ? '#6366f1' : activeCategory === 'Process' ? '#06b6d4' : '#ec4899',
+                          borderColor: activeCategory === 'Overall' ? '#eab30840' : activeCategory === 'People' ? '#6366f140' : activeCategory === 'Process' ? '#06b6d440' : '#ec489940'
+                        }}
+                      >
+                        <option value="Overall">🌟 Overall CSAT</option>
+                        <option value="People">👥 People (PPL)</option>
+                        <option value="Process">🔄 Process (PRC)</option>
+                        <option value="Premises">🏢 Premises (PRM)</option>
+                      </select>
+                    </td>
+                    <td className="p-3 text-center">
+                      <button
+                        onClick={() => handleSingleDelete(q.id, q.name)}
+                        className="p-1 text-slate-400 hover:text-red-400 rounded transition-colors"
+                        title="Delete Question"
+                      >
+                        🗑️
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
