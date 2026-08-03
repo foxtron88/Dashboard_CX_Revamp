@@ -13,25 +13,19 @@ import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSa
 import { FacilityRankings, TagsCloud } from '@/modules/cx-performance/components/FacilityAndTags';
 import FeedbackExplorer from '@/modules/cx-performance/components/FeedbackExplorer';
 
-const BUS = ['ALL', 'API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
+const BUS = ['API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
 
 function CXPerformanceContent() {
   const searchParams = useSearchParams();
   const { data: records, loading, error } = useCSATData();
-  const [bu, setBU] = useState('ALL');
-  const [surveyType, setSurveyType] = useState('ALL');
+  const [bu, setBU] = useState('API');
   const [location, setLocation] = useState('ALL');
   const [sentiment, setSentiment] = useState('ALL');
   const [fromMonth, setFromMonth] = useState(searchParams.get('from') || '');
   const [toMonth, setToMonth] = useState(searchParams.get('to') || '');
 
-  const surveyTypes = useMemo(() => {
-    if (!records) return ['ALL'];
-    const relRecs = bu === 'ALL' ? records : records.filter(r => r.bu === bu);
-    const types = Array.from(new Set(relRecs.map(r => r.survey_type).filter(Boolean))).sort();
-    return ['ALL', ...types];
-  }, [records, bu]);
+
 
   const locations = useMemo(() => {
     if (!records) return ['ALL'];
@@ -43,10 +37,9 @@ function CXPerformanceContent() {
   const handleSelectBU = (newBU: string) => {
     setBU(newBU);
     setLocation('ALL');
-    setSurveyType('ALL');
   };
 
-  const filtered = useFilteredCSAT(records, bu, surveyType, sentiment, fromMonth, toMonth, location);
+  const filtered = useFilteredCSAT(records, bu, 'ALL', sentiment, fromMonth, toMonth, location);
 
   if (error) {
     return (
@@ -83,14 +76,7 @@ function CXPerformanceContent() {
           </div>
         </div>
 
-        <div className="min-w-[180px]">
-          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Survey Type</p>
-          <select value={surveyType} onChange={e => setSurveyType(e.target.value)}
-            className="w-full text-xs rounded-lg px-3 py-1.5"
-            style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}>
-            {surveyTypes.map(t => <option key={t} value={t}>{t === 'ALL' ? 'All Types' : t}</option>)}
-          </select>
-        </div>
+
 
         <div className="min-w-[180px]">
           <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Location</p>
