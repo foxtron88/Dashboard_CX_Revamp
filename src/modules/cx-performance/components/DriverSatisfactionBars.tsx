@@ -31,6 +31,7 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
   const [driver, setDriver] = useState<Driver>('people_score');
   const [dimension, setDimension] = useState<Dimension>('bu');
   const [topN, setTopN] = useState(10);
+  const [sortBy, setSortBy] = useState<'volume' | 'dissatisfied'>('volume');
 
   const activeDriver = DRIVERS.find(d => d.key === driver)!;
 
@@ -55,9 +56,17 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
         return { label, n: scores.length, satisfied: sat, neutral: neu, dissatisfied: dis, avg };
       })
       .filter(r => r.n >= (dimension === 'facility_type' ? 5 : 1))
-      .sort((a, b) => b.n - a.n)
+      .sort((a, b) => {
+        if (sortBy === 'dissatisfied') {
+          const pctA = a.dissatisfied / a.n;
+          const pctB = b.dissatisfied / b.n;
+          if (pctB !== pctA) return pctB - pctA;
+          return b.dissatisfied - a.dissatisfied;
+        }
+        return b.n - a.n;
+      })
       .slice(0, topN);
-  }, [records, driver, dimension, topN]);
+  }, [records, driver, dimension, topN, sortBy]);
 
   const maxN = Math.max(...rows.map(r => r.n), 1);
 
@@ -143,6 +152,35 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
             </select>
           </div>
         )}
+
+        {/* Sort By */}
+        <div>
+          <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
+            Sort By
+          </p>
+          <div className="flex gap-1">
+            <button
+              onClick={() => setSortBy('volume')}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                sortBy === 'volume'
+                  ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30'
+                  : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'
+              }`}
+            >
+              Highest Volume
+            </button>
+            <button
+              onClick={() => setSortBy('dissatisfied')}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                sortBy === 'dissatisfied'
+                  ? 'bg-red-500/20 text-red-400 border-red-500/30'
+                  : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-red-500/30'
+              }`}
+            >
+              Highest Dissatisfied
+            </button>
+          </div>
+        </div>
 
         {/* Legend */}
         <div className="ml-auto flex items-center gap-4 text-[11px] text-[var(--text-muted)]">
