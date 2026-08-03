@@ -115,14 +115,15 @@ export default function OperationsView({ data, months }: Props) {
     let callVolume = 0;
     let fcrSum = 0;
     let slSum = 0;
-    let ccCount = 0;
+    let fcrCount = 0;
+    let slCount = 0;
     busToUse.forEach(bu => {
       const cc = data[bu]?.performance?.call_center;
       if (cc) {
         for (let i = fromIdx; i <= toIdx && i < (cc.volume?.length || 0); i++) {
           callVolume += (cc.volume?.[i] || 0);
-          if (cc.fcr?.[i] !== null && cc.fcr?.[i] !== undefined) { fcrSum += cc.fcr[i]; ccCount++; }
-          if (cc.service_level?.[i] !== null && cc.service_level?.[i] !== undefined) { slSum += cc.service_level[i]; }
+          if (cc.fcr?.[i] !== null && cc.fcr?.[i] !== undefined && cc.fcr?.[i] > 0) { fcrSum += cc.fcr[i]; fcrCount++; }
+          if (cc.service_level?.[i] !== null && cc.service_level?.[i] !== undefined && cc.service_level?.[i] > 0) { slSum += cc.service_level[i]; slCount++; }
         }
       }
     });
@@ -132,21 +133,21 @@ export default function OperationsView({ data, months }: Props) {
       let volume = 0;
       let fcr = 0;
       let sl = 0;
-      let cnt = 0;
+      let cntFCR = 0;
+      let cntSL = 0;
       busToUse.forEach(bu => {
         const cc = data[bu]?.performance?.call_center;
         if (cc) {
           volume += (cc.volume?.[mIdx] || 0);
-          if (cc.fcr?.[mIdx]) fcr += cc.fcr[mIdx];
-          if (cc.service_level?.[mIdx]) sl += cc.service_level[mIdx];
-          cnt++;
+          if (cc.fcr?.[mIdx]) { fcr += cc.fcr[mIdx]; cntFCR++; }
+          if (cc.service_level?.[mIdx]) { sl += cc.service_level[mIdx]; cntSL++; }
         }
       });
       return {
         month: m,
         volume,
-        fcr: cnt ? Math.round(fcr / cnt) : 0,
-        serviceLevel: cnt ? Math.round(sl / cnt) : 0,
+        fcr: cntFCR ? Math.min(100, Math.round(fcr / cntFCR)) : 0,
+        serviceLevel: cntSL ? Math.min(100, Math.round(sl / cntSL)) : 0,
       };
     });
 
@@ -156,8 +157,8 @@ export default function OperationsView({ data, months }: Props) {
       totalInteractions,
       monthlyChart,
       callVolume,
-      avgFCR: ccCount ? (fcrSum / ccCount).toFixed(1) : '0',
-      avgSL: ccCount ? (slSum / ccCount).toFixed(1) : '0',
+      avgFCR: fcrCount ? Math.min(100, Math.round((fcrSum / fcrCount) * 10) / 10).toFixed(1) : '0',
+      avgSL: slCount ? Math.min(100, Math.round((slSum / slCount) * 10) / 10).toFixed(1) : '0',
       callCenterChart,
     };
   }, [data, months, selectedBU, fromIdx, toIdx]);
@@ -502,7 +503,7 @@ export default function OperationsView({ data, months }: Props) {
             </ResponsiveContainer>
           </div>
 
-          <div className="glass-card">
+          <div className="glass-card overflow-hidden">
             <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Call Center KPIs</h3>
             <div className="space-y-4">
               {[
@@ -510,13 +511,13 @@ export default function OperationsView({ data, months }: Props) {
                 { label: 'First Call Resolution (FCR)', value: `${aggregated.avgFCR}%`, color: '#10b981', pct: Number(aggregated.avgFCR) },
                 { label: 'Service Level', value: `${aggregated.avgSL}%`, color: '#f59e0b', pct: Number(aggregated.avgSL) },
               ].map(kpi => (
-                <div key={kpi.label} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                <div key={kpi.label} className="bg-[var(--bg-tertiary)] rounded-lg p-4 overflow-hidden">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-[var(--text-secondary)]">{kpi.label}</span>
                     <span className="text-lg font-bold" style={{ color: kpi.color, fontFamily: 'var(--font-display)' }}>{kpi.value}</span>
                   </div>
-                  <div className="w-full bg-[var(--bg-primary)] rounded-full h-2">
-                    <div className="h-2 rounded-full transition-all duration-700" style={{ width: `${kpi.pct}%`, background: kpi.color }} />
+                  <div className="w-full bg-[var(--bg-primary)] rounded-full h-2 overflow-hidden">
+                    <div className="h-2 rounded-full transition-all duration-700" style={{ width: `${Math.min(100, Math.max(0, kpi.pct))}%`, background: kpi.color }} />
                   </div>
                 </div>
               ))}
