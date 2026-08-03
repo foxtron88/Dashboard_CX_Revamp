@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star,
+  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star, Menu
 } from 'lucide-react';
 
 const navItems = [
@@ -18,11 +18,16 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-[var(--bg-secondary)] border-r border-[var(--glass-border)] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
+      <aside 
+        className={`bg-[var(--bg-secondary)] border-r border-[var(--glass-border)] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto transition-all duration-300 ${
+          isSidebarOpen ? 'w-64 opacity-100' : 'w-0 opacity-0 overflow-hidden border-none'
+        }`}
+      >
         {/* Logo */}
         <div className="p-5 border-b border-[var(--glass-border)]">
           <Link href="/executive-summary" className="flex items-center gap-3 no-underline">
@@ -75,10 +80,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto transition-all duration-300">
         {/* Top Bar */}
         <header className="sticky top-0 z-10 bg-[var(--bg-primary)]/80 backdrop-blur-xl border-b border-[var(--glass-border)] px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-2 rounded-lg hover:bg-[var(--glass-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mr-2"
+              title="Toggle Sidebar"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
             {(() => {
               const currentNav = navItems.find(item => item.href === pathname);
               if (currentNav) {
