@@ -5,10 +5,11 @@ import type { CSATRecord } from '@/modules/common/types';
 
 interface Props { records: CSATRecord[]; }
 
-type Driver = 'people_score' | 'process_score' | 'premises_score';
+type Driver = 'overall_score' | 'people_score' | 'process_score' | 'premises_score';
 type Dimension = 'bu' | 'facility_type';
 
 const DRIVERS: { key: Driver; label: string; icon: string; color: string }[] = [
+  { key: 'overall_score',  label: 'Overall CSAT',   icon: '🌟', color: '#eab308' },
   { key: 'people_score',   label: 'People (PPL)',   icon: '👥', color: '#6366f1' },
   { key: 'process_score',  label: 'Process (PRC)',  icon: '🔄', color: '#06b6d4' },
   { key: 'premises_score', label: 'Premises (PRM)', icon: '🏢', color: '#ec4899' },
