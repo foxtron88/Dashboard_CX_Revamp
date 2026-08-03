@@ -29,15 +29,23 @@ export default function CXPerformancePage() {
 
   const surveyTypes = useMemo(() => {
     if (!records) return ['ALL'];
-    const types = Array.from(new Set(records.map(r => r.survey_type).filter(Boolean))).sort();
+    const relRecs = bu === 'ALL' ? records : records.filter(r => r.bu === bu);
+    const types = Array.from(new Set(relRecs.map(r => r.survey_type).filter(Boolean))).sort();
     return ['ALL', ...types];
-  }, [records]);
+  }, [records, bu]);
 
   const locations = useMemo(() => {
     if (!records) return ['ALL'];
-    const locs = Array.from(new Set(records.map(r => r.location).filter(Boolean))).sort();
+    const relRecs = bu === 'ALL' ? records : records.filter(r => r.bu === bu);
+    const locs = Array.from(new Set(relRecs.map(r => r.location).filter(Boolean))).sort();
     return ['ALL', ...locs];
-  }, [records]);
+  }, [records, bu]);
+
+  const handleSelectBU = (newBU: string) => {
+    setBU(newBU);
+    setLocation('ALL');
+    setSurveyType('ALL');
+  };
 
   const filtered = useFilteredCSAT(records, bu, surveyType, sentiment, fromMonth, toMonth, location);
 
@@ -86,7 +94,7 @@ export default function CXPerformancePage() {
           <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
           <div className="flex flex-wrap gap-1">
             {BUS.map(b => (
-              <button key={b} onClick={() => setBU(b)}
+              <button key={b} onClick={() => handleSelectBU(b)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${bu === b ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30' : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'}`}>
                 {b}
               </button>
