@@ -148,11 +148,16 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
         {csatStats ? (
           <>
             <ExecutiveSummaryTopMetrics socmedStats={socmedData?.global || null} opsStats={opsStats || null} />
-            
             {/* Individual Business Units */}
             <div className="mt-2">
               <BUGroupLabel label="Individual Business Units" />
-              <MemberCSATGrid records={csatStats.filtered} hideHeader />
+              <MemberCSATGrid 
+                records={csatStats.filtered} 
+                hideHeader 
+                allRecords={csatRecords || undefined}
+                fromMonth={fromMonth}
+                toMonth={toMonth}
+              />
             </div>
             
             {/* BU Deep Dive Charts */}

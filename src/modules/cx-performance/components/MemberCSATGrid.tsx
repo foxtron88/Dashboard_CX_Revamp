@@ -7,6 +7,9 @@ import { useCSATTarget } from '@/modules/common/hooks/use-csat-target';
 interface Props { 
   records: CSATRecord[];
   hideHeader?: boolean;
+  allRecords?: CSATRecord[];
+  fromMonth?: string;
+  toMonth?: string;
 }
 
 const BU_COLORS: Record<string, string> = {
@@ -25,27 +28,76 @@ function getScoreColor(score: number) {
   return 'var(--accent-danger)';
 }
 
-export default function MemberCSATGrid({ records, hideHeader }: Props) {
+export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMonth, toMonth }: Props) {
   const { target } = useCSATTarget();
   const buStats = useMemo(() => {
     const buNames = Array.from(new Set(records.map(r => r.bu))).sort();
     return buNames.map(bu => {
       const buRecs = records.filter(r => r.bu === bu);
-      const calcAvg = (key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
-        const vals = buRecs.map(r => r[key]).filter((v): v is number => v !== null);
+      const calcAvg = (recs: CSATRecord[], key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
+        const vals = recs.map(r => r[key]).filter((v): v is number => v !== null);
         return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
       };
-      const overall = calcAvg('overall_score');
-      const people = calcAvg('people_score');
-      const process = calcAvg('process_score');
-      const premises = calcAvg('premises_score');
+      
+      const overall = calcAvg(buRecs, 'overall_score');
+      const people = calcAvg(buRecs, 'people_score');
+      const process = calcAvg(buRecs, 'process_score');
+      const premises = calcAvg(buRecs, 'premises_score');
+      
       const ratedTotal = buRecs.filter(r => r.overall_score !== null).length;
       const satisfied = buRecs.filter(r => r.overall_group === 'Satisfied').length;
       const csatPct = ratedTotal > 0 ? (satisfied / ratedTotal) * 100 : 0;
 
-      return { bu, total: buRecs.length, overall, people, process, premises, csatPct, ratedTotal };
+      let momDiff: number | null = null;
+      let yoyDiff: number | null = null;
+
+      if (allRecords) {
+        let fMonth = fromMonth;
+        let tMonth = toMonth;
+        if (!fMonth && !tMonth) {
+           const buMonths = Array.from(new Set(allRecords.filter(r => r.bu === bu).map(r => r.month).filter(Boolean))).sort();
+           if (buMonths.length > 0) {
+             fMonth = buMonths[buMonths.length - 1];
+             tMonth = fMonth;
+           }
+        }
+        
+        if (fMonth && tMonth) {
+          const curRecs = allRecords.filter(r => r.bu === bu && r.month >= fMonth! && r.month <= tMonth!);
+          const curAvg = calcAvg(curRecs, 'overall_score');
+
+          const shiftMonth = (ym: string) => {
+            if (!ym) return ym;
+            let [y, m] = ym.split('-').map(Number);
+            m -= 1;
+            if (m === 0) { m = 12; y -= 1; }
+            return `${y}-${String(m).padStart(2, '0')}`;
+          };
+          
+          const shiftYear = (ym: string) => {
+            if (!ym) return ym;
+            let [y, m] = ym.split('-').map(Number);
+            y -= 1;
+            return `${y}-${String(m).padStart(2, '0')}`;
+          };
+
+          const pmF = shiftMonth(fMonth);
+          const pmT = shiftMonth(tMonth);
+          const prevMoMRecs = allRecords.filter(r => r.bu === bu && r.month >= pmF && r.month <= pmT);
+          const prevMoMAvg = calcAvg(prevMoMRecs, 'overall_score');
+          if (prevMoMRecs.length > 0 && prevMoMAvg > 0) momDiff = curAvg - prevMoMAvg;
+
+          const pyF = shiftYear(fMonth);
+          const pyT = shiftYear(tMonth);
+          const prevYoYRecs = allRecords.filter(r => r.bu === bu && r.month >= pyF && r.month <= pyT);
+          const prevYoYAvg = calcAvg(prevYoYRecs, 'overall_score');
+          if (prevYoYRecs.length > 0 && prevYoYAvg > 0) yoyDiff = curAvg - prevYoYAvg;
+        }
+      }
+
+      return { bu, total: buRecs.length, overall, people, process, premises, csatPct, ratedTotal, momDiff, yoyDiff };
     });
-  }, [records]);
+  }, [records, allRecords, fromMonth, toMonth]);
 
   return (
     <section className="mt-10 animate-in">
@@ -103,6 +155,22 @@ export default function MemberCSATGrid({ records, hideHeader }: Props) {
                     Target: {target.toFixed(2)}
                   </p>
                 </div>
+                
+                {/* Trend Indicators */}
+                {(s.momDiff !== null || s.yoyDiff !== null) && (
+                  <div className="flex items-center justify-center gap-3 mt-2">
+                    {s.momDiff !== null && (
+                      <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.momDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
+                        {s.momDiff >= 0 ? '▲' : '▼'} {Math.abs(s.momDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">MoM</span>
+                      </div>
+                    )}
+                    {s.yoyDiff !== null && (
+                      <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.yoyDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
+                        {s.yoyDiff >= 0 ? '▲' : '▼'} {Math.abs(s.yoyDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">YoY</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* 3P Drivers */}

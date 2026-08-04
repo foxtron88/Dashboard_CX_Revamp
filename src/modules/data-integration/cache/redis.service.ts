@@ -4,8 +4,13 @@ import Redis from 'ioredis';
 class InMemoryCache {
   private store = new Map<string, { value: string, expiresAt: number }>();
 
-  async set(key: string, value: string, options?: { EX: number }) {
-    const expiresAt = options?.EX ? Date.now() + options.EX * 1000 : Infinity;
+  async set(key: string, value: string, ...args: any[]) {
+    let expiresAt = Infinity;
+    if (args[0] === 'EX' && typeof args[1] === 'number') {
+      expiresAt = Date.now() + args[1] * 1000;
+    } else if (args[0] && typeof args[0] === 'object' && args[0].EX) {
+      expiresAt = Date.now() + args[0].EX * 1000;
+    }
     this.store.set(key, { value, expiresAt });
     return 'OK';
   }
@@ -28,7 +33,7 @@ export const redisClient = redisUrl ? new Redis(redisUrl) : new InMemoryCache();
 export async function setCache(key: string, data: any, ttlSeconds: number = 300) {
   try {
     const serialized = JSON.stringify(data);
-    await redisClient.set(key, serialized, { EX: ttlSeconds });
+    await redisClient.set(key, serialized, 'EX', ttlSeconds);
     return true;
   } catch (error) {
     console.error('Redis Set Error:', error);
