@@ -1,73 +1,73 @@
 {
   "global": {
-    "total_posts": 152020,
+    "total_posts": 157403,
     "total_comments": 10001,
-    "total_likes": 28707409,
-    "total_views": 799184278,
-    "total_replies": 904504,
+    "total_likes": 29265017,
+    "total_views": 803911313,
+    "total_replies": 925157,
     "platform_stats": [
       {
         "platform": "Twitter",
-        "post_count": 67880,
-        "total_likes": 205353.0,
-        "total_views": 0.0,
-        "total_replies": 27369.0,
-        "total_retweet": 57177.0,
-        "avg_likes": 3.0,
-        "avg_views": 0.0
+        "post_count": 69640,
+        "total_likes": 215982,
+        "total_views": 0,
+        "total_replies": 28453,
+        "total_retweet": 60909,
+        "avg_likes": 3.1,
+        "avg_views": 0
       },
       {
         "platform": "Instagram",
-        "post_count": 37846,
-        "total_likes": 9515670.0,
-        "total_views": 213946928.0,
-        "total_replies": 303501.0,
-        "total_retweet": 0.0,
-        "avg_likes": 251.4,
-        "avg_views": 5653.0
+        "post_count": 39921,
+        "total_likes": 10432582,
+        "total_views": 228606809,
+        "total_replies": 334698,
+        "total_retweet": 0,
+        "avg_likes": 261.3,
+        "avg_views": 5726
       },
       {
         "platform": "Youtube",
-        "post_count": 31481,
-        "total_likes": 1279239.0,
-        "total_views": 103402485.0,
-        "total_replies": 160084.0,
-        "total_retweet": 0.0,
-        "avg_likes": 40.6,
-        "avg_views": 3285.0
+        "post_count": 33055,
+        "total_likes": 1314475,
+        "total_views": 105787277,
+        "total_replies": 162593,
+        "total_retweet": 0,
+        "avg_likes": 39.8,
+        "avg_views": 3200
       },
       {
         "platform": "Tiktok",
-        "post_count": 14805,
-        "total_likes": 17707144.0,
-        "total_views": 481834865.0,
-        "total_replies": 413548.0,
-        "total_retweet": 0.0,
-        "avg_likes": 1196.0,
-        "avg_views": 32545.0
+        "post_count": 14779,
+        "total_likes": 17301975,
+        "total_views": 469517227,
+        "total_replies": 399411,
+        "total_retweet": 0,
+        "avg_likes": 1170.7,
+        "avg_views": 31769
       },
       {
         "platform": "Threads",
         "post_count": 8,
-        "total_likes": 3.0,
-        "total_views": 0.0,
-        "total_replies": 2.0,
-        "total_retweet": 0.0,
+        "total_likes": 3,
+        "total_views": 0,
+        "total_replies": 2,
+        "total_retweet": 0,
         "avg_likes": 0.4,
-        "avg_views": 0.0
+        "avg_views": 0
       }
     ],
     "platform_engagement_rate": {
-      "Twitter": 3.4,
-      "Instagram": 259.5,
-      "Youtube": 45.7,
-      "Tiktok": 1224.0,
+      "Twitter": 3.5,
+      "Instagram": 269.7,
+      "Youtube": 44.7,
+      "Tiktok": 1197.7,
       "Threads": 0.6
     },
     "posts_sentiment": {
-      "Netral": 76769,
-      "Positif": 67895,
-      "Negatif": 7356
+      "Netral": 79305,
+      "Positif": 70408,
+      "Negatif": 7690
     },
     "comments_sentiment": {
       "Positif": 2097,
@@ -168,11 +168,11 @@
       },
       "2025-08": {
         "Positif": 3510,
-        "Netral": 3732,
+        "Netral": 3733,
         "Negatif": 52
       },
       "2025-09": {
-        "Positif": 2433,
+        "Positif": 2434,
         "Netral": 2439,
         "Negatif": 41
       },
@@ -182,18 +182,18 @@
         "Negatif": 123
       },
       "2025-11": {
-        "Positif": 2250,
-        "Netral": 3096,
-        "Negatif": 387
+        "Positif": 2159,
+        "Netral": 2935,
+        "Negatif": 375
       },
       "2025-12": {
-        "Positif": 3070,
-        "Netral": 3016,
-        "Negatif": 605
+        "Positif": 3013,
+        "Netral": 2939,
+        "Negatif": 593
       },
       "2026-01": {
-        "Positif": 2658,
-        "Netral": 3187,
+        "Positif": 2659,
+        "Netral": 3188,
         "Negatif": 596
       },
       "2026-02": {
@@ -202,29 +202,34 @@
         "Negatif": 662
       },
       "2026-03": {
-        "Positif": 3501,
-        "Netral": 3991,
-        "Negatif": 749
+        "Positif": 3395,
+        "Netral": 3940,
+        "Negatif": 738
       },
       "2026-04": {
-        "Positif": 3390,
-        "Netral": 4072,
-        "Negatif": 689
+        "Positif": 3286,
+        "Netral": 4028,
+        "Negatif": 683
       },
       "2026-05": {
-        "Positif": 6053,
+        "Positif": 6055,
         "Netral": 5447,
         "Negatif": 964
       },
       "2026-06": {
-        "Positif": 4453,
-        "Netral": 4430,
-        "Negatif": 591
+        "Positif": 4317,
+        "Netral": 4173,
+        "Negatif": 575
       },
       "2026-07": {
-        "Positif": 3523,
-        "Netral": 3068,
-        "Negatif": 352
+        "Positif": 5953,
+        "Netral": 5591,
+        "Negatif": 630
+      },
+      "2026-08": {
+        "Positif": 572,
+        "Netral": 601,
+        "Negatif": 113
       }
     },
     "monthly_platform_trend": {
@@ -279,14 +284,14 @@
       },
       "2025-08": {
         "Twitter": 4229,
-        "Instagram": 1540,
+        "Instagram": 1541,
         "Youtube": 496,
         "Tiktok": 1029,
         "Threads": 0
       },
       "2025-09": {
         "Twitter": 1754,
-        "Instagram": 888,
+        "Instagram": 889,
         "Youtube": 1535,
         "Tiktok": 736,
         "Threads": 0
@@ -302,19 +307,19 @@
         "Twitter": 2404,
         "Instagram": 516,
         "Youtube": 2138,
-        "Tiktok": 675,
+        "Tiktok": 411,
         "Threads": 0
       },
       "2025-12": {
         "Twitter": 2074,
-        "Instagram": 999,
+        "Instagram": 1000,
         "Youtube": 2462,
-        "Tiktok": 1156,
+        "Tiktok": 1009,
         "Threads": 0
       },
       "2026-01": {
         "Twitter": 1887,
-        "Instagram": 848,
+        "Instagram": 850,
         "Youtube": 2450,
         "Tiktok": 1256,
         "Threads": 0
@@ -328,253 +333,260 @@
       },
       "2026-03": {
         "Twitter": 3009,
-        "Instagram": 984,
+        "Instagram": 816,
         "Youtube": 3027,
         "Tiktok": 1221,
         "Threads": 0
       },
       "2026-04": {
         "Twitter": 1991,
-        "Instagram": 1160,
+        "Instagram": 1006,
         "Youtube": 3124,
         "Tiktok": 1876,
         "Threads": 0
       },
       "2026-05": {
         "Twitter": 2767,
-        "Instagram": 5184,
+        "Instagram": 5186,
         "Youtube": 3278,
         "Tiktok": 1235,
         "Threads": 0
       },
       "2026-06": {
         "Twitter": 2322,
-        "Instagram": 3278,
+        "Instagram": 3279,
         "Youtube": 2881,
-        "Tiktok": 985,
+        "Tiktok": 575,
         "Threads": 8
       },
       "2026-07": {
-        "Twitter": 1872,
-        "Instagram": 2676,
-        "Youtube": 1805,
-        "Tiktok": 590,
+        "Twitter": 3091,
+        "Instagram": 4776,
+        "Youtube": 3048,
+        "Tiktok": 1259,
+        "Threads": 0
+      },
+      "2026-08": {
+        "Twitter": 541,
+        "Instagram": 288,
+        "Youtube": 331,
+        "Tiktok": 126,
         "Threads": 0
       }
     },
     "keyword_engagement": [
       {
         "keyword": "bandara",
-        "post_count": 27834,
-        "total_likes": 9354013.0,
-        "total_views": 293529493.0,
-        "total_comments": 304222.0,
-        "avg_likes": 336.1,
-        "avg_views": 10546.0
+        "post_count": 28324,
+        "total_likes": 9044019,
+        "total_views": 286453630,
+        "total_comments": 296332,
+        "avg_likes": 319.3,
+        "avg_views": 10113
       },
       {
         "keyword": "Taman Wisata Candi",
-        "post_count": 3034,
-        "total_likes": 3181982.0,
-        "total_views": 40755626.0,
-        "total_comments": 49563.0,
-        "avg_likes": 1048.8,
-        "avg_views": 13433.0
+        "post_count": 3041,
+        "total_likes": 3215085,
+        "total_views": 41289142,
+        "total_comments": 49489,
+        "avg_likes": 1057.2,
+        "avg_views": 13577
       },
       {
         "keyword": "MGPA Mandalika",
-        "post_count": 3403,
-        "total_likes": 2250241.0,
-        "total_views": 71505673.0,
-        "total_comments": 71945.0,
-        "avg_likes": 661.3,
-        "avg_views": 21013.0
+        "post_count": 3348,
+        "total_likes": 2241365,
+        "total_views": 70850471,
+        "total_comments": 71616,
+        "avg_likes": 669.5,
+        "avg_views": 21162
       },
       {
         "keyword": "KEK Sanur",
-        "post_count": 4405,
-        "total_likes": 2014248.0,
-        "total_views": 69727158.0,
-        "total_comments": 69279.0,
-        "avg_likes": 457.3,
-        "avg_views": 15829.0
+        "post_count": 4453,
+        "total_likes": 1990525,
+        "total_views": 66250866,
+        "total_comments": 68557,
+        "avg_likes": 447,
+        "avg_views": 14878
       },
       {
         "keyword": "bagasi bandara",
-        "post_count": 3454,
-        "total_likes": 1901606.0,
-        "total_views": 81584693.0,
-        "total_comments": 65602.0,
-        "avg_likes": 550.6,
-        "avg_views": 23620.0
+        "post_count": 3424,
+        "total_likes": 1905009,
+        "total_views": 81541091,
+        "total_comments": 65093,
+        "avg_likes": 556.4,
+        "avg_views": 23815
       },
       {
         "keyword": "Mandalika",
-        "post_count": 12532,
-        "total_likes": 1848304.0,
-        "total_views": 45421881.0,
-        "total_comments": 57684.0,
-        "avg_likes": 147.5,
-        "avg_views": 3624.0
-      },
-      {
-        "keyword": "TMII",
-        "post_count": 29063,
-        "total_likes": 1352915.0,
-        "total_views": 40066644.0,
-        "total_comments": 59752.0,
-        "avg_likes": 46.6,
-        "avg_views": 1379.0
-      },
-      {
-        "keyword": "Sarinah",
-        "post_count": 24197,
-        "total_likes": 1260234.0,
-        "total_views": 38286284.0,
-        "total_comments": 47288.0,
-        "avg_likes": 52.1,
-        "avg_views": 1582.0
+        "post_count": 12466,
+        "total_likes": 1795696,
+        "total_views": 45945768,
+        "total_comments": 58072,
+        "avg_likes": 144,
+        "avg_views": 3686
       },
       {
         "keyword": "Borobudur",
-        "post_count": 14238,
-        "total_likes": 1182375.0,
-        "total_views": 35850272.0,
-        "total_comments": 47679.0,
-        "avg_likes": 83.0,
-        "avg_views": 2518.0
+        "post_count": 15420,
+        "total_likes": 1451093,
+        "total_views": 41918581,
+        "total_comments": 57087,
+        "avg_likes": 94.1,
+        "avg_views": 2718
+      },
+      {
+        "keyword": "Sarinah",
+        "post_count": 24620,
+        "total_likes": 1418141,
+        "total_views": 40727745,
+        "total_comments": 51263,
+        "avg_likes": 57.6,
+        "avg_views": 1654
+      },
+      {
+        "keyword": "TMII",
+        "post_count": 29817,
+        "total_likes": 1365814,
+        "total_views": 40080123,
+        "total_comments": 61818,
+        "avg_likes": 45.8,
+        "avg_views": 1344
       },
       {
         "keyword": "Angkasa Pura",
-        "post_count": 5847,
-        "total_likes": 1131134.0,
-        "total_views": 24335955.0,
-        "total_comments": 36264.0,
-        "avg_likes": 193.5,
-        "avg_views": 4162.0
+        "post_count": 6039,
+        "total_likes": 1170540,
+        "total_views": 24513496,
+        "total_comments": 37266,
+        "avg_likes": 193.8,
+        "avg_views": 4059
       },
       {
         "keyword": "InJourney",
-        "post_count": 11390,
-        "total_likes": 902370.0,
-        "total_views": 17190299.0,
-        "total_comments": 25195.0,
-        "avg_likes": 79.2,
-        "avg_views": 1509.0
+        "post_count": 11471,
+        "total_likes": 907618,
+        "total_views": 17227525,
+        "total_comments": 25222,
+        "avg_likes": 79.1,
+        "avg_views": 1502
       },
       {
         "keyword": "ITDC",
-        "post_count": 5067,
-        "total_likes": 852446.0,
-        "total_views": 7225670.0,
-        "total_comments": 29621.0,
-        "avg_likes": 168.2,
-        "avg_views": 1426.0
+        "post_count": 5285,
+        "total_likes": 890075,
+        "total_views": 8574561,
+        "total_comments": 30082,
+        "avg_likes": 168.4,
+        "avg_views": 1622
       },
       {
         "keyword": "Injourney Aviation Services",
-        "post_count": 1095,
-        "total_likes": 483503.0,
-        "total_views": 8846727.0,
-        "total_comments": 11328.0,
-        "avg_likes": 441.6,
-        "avg_views": 8079.0
+        "post_count": 1080,
+        "total_likes": 481569,
+        "total_views": 8812568,
+        "total_comments": 11198,
+        "avg_likes": 445.9,
+        "avg_views": 8160
       },
       {
         "keyword": "cleaning bandara",
-        "post_count": 390,
-        "total_likes": 449452.0,
-        "total_views": 12298968.0,
-        "total_comments": 13589.0,
-        "avg_likes": 1152.4,
-        "avg_views": 31536.0
+        "post_count": 384,
+        "total_likes": 440569,
+        "total_views": 11904193,
+        "total_comments": 13336,
+        "avg_likes": 1147.3,
+        "avg_views": 31001
       },
       {
         "keyword": "Aquabike dan F1 Powerboat",
         "post_count": 744,
-        "total_likes": 215102.0,
-        "total_views": 3601764.0,
-        "total_comments": 3620.0,
+        "total_likes": 215102,
+        "total_views": 3601764,
+        "total_comments": 3620,
         "avg_likes": 289.1,
-        "avg_views": 4841.0
+        "avg_views": 4841
       }
     ],
     "top_keywords_volume": {
-      "TMII": 29063,
-      "bandara": 27834,
-      "Sarinah": 24197,
-      "Borobudur": 14238,
-      "Mandalika": 12532,
-      "InJourney": 11390,
-      "Angkasa Pura": 5847,
-      "ITDC": 5067,
-      "KEK Sanur": 4405,
-      "bagasi bandara": 3454,
-      "MGPA Mandalika": 3403,
-      "Taman Wisata Candi": 3034,
-      "InJourney Hospitality": 3021,
-      "Injourney Aviation Services": 1095,
-      "Hotel Indonesia Natour": 745
+      "TMII": 29817,
+      "bandara": 28324,
+      "Sarinah": 24620,
+      "Borobudur": 15420,
+      "Mandalika": 12466,
+      "InJourney": 11471,
+      "Angkasa Pura": 6039,
+      "ITDC": 5285,
+      "KEK Sanur": 4453,
+      "bagasi bandara": 3424,
+      "MGPA Mandalika": 3348,
+      "Taman Wisata Candi": 3041,
+      "InJourney Hospitality": 3022,
+      "Prambanan": 1271,
+      "Injourney Aviation Services": 1080
     },
     "keyword_sentiment": {
       "Mandalika": {
-        "Positif": 4326,
-        "Netral": 7481,
-        "Negatif": 725
+        "Positif": 4338,
+        "Netral": 7401,
+        "Negatif": 727
       },
       "Sarinah": {
-        "Positif": 10370,
-        "Netral": 13090,
-        "Negatif": 737
+        "Positif": 10549,
+        "Netral": 13297,
+        "Negatif": 774
       },
       "Angkasa Pura": {
-        "Positif": 2964,
-        "Netral": 2297,
-        "Negatif": 586
+        "Positif": 3113,
+        "Netral": 2324,
+        "Negatif": 602
       },
       "Borobudur": {
-        "Positif": 5467,
-        "Netral": 8152,
-        "Negatif": 619
+        "Positif": 5951,
+        "Netral": 8811,
+        "Negatif": 658
       },
       "TMII": {
-        "Positif": 10670,
-        "Netral": 17678,
-        "Negatif": 715
+        "Positif": 10994,
+        "Netral": 18078,
+        "Negatif": 745
       },
       "bandara": {
-        "Positif": 7495,
-        "Netral": 17965,
-        "Negatif": 2374
+        "Positif": 7656,
+        "Netral": 18192,
+        "Negatif": 2476
       },
       "Taman Wisata Candi": {
-        "Positif": 1783,
-        "Netral": 1130,
-        "Negatif": 121
+        "Positif": 1815,
+        "Netral": 1106,
+        "Negatif": 120
       },
       "ITDC": {
-        "Positif": 3554,
-        "Netral": 1226,
-        "Negatif": 287
+        "Positif": 3690,
+        "Netral": 1298,
+        "Negatif": 297
       },
       "Hotel Indonesia Natour": {
-        "Positif": 698,
-        "Netral": 31,
+        "Positif": 701,
+        "Netral": 34,
         "Negatif": 16
       },
       "InJourney": {
-        "Positif": 9877,
-        "Netral": 1318,
-        "Negatif": 195
+        "Positif": 9935,
+        "Netral": 1342,
+        "Negatif": 194
       },
       "Injourney Aviation Services": {
-        "Positif": 922,
-        "Netral": 159,
-        "Negatif": 14
+        "Positif": 913,
+        "Netral": 154,
+        "Negatif": 13
       },
       "InJourney Hospitality": {
-        "Positif": 2588,
-        "Netral": 418,
+        "Positif": 2593,
+        "Netral": 414,
         "Negatif": 15
       },
       "Jumbo di Prambanan": {
@@ -593,19 +605,19 @@
         "Negatif": 6
       },
       "KEK Sanur": {
-        "Positif": 2879,
-        "Netral": 1329,
-        "Negatif": 197
+        "Positif": 2914,
+        "Netral": 1341,
+        "Negatif": 198
       },
       "Joumpa": {
-        "Positif": 186,
-        "Netral": 50,
+        "Positif": 184,
+        "Netral": 49,
         "Negatif": 27
       },
       "MGPA Mandalika": {
-        "Positif": 1414,
-        "Netral": 1925,
-        "Negatif": 64
+        "Positif": 1397,
+        "Netral": 1891,
+        "Negatif": 60
       },
       "party wisata": {
         "Positif": 64,
@@ -618,9 +630,9 @@
         "Negatif": 9
       },
       "bagasi bandara": {
-        "Positif": 1254,
-        "Netral": 1637,
-        "Negatif": 563
+        "Positif": 1249,
+        "Netral": 1613,
+        "Negatif": 562
       },
       "Pocari Sweat Run Lombok 2025": {
         "Positif": 161,
@@ -629,12 +641,12 @@
       },
       "Lounge": {
         "Positif": 13,
-        "Netral": 43,
+        "Netral": 50,
         "Negatif": 9
       },
       "cleaning bandara": {
-        "Positif": 262,
-        "Netral": 94,
+        "Positif": 257,
+        "Netral": 93,
         "Negatif": 34
       },
       "Sirkuit Mandalika": {
@@ -643,56 +655,122 @@
         "Negatif": 12
       },
       "Angkasa Pura Kargo": {
-        "Positif": 46,
-        "Netral": 8,
+        "Positif": 44,
+        "Netral": 7,
         "Negatif": 4
       },
       "InJourney Aviation Services": {
-        "Positif": 79,
+        "Positif": 141,
+        "Netral": 17,
+        "Negatif": 3
+      },
+      "MGPA": {
+        "Positif": 48,
+        "Netral": 71,
+        "Negatif": 5
+      },
+      "Prambanan": {
+        "Positif": 453,
+        "Netral": 736,
+        "Negatif": 82
+      },
+      "Baggage Service Solution": {
+        "Positif": 1,
         "Netral": 1,
+        "Negatif": 0
+      },
+      "Keraton Ratu Boko": {
+        "Positif": 37,
+        "Netral": 13,
+        "Negatif": 0
+      },
+      "Nusa Dua": {
+        "Positif": 146,
+        "Netral": 160,
+        "Negatif": 4
+      },
+      "Golo Mori": {
+        "Positif": 41,
+        "Netral": 56,
         "Negatif": 1
+      },
+      "Gapura Angkasa": {
+        "Positif": 23,
+        "Netral": 3,
+        "Negatif": 0
+      },
+      "PT Aviasi Pariwisata Indonesia": {
+        "Positif": 28,
+        "Netral": 1,
+        "Negatif": 0
       },
       "Hotel Truntum Padang": {
         "Positif": 13,
-        "Netral": 11,
+        "Netral": 10,
         "Negatif": 10
       },
       "Integrasi Aviasi Solusi": {
-        "Positif": 39,
-        "Netral": 9,
+        "Positif": 38,
+        "Netral": 8,
         "Negatif": 2
+      },
+      "cleaning service bandara": {
+        "Positif": 115,
+        "Netral": 11,
+        "Negatif": 10
+      },
+      "InJourney Destination Management": {
+        "Positif": 15,
+        "Netral": 2,
+        "Negatif": 1
+      },
+      "Sarinah An InJourney Retail": {
+        "Positif": 7,
+        "Netral": 4,
+        "Negatif": 0
       }
     },
     "keyword_nss": {
-      "Mandalika": 28.7,
-      "Sarinah": 39.8,
-      "Angkasa Pura": 40.7,
-      "Borobudur": 34.0,
-      "TMII": 34.3,
-      "bandara": 18.4,
-      "Taman Wisata Candi": 54.8,
-      "ITDC": 64.5,
-      "Hotel Indonesia Natour": 91.5,
-      "InJourney": 85.0,
-      "Injourney Aviation Services": 82.9,
-      "InJourney Hospitality": 85.2,
+      "Mandalika": 29,
+      "Sarinah": 39.7,
+      "Angkasa Pura": 41.6,
+      "Borobudur": 34.3,
+      "TMII": 34.4,
+      "bandara": 18.3,
+      "Taman Wisata Candi": 55.7,
+      "ITDC": 64.2,
+      "Hotel Indonesia Natour": 91.2,
+      "InJourney": 84.9,
+      "Injourney Aviation Services": 83.3,
+      "InJourney Hospitality": 85.3,
       "Jumbo di Prambanan": 44.5,
-      "Haidudu ": 20.0,
+      "Haidudu ": 20,
       "Skytrax Bandara": 70.2,
-      "KEK Sanur": 60.9,
-      "Joumpa": 60.5,
-      "MGPA Mandalika": 39.7,
-      "party wisata": 97.0,
+      "KEK Sanur": 61,
+      "Joumpa": 60.4,
+      "MGPA Mandalika": 39.9,
+      "party wisata": 97,
       "Aquabike dan F1 Powerboat": 62.2,
-      "bagasi bandara": 20.0,
+      "bagasi bandara": 20.1,
       "Pocari Sweat Run Lombok 2025": 49.2,
-      "Lounge": 6.2,
-      "cleaning bandara": 58.5,
+      "Lounge": 5.6,
+      "cleaning bandara": 58.1,
       "Sirkuit Mandalika": 35.8,
-      "Angkasa Pura Kargo": 72.4,
-      "InJourney Aviation Services": 96.3,
-      "Hotel Truntum Padang": 8.8,
-      "Integrasi Aviasi Solusi": 74.0
+      "Angkasa Pura Kargo": 72.7,
+      "InJourney Aviation Services": 85.7,
+      "MGPA": 34.7,
+      "Prambanan": 29.2,
+      "Baggage Service Solution": 50,
+      "Keraton Ratu Boko": 74,
+      "Nusa Dua": 45.8,
+      "Golo Mori": 40.8,
+      "Gapura Angkasa": 88.5,
+      "PT Aviasi Pariwisata Indonesia": 96.6,
+      "Hotel Truntum Padang": 9.1,
+      "Integrasi Aviasi Solusi": 75,
+      "cleaning service bandara": 77.2,
+      "InJourney Destination Management": 77.8,
+      "Sarinah An InJourney Retail": 63.6
     },
     "top_viral_posts": [
       {
@@ -788,527 +866,64 @@
     ]
   },
   "bu_data": {
-    "Sarinah": {
-      "total_posts": 24197,
-      "total_comments": 272,
-      "total_likes": 1260234,
-      "total_views": 38286284,
-      "total_replies": 47288,
-      "platform_stats": [
-        {
-          "platform": "Twitter",
-          "post_count": 12867,
-          "total_likes": 34214.0,
-          "total_views": 0.0,
-          "total_replies": 4888.0,
-          "total_retweet": 9258.0,
-          "avg_likes": 2.7,
-          "avg_views": 0.0
-        },
-        {
-          "platform": "Instagram",
-          "post_count": 6262,
-          "total_likes": 280077.0,
-          "total_views": 11131540.0,
-          "total_replies": 14719.0,
-          "total_retweet": 0.0,
-          "avg_likes": 44.7,
-          "avg_views": 1778.0
-        },
-        {
-          "platform": "Youtube",
-          "post_count": 3446,
-          "total_likes": 57966.0,
-          "total_views": 4806541.0,
-          "total_replies": 4475.0,
-          "total_retweet": 0.0,
-          "avg_likes": 16.8,
-          "avg_views": 1395.0
-        },
-        {
-          "platform": "Tiktok",
-          "post_count": 1622,
-          "total_likes": 887977.0,
-          "total_views": 22348203.0,
-          "total_replies": 23206.0,
-          "total_retweet": 0.0,
-          "avg_likes": 547.5,
-          "avg_views": 13778.0
-        }
-      ],
-      "platform_engagement_rate": {
-        "Twitter": 3.0,
-        "Instagram": 47.1,
-        "Youtube": 18.1,
-        "Tiktok": 561.8
-      },
-      "posts_sentiment": {
-        "Netral": 13090,
-        "Positif": 10370,
-        "Negatif": 737
-      },
-      "comments_sentiment": {
-        "Netral": 246,
-        "Positif": 26
-      },
-      "avg_response_time_minutes": 2036.6315789473683,
-      "response_time": {
-        "within_1h": 2,
-        "within_6h": 6,
-        "within_24h": 16,
-        "over_24h": 14,
-        "avg_minutes": 2036.6315789473683,
-        "total_with_rt": 38
-      },
-      "comments_by_hour": {
-        "0": 4,
-        "1": 3,
-        "2": 0,
-        "3": 0,
-        "4": 2,
-        "5": 6,
-        "6": 7,
-        "7": 4,
-        "8": 6,
-        "9": 5,
-        "10": 9,
-        "11": 9,
-        "12": 11,
-        "13": 8,
-        "14": 60,
-        "15": 16,
-        "16": 22,
-        "17": 12,
-        "18": 15,
-        "19": 18,
-        "20": 10,
-        "21": 13,
-        "22": 23,
-        "23": 9
-      },
-      "brand_vs_public": {
-        "brand_responses": 19,
-        "public_comments": 253
-      },
-      "monthly_comment_sentiment": {
-        "2025-10": {
-          "Netral": 245,
-          "Positif": 26,
-          "Negatif": 0
-        },
-        "2025-11": {
-          "Netral": 1,
-          "Positif": 0,
-          "Negatif": 0
-        }
-      },
-      "monthly_sentiment_trend": {
-        "2025-01": {
-          "Positif": 1009,
-          "Netral": 636,
-          "Negatif": 12
-        },
-        "2025-02": {
-          "Positif": 1130,
-          "Netral": 791,
-          "Negatif": 4
-        },
-        "2025-03": {
-          "Positif": 1519,
-          "Netral": 666,
-          "Negatif": 7
-        },
-        "2025-04": {
-          "Positif": 378,
-          "Netral": 806,
-          "Negatif": 0
-        },
-        "2025-05": {
-          "Positif": 170,
-          "Netral": 1113,
-          "Negatif": 12
-        },
-        "2025-06": {
-          "Positif": 1224,
-          "Netral": 804,
-          "Negatif": 1
-        },
-        "2025-07": {
-          "Positif": 236,
-          "Netral": 1121,
-          "Negatif": 1
-        },
-        "2025-08": {
-          "Positif": 1146,
-          "Netral": 895,
-          "Negatif": 0
-        },
-        "2025-09": {
-          "Positif": 227,
-          "Netral": 380,
-          "Negatif": 0
-        },
-        "2025-10": {
-          "Positif": 277,
-          "Netral": 944,
-          "Negatif": 0
-        },
-        "2025-11": {
-          "Positif": 294,
-          "Netral": 789,
-          "Negatif": 66
-        },
-        "2025-12": {
-          "Positif": 306,
-          "Netral": 651,
-          "Negatif": 119
-        },
-        "2026-01": {
-          "Positif": 273,
-          "Netral": 516,
-          "Negatif": 62
-        },
-        "2026-02": {
-          "Positif": 273,
-          "Netral": 545,
-          "Negatif": 70
-        },
-        "2026-03": {
-          "Positif": 235,
-          "Netral": 405,
-          "Negatif": 69
-        },
-        "2026-04": {
-          "Positif": 209,
-          "Netral": 497,
-          "Negatif": 81
-        },
-        "2026-05": {
-          "Positif": 386,
-          "Netral": 525,
-          "Negatif": 98
-        },
-        "2026-06": {
-          "Positif": 317,
-          "Netral": 518,
-          "Negatif": 68
-        },
-        "2026-07": {
-          "Positif": 279,
-          "Netral": 402,
-          "Negatif": 48
-        }
-      },
-      "monthly_platform_trend": {
-        "2025-01": {
-          "Twitter": 901,
-          "Instagram": 698,
-          "Youtube": 58,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-02": {
-          "Twitter": 1156,
-          "Instagram": 737,
-          "Youtube": 32,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-03": {
-          "Twitter": 1044,
-          "Instagram": 1123,
-          "Youtube": 25,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-04": {
-          "Twitter": 991,
-          "Instagram": 128,
-          "Youtube": 21,
-          "Tiktok": 44,
-          "Threads": 0
-        },
-        "2025-05": {
-          "Twitter": 1095,
-          "Instagram": 105,
-          "Youtube": 34,
-          "Tiktok": 61,
-          "Threads": 0
-        },
-        "2025-06": {
-          "Twitter": 1088,
-          "Instagram": 812,
-          "Youtube": 56,
-          "Tiktok": 73,
-          "Threads": 0
-        },
-        "2025-07": {
-          "Twitter": 1117,
-          "Instagram": 96,
-          "Youtube": 47,
-          "Tiktok": 98,
-          "Threads": 0
-        },
-        "2025-08": {
-          "Twitter": 1188,
-          "Instagram": 672,
-          "Youtube": 60,
-          "Tiktok": 121,
-          "Threads": 0
-        },
-        "2025-09": {
-          "Twitter": 351,
-          "Instagram": 79,
-          "Youtube": 119,
-          "Tiktok": 58,
-          "Threads": 0
-        },
-        "2025-10": {
-          "Twitter": 695,
-          "Instagram": 18,
-          "Youtube": 303,
-          "Tiktok": 205,
-          "Threads": 0
-        },
-        "2025-11": {
-          "Twitter": 717,
-          "Instagram": 36,
-          "Youtube": 322,
-          "Tiktok": 74,
-          "Threads": 0
-        },
-        "2025-12": {
-          "Twitter": 443,
-          "Instagram": 129,
-          "Youtube": 362,
-          "Tiktok": 142,
-          "Threads": 0
-        },
-        "2026-01": {
-          "Twitter": 334,
-          "Instagram": 66,
-          "Youtube": 324,
-          "Tiktok": 127,
-          "Threads": 0
-        },
-        "2026-02": {
-          "Twitter": 225,
-          "Instagram": 151,
-          "Youtube": 360,
-          "Tiktok": 152,
-          "Threads": 0
-        },
-        "2026-03": {
-          "Twitter": 299,
-          "Instagram": 65,
-          "Youtube": 283,
-          "Tiktok": 62,
-          "Threads": 0
-        },
-        "2026-04": {
-          "Twitter": 297,
-          "Instagram": 86,
-          "Youtube": 233,
-          "Tiktok": 171,
-          "Threads": 0
-        },
-        "2026-05": {
-          "Twitter": 308,
-          "Instagram": 341,
-          "Youtube": 258,
-          "Tiktok": 102,
-          "Threads": 0
-        },
-        "2026-06": {
-          "Twitter": 309,
-          "Instagram": 265,
-          "Youtube": 244,
-          "Tiktok": 85,
-          "Threads": 0
-        },
-        "2026-07": {
-          "Twitter": 309,
-          "Instagram": 205,
-          "Youtube": 168,
-          "Tiktok": 47,
-          "Threads": 0
-        }
-      },
-      "keyword_engagement": [
-        {
-          "keyword": "Sarinah",
-          "post_count": 24197,
-          "total_likes": 1260234.0,
-          "total_views": 38286284.0,
-          "total_comments": 47288.0,
-          "avg_likes": 52.1,
-          "avg_views": 1582.0
-        }
-      ],
-      "top_keywords_volume": {
-        "Sarinah": 24197
-      },
-      "keyword_sentiment": {
-        "Sarinah": {
-          "Positif": 10370,
-          "Netral": 13090,
-          "Negatif": 737
-        }
-      },
-      "keyword_nss": {
-        "Sarinah": 39.8
-      },
-      "top_viral_posts": [
-        {
-          "platform": "Tiktok",
-          "title": "ireneswnd",
-          "likes": 102966,
-          "views": 1705900,
-          "replies": 1718,
-          "sentiment": "Positif",
-          "date": "2026-02-06"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "yoggii67",
-          "likes": 89512,
-          "views": 1896224,
-          "replies": 1032,
-          "sentiment": "Netral",
-          "date": "2025-08-29"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "stellaamonique",
-          "likes": 71117,
-          "views": 358682,
-          "replies": 563,
-          "sentiment": "Positif",
-          "date": "2026-01-31"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "matchaay.s",
-          "likes": 60677,
-          "views": 949118,
-          "replies": 896,
-          "sentiment": "Netral",
-          "date": "2025-12-28"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "infoindonesia.tv",
-          "likes": 40199,
-          "views": 1667925,
-          "replies": 7266,
-          "sentiment": "Positif",
-          "date": "2026-06-30"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "ssnlb_",
-          "likes": 29518,
-          "views": 207765,
-          "replies": 100,
-          "sentiment": "Netral",
-          "date": "2026-05-01"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Seru banget, Self Photo di Sarinah. Kamu bisa dapat 3x foto harganya 5ribuan\n\nBu",
-          "likes": 24316,
-          "views": 0,
-          "replies": 800,
-          "sentiment": "Positif",
-          "date": "2023-05-02"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "melkibajaj",
-          "likes": 17529,
-          "views": 3602771,
-          "replies": 77,
-          "sentiment": "Negatif",
-          "date": "2026-02-05"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "jktdiemplease",
-          "likes": 19684,
-          "views": 331084,
-          "replies": 394,
-          "sentiment": "Positif",
-          "date": "2025-08-17"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "zafirazaf_",
-          "likes": 18223,
-          "views": 254823,
-          "replies": 173,
-          "sentiment": "Netral",
-          "date": "2025-04-18"
-        }
-      ]
-    },
     "IDM - TMII": {
-      "total_posts": 29063,
+      "total_posts": 29817,
       "total_comments": 867,
-      "total_likes": 1352915,
-      "total_views": 40066644,
-      "total_replies": 59752,
+      "total_likes": 1365814,
+      "total_views": 40080123,
+      "total_replies": 61818,
       "platform_stats": [
         {
           "platform": "Twitter",
-          "post_count": 13313,
-          "total_likes": 10906.0,
-          "total_views": 0.0,
-          "total_replies": 5034.0,
-          "total_retweet": 1419.0,
+          "post_count": 13467,
+          "total_likes": 11106,
+          "total_views": 0,
+          "total_replies": 5131,
+          "total_retweet": 1431,
           "avg_likes": 0.8,
-          "avg_views": 0.0
+          "avg_views": 0
         },
         {
           "platform": "Youtube",
-          "post_count": 8833,
-          "total_likes": 88360.0,
-          "total_views": 8857290.0,
-          "total_replies": 8289.0,
-          "total_retweet": 0.0,
-          "avg_likes": 10.0,
-          "avg_views": 1003.0
+          "post_count": 9177,
+          "total_likes": 90075,
+          "total_views": 9029553,
+          "total_replies": 8411,
+          "total_retweet": 0,
+          "avg_likes": 9.8,
+          "avg_views": 984
         },
         {
           "platform": "Instagram",
-          "post_count": 4787,
-          "total_likes": 344747.0,
-          "total_views": 7966916.0,
-          "total_replies": 23785.0,
-          "total_retweet": 0.0,
-          "avg_likes": 72.0,
-          "avg_views": 1664.0
+          "post_count": 4963,
+          "total_likes": 403798,
+          "total_views": 9485790,
+          "total_replies": 27399,
+          "total_retweet": 0,
+          "avg_likes": 81.4,
+          "avg_views": 1911
         },
         {
           "platform": "Tiktok",
-          "post_count": 2130,
-          "total_likes": 908902.0,
-          "total_views": 23242438.0,
-          "total_replies": 22644.0,
-          "total_retweet": 0.0,
-          "avg_likes": 426.7,
-          "avg_views": 10912.0
+          "post_count": 2210,
+          "total_likes": 860835,
+          "total_views": 21564780,
+          "total_replies": 20877,
+          "total_retweet": 0,
+          "avg_likes": 389.5,
+          "avg_views": 9758
         }
       ],
       "platform_engagement_rate": {
         "Twitter": 1.2,
-        "Youtube": 10.9,
-        "Instagram": 77.0,
-        "Tiktok": 437.3
+        "Youtube": 10.7,
+        "Instagram": 86.9,
+        "Tiktok": 399
       },
       "posts_sentiment": {
-        "Positif": 10670,
-        "Netral": 17678,
-        "Negatif": 715
+        "Positif": 10994,
+        "Netral": 18078,
+        "Negatif": 745
       },
       "comments_sentiment": {
         "Netral": 750,
@@ -1418,13 +1033,13 @@
           "Negatif": 0
         },
         "2025-11": {
-          "Positif": 653,
-          "Netral": 813,
-          "Negatif": 68
+          "Positif": 637,
+          "Netral": 794,
+          "Negatif": 65
         },
         "2025-12": {
-          "Positif": 804,
-          "Netral": 730,
+          "Positif": 794,
+          "Netral": 720,
           "Negatif": 99
         },
         "2026-01": {
@@ -1438,13 +1053,13 @@
           "Negatif": 61
         },
         "2026-03": {
-          "Positif": 655,
-          "Netral": 700,
-          "Negatif": 89
+          "Positif": 632,
+          "Netral": 690,
+          "Negatif": 85
         },
         "2026-04": {
-          "Positif": 707,
-          "Netral": 743,
+          "Positif": 689,
+          "Netral": 737,
           "Negatif": 56
         },
         "2026-05": {
@@ -1453,14 +1068,19 @@
           "Negatif": 76
         },
         "2026-06": {
-          "Positif": 805,
-          "Netral": 800,
-          "Negatif": 57
+          "Positif": 795,
+          "Netral": 784,
+          "Negatif": 54
         },
         "2026-07": {
-          "Positif": 581,
-          "Netral": 707,
-          "Negatif": 49
+          "Positif": 877,
+          "Netral": 1060,
+          "Negatif": 83
+        },
+        "2026-08": {
+          "Positif": 105,
+          "Netral": 108,
+          "Negatif": 6
         }
       },
       "monthly_platform_trend": {
@@ -1538,14 +1158,14 @@
           "Twitter": 473,
           "Instagram": 152,
           "Youtube": 786,
-          "Tiktok": 123,
+          "Tiktok": 85,
           "Threads": 0
         },
         "2025-12": {
           "Twitter": 332,
           "Instagram": 227,
           "Youtube": 867,
-          "Tiktok": 207,
+          "Tiktok": 187,
           "Threads": 0
         },
         "2026-01": {
@@ -1564,14 +1184,14 @@
         },
         "2026-03": {
           "Twitter": 472,
-          "Instagram": 139,
+          "Instagram": 102,
           "Youtube": 692,
           "Tiktok": 141,
           "Threads": 0
         },
         "2026-04": {
           "Twitter": 290,
-          "Instagram": 199,
+          "Instagram": 175,
           "Youtube": 794,
           "Tiktok": 223,
           "Threads": 0
@@ -1587,40 +1207,47 @@
           "Twitter": 447,
           "Instagram": 406,
           "Youtube": 745,
-          "Tiktok": 64,
+          "Tiktok": 35,
           "Threads": 0
         },
         "2026-07": {
-          "Twitter": 376,
-          "Instagram": 426,
-          "Youtube": 506,
-          "Tiktok": 29,
+          "Twitter": 474,
+          "Instagram": 625,
+          "Youtube": 763,
+          "Tiktok": 158,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 56,
+          "Instagram": 38,
+          "Youtube": 87,
+          "Tiktok": 38,
           "Threads": 0
         }
       },
       "keyword_engagement": [
         {
           "keyword": "TMII",
-          "post_count": 29063,
-          "total_likes": 1352915.0,
-          "total_views": 40066644.0,
-          "total_comments": 59752.0,
-          "avg_likes": 46.6,
-          "avg_views": 1379.0
+          "post_count": 29817,
+          "total_likes": 1365814,
+          "total_views": 40080123,
+          "total_comments": 61818,
+          "avg_likes": 45.8,
+          "avg_views": 1344
         }
       ],
       "top_keywords_volume": {
-        "TMII": 29063
+        "TMII": 29817
       },
       "keyword_sentiment": {
         "TMII": {
-          "Positif": 10670,
-          "Netral": 17678,
-          "Negatif": 715
+          "Positif": 10994,
+          "Netral": 18078,
+          "Negatif": 745
         }
       },
       "keyword_nss": {
-        "TMII": 34.3
+        "TMII": 34.4
       },
       "top_viral_posts": [
         {
@@ -1706,73 +1333,73 @@
         },
         {
           "platform": "Instagram",
-          "title": "Pada Jumat (1/9/2023), Presiden Jokowi meresmikan revitalisasi TMII yang telah m",
-          "likes": 30136,
-          "views": 0,
-          "replies": 629,
-          "sentiment": "Positif",
-          "date": "2023-09-02"
+          "title": "TMII berduka🥀🥀\n•\n•\n#reels #reelsinstagram #spacemedia #fyp #race500m",
+          "likes": 30044,
+          "views": 957891,
+          "replies": 1823,
+          "sentiment": "Netral",
+          "date": "2026-07-23"
         }
       ]
     },
     "API": {
-      "total_posts": 37525,
+      "total_posts": 38171,
       "total_comments": 1065,
-      "total_likes": 12836205,
-      "total_views": 411749109,
-      "total_replies": 419677,
+      "total_likes": 12560137,
+      "total_views": 404412410,
+      "total_replies": 412027,
       "platform_stats": [
         {
           "platform": "Twitter",
-          "post_count": 20334,
-          "total_likes": 47115.0,
-          "total_views": 0.0,
-          "total_replies": 7950.0,
-          "total_retweet": 11807.0,
+          "post_count": 20703,
+          "total_likes": 48259,
+          "total_views": 0,
+          "total_replies": 8124,
+          "total_retweet": 11968,
           "avg_likes": 2.3,
-          "avg_views": 0.0
+          "avg_views": 0
         },
         {
           "platform": "Instagram",
-          "post_count": 7329,
-          "total_likes": 2979720.0,
-          "total_views": 102593377.0,
-          "total_replies": 141300.0,
-          "total_retweet": 0.0,
-          "avg_likes": 406.6,
-          "avg_views": 13998.0
+          "post_count": 7631,
+          "total_likes": 3133959,
+          "total_views": 105284718,
+          "total_replies": 148786,
+          "total_retweet": 0,
+          "avg_likes": 410.7,
+          "avg_views": 13797
         },
         {
           "platform": "Youtube",
-          "post_count": 6451,
-          "total_likes": 498589.0,
-          "total_views": 44314582.0,
-          "total_replies": 55801.0,
-          "total_retweet": 0.0,
-          "avg_likes": 77.3,
-          "avg_views": 6869.0
+          "post_count": 6608,
+          "total_likes": 514387,
+          "total_views": 45771089,
+          "total_replies": 56678,
+          "total_retweet": 0,
+          "avg_likes": 77.8,
+          "avg_views": 6927
         },
         {
           "platform": "Tiktok",
-          "post_count": 3411,
-          "total_likes": 9310781.0,
-          "total_views": 264841150.0,
-          "total_replies": 214626.0,
-          "total_retweet": 0.0,
-          "avg_likes": 2729.6,
-          "avg_views": 77643.0
+          "post_count": 3229,
+          "total_likes": 8863532,
+          "total_views": 253356603,
+          "total_replies": 198439,
+          "total_retweet": 0,
+          "avg_likes": 2745,
+          "avg_views": 78463
         }
       ],
       "platform_engagement_rate": {
         "Twitter": 2.7,
-        "Instagram": 425.8,
-        "Youtube": 85.9,
-        "Tiktok": 2792.6
+        "Instagram": 430.2,
+        "Youtube": 86.4,
+        "Tiktok": 2806.4
       },
       "posts_sentiment": {
-        "Positif": 11975,
-        "Netral": 21993,
-        "Negatif": 3557
+        "Positif": 12275,
+        "Netral": 22222,
+        "Negatif": 3674
       },
       "comments_sentiment": {
         "Netral": 897,
@@ -1882,14 +1509,14 @@
           "Negatif": 89
         },
         "2025-11": {
-          "Positif": 553,
-          "Netral": 907,
-          "Negatif": 184
+          "Positif": 529,
+          "Netral": 864,
+          "Negatif": 181
         },
         "2025-12": {
-          "Positif": 930,
-          "Netral": 887,
-          "Negatif": 238
+          "Positif": 916,
+          "Netral": 863,
+          "Negatif": 234
         },
         "2026-01": {
           "Positif": 673,
@@ -1902,14 +1529,14 @@
           "Negatif": 303
         },
         "2026-03": {
-          "Positif": 1055,
-          "Netral": 1104,
-          "Negatif": 344
+          "Positif": 1029,
+          "Netral": 1091,
+          "Negatif": 342
         },
         "2026-04": {
-          "Positif": 822,
-          "Netral": 914,
-          "Negatif": 345
+          "Positif": 792,
+          "Netral": 903,
+          "Negatif": 343
         },
         "2026-05": {
           "Positif": 1614,
@@ -1917,14 +1544,19 @@
           "Negatif": 439
         },
         "2026-06": {
-          "Positif": 1125,
-          "Netral": 971,
-          "Negatif": 268
+          "Positif": 1076,
+          "Netral": 922,
+          "Negatif": 259
         },
         "2026-07": {
-          "Positif": 884,
-          "Netral": 570,
-          "Negatif": 119
+          "Positif": 1252,
+          "Netral": 889,
+          "Negatif": 208
+        },
+        "2026-08": {
+          "Positif": 75,
+          "Netral": 50,
+          "Negatif": 48
         }
       },
       "monthly_platform_trend": {
@@ -2002,14 +1634,14 @@
           "Twitter": 879,
           "Instagram": 92,
           "Youtube": 520,
-          "Tiktok": 153,
+          "Tiktok": 83,
           "Threads": 0
         },
         "2025-12": {
           "Twitter": 857,
           "Instagram": 204,
           "Youtube": 706,
-          "Tiktok": 288,
+          "Tiktok": 246,
           "Threads": 0
         },
         "2026-01": {
@@ -2028,14 +1660,14 @@
         },
         "2026-03": {
           "Twitter": 1130,
-          "Instagram": 302,
+          "Instagram": 261,
           "Youtube": 702,
           "Tiktok": 369,
           "Threads": 0
         },
         "2026-04": {
           "Twitter": 641,
-          "Instagram": 236,
+          "Instagram": 193,
           "Youtube": 662,
           "Tiktok": 542,
           "Threads": 0
@@ -2051,88 +1683,95 @@
           "Twitter": 696,
           "Instagram": 1023,
           "Youtube": 404,
-          "Tiktok": 241,
+          "Tiktok": 134,
           "Threads": 0
         },
         "2026-07": {
-          "Twitter": 447,
-          "Instagram": 770,
-          "Youtube": 231,
-          "Tiktok": 125,
+          "Twitter": 709,
+          "Instagram": 1114,
+          "Youtube": 370,
+          "Tiktok": 156,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 107,
+          "Instagram": 42,
+          "Youtube": 18,
+          "Tiktok": 6,
           "Threads": 0
         }
       },
       "keyword_engagement": [
         {
           "keyword": "bandara",
-          "post_count": 27834,
-          "total_likes": 9354013.0,
-          "total_views": 293529493.0,
-          "total_comments": 304222.0,
-          "avg_likes": 336.1,
-          "avg_views": 10546.0
+          "post_count": 28324,
+          "total_likes": 9044019,
+          "total_views": 286453630,
+          "total_comments": 296332,
+          "avg_likes": 319.3,
+          "avg_views": 10113
         },
         {
           "keyword": "bagasi bandara",
-          "post_count": 3454,
-          "total_likes": 1901606.0,
-          "total_views": 81584693.0,
-          "total_comments": 65602.0,
-          "avg_likes": 550.6,
-          "avg_views": 23620.0
+          "post_count": 3424,
+          "total_likes": 1905009,
+          "total_views": 81541091,
+          "total_comments": 65093,
+          "avg_likes": 556.4,
+          "avg_views": 23815
         },
         {
           "keyword": "Angkasa Pura",
-          "post_count": 5847,
-          "total_likes": 1131134.0,
-          "total_views": 24335955.0,
-          "total_comments": 36264.0,
-          "avg_likes": 193.5,
-          "avg_views": 4162.0
+          "post_count": 6039,
+          "total_likes": 1170540,
+          "total_views": 24513496,
+          "total_comments": 37266,
+          "avg_likes": 193.8,
+          "avg_views": 4059
         },
         {
           "keyword": "cleaning bandara",
-          "post_count": 390,
-          "total_likes": 449452.0,
-          "total_views": 12298968.0,
-          "total_comments": 13589.0,
-          "avg_likes": 1152.4,
-          "avg_views": 31536.0
+          "post_count": 384,
+          "total_likes": 440569,
+          "total_views": 11904193,
+          "total_comments": 13336,
+          "avg_likes": 1147.3,
+          "avg_views": 31001
         }
       ],
       "top_keywords_volume": {
-        "bandara": 27834,
-        "Angkasa Pura": 5847,
-        "bagasi bandara": 3454,
-        "cleaning bandara": 390
+        "bandara": 28324,
+        "Angkasa Pura": 6039,
+        "bagasi bandara": 3424,
+        "cleaning bandara": 384
       },
       "keyword_sentiment": {
         "Angkasa Pura": {
-          "Positif": 2964,
-          "Netral": 2297,
-          "Negatif": 586
+          "Positif": 3113,
+          "Netral": 2324,
+          "Negatif": 602
         },
         "bandara": {
-          "Positif": 7495,
-          "Netral": 17965,
-          "Negatif": 2374
+          "Positif": 7656,
+          "Netral": 18192,
+          "Negatif": 2476
         },
         "bagasi bandara": {
-          "Positif": 1254,
-          "Netral": 1637,
-          "Negatif": 563
+          "Positif": 1249,
+          "Netral": 1613,
+          "Negatif": 562
         },
         "cleaning bandara": {
-          "Positif": 262,
-          "Netral": 94,
+          "Positif": 257,
+          "Netral": 93,
           "Negatif": 34
         }
       },
       "keyword_nss": {
-        "Angkasa Pura": 40.7,
-        "bandara": 18.4,
-        "bagasi bandara": 20.0,
-        "cleaning bandara": 58.5
+        "Angkasa Pura": 41.6,
+        "bandara": 18.3,
+        "bagasi bandara": 20.1,
+        "cleaning bandara": 58.1
       },
       "top_viral_posts": [
         {
@@ -2227,64 +1866,539 @@
         }
       ]
     },
-    "IDM - TWC": {
-      "total_posts": 17472,
-      "total_comments": 1208,
-      "total_likes": 4400343,
-      "total_views": 79322174,
-      "total_replies": 98160,
+    "Sarinah": {
+      "total_posts": 24620,
+      "total_comments": 272,
+      "total_likes": 1418141,
+      "total_views": 40727745,
+      "total_replies": 51263,
       "platform_stats": [
         {
           "platform": "Twitter",
-          "post_count": 7500,
-          "total_likes": 25566.0,
-          "total_views": 0.0,
-          "total_replies": 3352.0,
-          "total_retweet": 4276.0,
-          "avg_likes": 3.4,
-          "avg_views": 0.0
-        },
-        {
-          "platform": "Youtube",
-          "post_count": 4470,
-          "total_likes": 167422.0,
-          "total_views": 13389562.0,
-          "total_replies": 24966.0,
-          "total_retweet": 0.0,
-          "avg_likes": 37.5,
-          "avg_views": 2995.0
+          "post_count": 13028,
+          "total_likes": 34484,
+          "total_views": 0,
+          "total_replies": 5025,
+          "total_retweet": 9288,
+          "avg_likes": 2.6,
+          "avg_views": 0
         },
         {
           "platform": "Instagram",
-          "post_count": 3121,
-          "total_likes": 2634662.0,
-          "total_views": 28616461.0,
-          "total_replies": 29976.0,
-          "total_retweet": 0.0,
-          "avg_likes": 844.2,
-          "avg_views": 9169.0
+          "post_count": 6441,
+          "total_likes": 334647,
+          "total_views": 11916024,
+          "total_replies": 16100,
+          "total_retweet": 0,
+          "avg_likes": 52,
+          "avg_views": 1850
+        },
+        {
+          "platform": "Youtube",
+          "post_count": 3564,
+          "total_likes": 58485,
+          "total_views": 4842475,
+          "total_replies": 4546,
+          "total_retweet": 0,
+          "avg_likes": 16.4,
+          "avg_views": 1359
         },
         {
           "platform": "Tiktok",
-          "post_count": 2381,
-          "total_likes": 1572693.0,
-          "total_views": 37316151.0,
-          "total_replies": 39866.0,
-          "total_retweet": 0.0,
-          "avg_likes": 660.5,
-          "avg_views": 15672.0
+          "post_count": 1587,
+          "total_likes": 990525,
+          "total_views": 23969246,
+          "total_replies": 25592,
+          "total_retweet": 0,
+          "avg_likes": 624.1,
+          "avg_views": 15103
         }
       ],
       "platform_engagement_rate": {
-        "Twitter": 3.9,
-        "Youtube": 43.0,
-        "Instagram": 853.8,
-        "Tiktok": 677.3
+        "Twitter": 3,
+        "Instagram": 54.5,
+        "Youtube": 17.7,
+        "Tiktok": 640.3
       },
       "posts_sentiment": {
-        "Positif": 7341,
-        "Netral": 9389,
-        "Negatif": 742
+        "Netral": 13297,
+        "Positif": 10549,
+        "Negatif": 774
+      },
+      "comments_sentiment": {
+        "Netral": 246,
+        "Positif": 26
+      },
+      "avg_response_time_minutes": 2036.6315789473683,
+      "response_time": {
+        "within_1h": 2,
+        "within_6h": 6,
+        "within_24h": 16,
+        "over_24h": 14,
+        "avg_minutes": 2036.6315789473683,
+        "total_with_rt": 38
+      },
+      "comments_by_hour": {
+        "0": 4,
+        "1": 3,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 6,
+        "6": 7,
+        "7": 4,
+        "8": 6,
+        "9": 5,
+        "10": 9,
+        "11": 9,
+        "12": 11,
+        "13": 8,
+        "14": 60,
+        "15": 16,
+        "16": 22,
+        "17": 12,
+        "18": 15,
+        "19": 18,
+        "20": 10,
+        "21": 13,
+        "22": 23,
+        "23": 9
+      },
+      "brand_vs_public": {
+        "brand_responses": 19,
+        "public_comments": 253
+      },
+      "monthly_comment_sentiment": {
+        "2025-10": {
+          "Netral": 245,
+          "Positif": 26,
+          "Negatif": 0
+        },
+        "2025-11": {
+          "Netral": 1,
+          "Positif": 0,
+          "Negatif": 0
+        }
+      },
+      "monthly_sentiment_trend": {
+        "2025-01": {
+          "Positif": 1009,
+          "Netral": 636,
+          "Negatif": 12
+        },
+        "2025-02": {
+          "Positif": 1130,
+          "Netral": 791,
+          "Negatif": 4
+        },
+        "2025-03": {
+          "Positif": 1519,
+          "Netral": 666,
+          "Negatif": 7
+        },
+        "2025-04": {
+          "Positif": 378,
+          "Netral": 806,
+          "Negatif": 0
+        },
+        "2025-05": {
+          "Positif": 170,
+          "Netral": 1113,
+          "Negatif": 12
+        },
+        "2025-06": {
+          "Positif": 1224,
+          "Netral": 804,
+          "Negatif": 1
+        },
+        "2025-07": {
+          "Positif": 236,
+          "Netral": 1121,
+          "Negatif": 1
+        },
+        "2025-08": {
+          "Positif": 1146,
+          "Netral": 895,
+          "Negatif": 0
+        },
+        "2025-09": {
+          "Positif": 227,
+          "Netral": 380,
+          "Negatif": 0
+        },
+        "2025-10": {
+          "Positif": 277,
+          "Netral": 944,
+          "Negatif": 0
+        },
+        "2025-11": {
+          "Positif": 287,
+          "Netral": 768,
+          "Negatif": 66
+        },
+        "2025-12": {
+          "Positif": 304,
+          "Netral": 645,
+          "Negatif": 119
+        },
+        "2026-01": {
+          "Positif": 273,
+          "Netral": 516,
+          "Negatif": 62
+        },
+        "2026-02": {
+          "Positif": 273,
+          "Netral": 545,
+          "Negatif": 70
+        },
+        "2026-03": {
+          "Positif": 232,
+          "Netral": 403,
+          "Negatif": 68
+        },
+        "2026-04": {
+          "Positif": 203,
+          "Netral": 493,
+          "Negatif": 80
+        },
+        "2026-05": {
+          "Positif": 386,
+          "Netral": 525,
+          "Negatif": 98
+        },
+        "2026-06": {
+          "Positif": 302,
+          "Netral": 494,
+          "Negatif": 67
+        },
+        "2026-07": {
+          "Positif": 459,
+          "Netral": 621,
+          "Negatif": 84
+        },
+        "2026-08": {
+          "Positif": 32,
+          "Netral": 45,
+          "Negatif": 4
+        }
+      },
+      "monthly_platform_trend": {
+        "2025-01": {
+          "Twitter": 901,
+          "Instagram": 698,
+          "Youtube": 58,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-02": {
+          "Twitter": 1156,
+          "Instagram": 737,
+          "Youtube": 32,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-03": {
+          "Twitter": 1044,
+          "Instagram": 1123,
+          "Youtube": 25,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-04": {
+          "Twitter": 991,
+          "Instagram": 128,
+          "Youtube": 21,
+          "Tiktok": 44,
+          "Threads": 0
+        },
+        "2025-05": {
+          "Twitter": 1095,
+          "Instagram": 105,
+          "Youtube": 34,
+          "Tiktok": 61,
+          "Threads": 0
+        },
+        "2025-06": {
+          "Twitter": 1088,
+          "Instagram": 812,
+          "Youtube": 56,
+          "Tiktok": 73,
+          "Threads": 0
+        },
+        "2025-07": {
+          "Twitter": 1117,
+          "Instagram": 96,
+          "Youtube": 47,
+          "Tiktok": 98,
+          "Threads": 0
+        },
+        "2025-08": {
+          "Twitter": 1188,
+          "Instagram": 672,
+          "Youtube": 60,
+          "Tiktok": 121,
+          "Threads": 0
+        },
+        "2025-09": {
+          "Twitter": 351,
+          "Instagram": 79,
+          "Youtube": 119,
+          "Tiktok": 58,
+          "Threads": 0
+        },
+        "2025-10": {
+          "Twitter": 695,
+          "Instagram": 18,
+          "Youtube": 303,
+          "Tiktok": 205,
+          "Threads": 0
+        },
+        "2025-11": {
+          "Twitter": 717,
+          "Instagram": 36,
+          "Youtube": 322,
+          "Tiktok": 46,
+          "Threads": 0
+        },
+        "2025-12": {
+          "Twitter": 443,
+          "Instagram": 129,
+          "Youtube": 362,
+          "Tiktok": 134,
+          "Threads": 0
+        },
+        "2026-01": {
+          "Twitter": 334,
+          "Instagram": 66,
+          "Youtube": 324,
+          "Tiktok": 127,
+          "Threads": 0
+        },
+        "2026-02": {
+          "Twitter": 225,
+          "Instagram": 151,
+          "Youtube": 360,
+          "Tiktok": 152,
+          "Threads": 0
+        },
+        "2026-03": {
+          "Twitter": 299,
+          "Instagram": 59,
+          "Youtube": 283,
+          "Tiktok": 62,
+          "Threads": 0
+        },
+        "2026-04": {
+          "Twitter": 297,
+          "Instagram": 75,
+          "Youtube": 233,
+          "Tiktok": 171,
+          "Threads": 0
+        },
+        "2026-05": {
+          "Twitter": 308,
+          "Instagram": 341,
+          "Youtube": 258,
+          "Tiktok": 102,
+          "Threads": 0
+        },
+        "2026-06": {
+          "Twitter": 309,
+          "Instagram": 265,
+          "Youtube": 244,
+          "Tiktok": 45,
+          "Threads": 0
+        },
+        "2026-07": {
+          "Twitter": 449,
+          "Instagram": 378,
+          "Youtube": 260,
+          "Tiktok": 77,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 21,
+          "Instagram": 23,
+          "Youtube": 26,
+          "Tiktok": 11,
+          "Threads": 0
+        }
+      },
+      "keyword_engagement": [
+        {
+          "keyword": "Sarinah",
+          "post_count": 24620,
+          "total_likes": 1418141,
+          "total_views": 40727745,
+          "total_comments": 51263,
+          "avg_likes": 57.6,
+          "avg_views": 1654
+        }
+      ],
+      "top_keywords_volume": {
+        "Sarinah": 24620
+      },
+      "keyword_sentiment": {
+        "Sarinah": {
+          "Positif": 10549,
+          "Netral": 13297,
+          "Negatif": 774
+        }
+      },
+      "keyword_nss": {
+        "Sarinah": 39.7
+      },
+      "top_viral_posts": [
+        {
+          "platform": "Tiktok",
+          "title": "ireneswnd",
+          "likes": 102966,
+          "views": 1705900,
+          "replies": 1718,
+          "sentiment": "Positif",
+          "date": "2026-02-06"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "detikcom",
+          "likes": 101363,
+          "views": 1606195,
+          "replies": 2425,
+          "sentiment": "Negatif",
+          "date": "2026-07-27"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "yoggii67",
+          "likes": 89512,
+          "views": 1896224,
+          "replies": 1032,
+          "sentiment": "Netral",
+          "date": "2025-08-29"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "stellaamonique",
+          "likes": 71117,
+          "views": 358682,
+          "replies": 563,
+          "sentiment": "Positif",
+          "date": "2026-01-31"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "matchaay.s",
+          "likes": 60677,
+          "views": 949118,
+          "replies": 896,
+          "sentiment": "Netral",
+          "date": "2025-12-28"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "infoindonesia.tv",
+          "likes": 40199,
+          "views": 1667925,
+          "replies": 7266,
+          "sentiment": "Positif",
+          "date": "2026-06-30"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Pengendara di Jakarta kini bisa langsung ditegur saat melanggar aturan lalu lint",
+          "likes": 33655,
+          "views": 0,
+          "replies": 491,
+          "sentiment": "Positif",
+          "date": "2026-07-28"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "ssnlb_",
+          "likes": 29518,
+          "views": 207765,
+          "replies": 100,
+          "sentiment": "Netral",
+          "date": "2026-05-01"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Seru banget, Self Photo di Sarinah. Kamu bisa dapat 3x foto harganya 5ribuan\n\nBu",
+          "likes": 24316,
+          "views": 0,
+          "replies": 800,
+          "sentiment": "Positif",
+          "date": "2023-05-02"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "kumparan",
+          "likes": 22546,
+          "views": 338121,
+          "replies": 73,
+          "sentiment": "Positif",
+          "date": "2026-07-29"
+        }
+      ]
+    },
+    "IDM - TWC": {
+      "total_posts": 18661,
+      "total_comments": 1208,
+      "total_likes": 4702164,
+      "total_views": 85923999,
+      "total_replies": 107494,
+      "platform_stats": [
+        {
+          "platform": "Twitter",
+          "post_count": 7840,
+          "total_likes": 26354,
+          "total_views": 0,
+          "total_replies": 3508,
+          "total_retweet": 4343,
+          "avg_likes": 3.4,
+          "avg_views": 0
+        },
+        {
+          "platform": "Youtube",
+          "post_count": 4916,
+          "total_likes": 175242,
+          "total_views": 13756510,
+          "total_replies": 25509,
+          "total_retweet": 0,
+          "avg_likes": 35.6,
+          "avg_views": 2798
+        },
+        {
+          "platform": "Instagram",
+          "post_count": 3409,
+          "total_likes": 2903638,
+          "total_views": 34174865,
+          "total_replies": 39951,
+          "total_retweet": 0,
+          "avg_likes": 851.8,
+          "avg_views": 10025
+        },
+        {
+          "platform": "Tiktok",
+          "post_count": 2496,
+          "total_likes": 1596930,
+          "total_views": 37992624,
+          "total_replies": 38526,
+          "total_retweet": 0,
+          "avg_likes": 639.8,
+          "avg_views": 15221
+        }
+      ],
+      "platform_engagement_rate": {
+        "Twitter": 3.8,
+        "Youtube": 40.8,
+        "Instagram": 863.5,
+        "Tiktok": 655.2
+      },
+      "posts_sentiment": {
+        "Positif": 7857,
+        "Netral": 10024,
+        "Negatif": 780
       },
       "comments_sentiment": {
         "Netral": 1142,
@@ -2394,14 +2508,14 @@
           "Negatif": 0
         },
         "2025-11": {
-          "Positif": 420,
-          "Netral": 351,
-          "Negatif": 41
+          "Positif": 402,
+          "Netral": 319,
+          "Negatif": 38
         },
         "2025-12": {
-          "Positif": 407,
-          "Netral": 437,
-          "Negatif": 72
+          "Positif": 399,
+          "Netral": 429,
+          "Negatif": 69
         },
         "2026-01": {
           "Positif": 383,
@@ -2414,14 +2528,14 @@
           "Negatif": 35
         },
         "2026-03": {
-          "Positif": 424,
-          "Netral": 356,
-          "Negatif": 49
+          "Positif": 410,
+          "Netral": 349,
+          "Negatif": 48
         },
         "2026-04": {
-          "Positif": 505,
-          "Netral": 394,
-          "Negatif": 50
+          "Positif": 493,
+          "Netral": 392,
+          "Negatif": 49
         },
         "2026-05": {
           "Positif": 1210,
@@ -2429,14 +2543,19 @@
           "Negatif": 90
         },
         "2026-06": {
-          "Positif": 641,
-          "Netral": 548,
-          "Negatif": 52
+          "Positif": 620,
+          "Netral": 482,
+          "Negatif": 50
         },
         "2026-07": {
-          "Positif": 389,
-          "Netral": 240,
-          "Negatif": 22
+          "Positif": 891,
+          "Netral": 889,
+          "Negatif": 61
+        },
+        "2026-08": {
+          "Positif": 87,
+          "Netral": 101,
+          "Negatif": 9
         }
       },
       "monthly_platform_trend": {
@@ -2514,14 +2633,14 @@
           "Twitter": 205,
           "Instagram": 110,
           "Youtube": 371,
-          "Tiktok": 126,
+          "Tiktok": 73,
           "Threads": 0
         },
         "2025-12": {
           "Twitter": 246,
           "Instagram": 126,
           "Youtube": 383,
-          "Tiktok": 161,
+          "Tiktok": 142,
           "Threads": 0
         },
         "2026-01": {
@@ -2540,14 +2659,14 @@
         },
         "2026-03": {
           "Twitter": 232,
-          "Instagram": 117,
+          "Instagram": 95,
           "Youtube": 306,
           "Tiktok": 174,
           "Threads": 0
         },
         "2026-04": {
           "Twitter": 189,
-          "Instagram": 119,
+          "Instagram": 104,
           "Youtube": 422,
           "Tiktok": 219,
           "Threads": 0
@@ -2563,61 +2682,68 @@
           "Twitter": 229,
           "Instagram": 335,
           "Youtube": 441,
-          "Tiktok": 236,
+          "Tiktok": 147,
           "Threads": 0
         },
         "2026-07": {
-          "Twitter": 135,
-          "Instagram": 237,
-          "Youtube": 209,
-          "Tiktok": 70,
+          "Twitter": 411,
+          "Instagram": 534,
+          "Youtube": 575,
+          "Tiktok": 321,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 64,
+          "Instagram": 28,
+          "Youtube": 80,
+          "Tiktok": 25,
           "Threads": 0
         }
       },
       "keyword_engagement": [
         {
           "keyword": "Taman Wisata Candi",
-          "post_count": 3034,
-          "total_likes": 3181982.0,
-          "total_views": 40755626.0,
-          "total_comments": 49563.0,
-          "avg_likes": 1048.8,
-          "avg_views": 13433.0
+          "post_count": 3041,
+          "total_likes": 3215085,
+          "total_views": 41289142,
+          "total_comments": 49489,
+          "avg_likes": 1057.2,
+          "avg_views": 13577
         },
         {
           "keyword": "Borobudur",
-          "post_count": 14238,
-          "total_likes": 1182375.0,
-          "total_views": 35850272.0,
-          "total_comments": 47679.0,
-          "avg_likes": 83.0,
-          "avg_views": 2518.0
+          "post_count": 15420,
+          "total_likes": 1451093,
+          "total_views": 41918581,
+          "total_comments": 57087,
+          "avg_likes": 94.1,
+          "avg_views": 2718
         },
         {
           "keyword": "Jumbo di Prambanan",
           "post_count": 200,
-          "total_likes": 35986.0,
-          "total_views": 2716276.0,
-          "total_comments": 918.0,
+          "total_likes": 35986,
+          "total_views": 2716276,
+          "total_comments": 918,
           "avg_likes": 179.9,
-          "avg_views": 13581.0
+          "avg_views": 13581
         }
       ],
       "top_keywords_volume": {
-        "Borobudur": 14238,
-        "Taman Wisata Candi": 3034,
+        "Borobudur": 15420,
+        "Taman Wisata Candi": 3041,
         "Jumbo di Prambanan": 200
       },
       "keyword_sentiment": {
         "Borobudur": {
-          "Positif": 5467,
-          "Netral": 8152,
-          "Negatif": 619
+          "Positif": 5951,
+          "Netral": 8811,
+          "Negatif": 658
         },
         "Taman Wisata Candi": {
-          "Positif": 1783,
-          "Netral": 1130,
-          "Negatif": 121
+          "Positif": 1815,
+          "Netral": 1106,
+          "Negatif": 120
         },
         "Jumbo di Prambanan": {
           "Positif": 91,
@@ -2626,8 +2752,8 @@
         }
       },
       "keyword_nss": {
-        "Borobudur": 34.0,
-        "Taman Wisata Candi": 54.8,
+        "Borobudur": 34.3,
+        "Taman Wisata Candi": 55.7,
         "Jumbo di Prambanan": 44.5
       },
       "top_viral_posts": [
@@ -2714,72 +2840,1115 @@
         },
         {
           "platform": "Instagram",
-          "title": "Sampai ketemu 21-24 Mei 2026 di lapangan Wisnu, Candi Prambanan! \n\nIsi link diba",
-          "likes": 62501,
-          "views": 0,
-          "replies": 356,
+          "title": "Borobudur Temple, Indonesia – दुनिया का सबसे बड़ा बौद्ध मंदिर\n\nइंडोनेशिया के घने",
+          "likes": 63418,
+          "views": 952963,
+          "replies": 334,
           "sentiment": "Positif",
-          "date": "2026-05-20"
+          "date": "2026-07-23"
+        }
+      ]
+    },
+    "ITDC": {
+      "total_posts": 26623,
+      "total_comments": 3402,
+      "total_likes": 7186484,
+      "total_views": 196173391,
+      "total_replies": 234543,
+      "platform_stats": [
+        {
+          "platform": "Instagram",
+          "post_count": 9225,
+          "total_likes": 2353404,
+          "total_views": 47502255,
+          "total_replies": 68027,
+          "total_retweet": 0,
+          "avg_likes": 255.1,
+          "avg_views": 5149
+        },
+        {
+          "platform": "Youtube",
+          "post_count": 7061,
+          "total_likes": 430735,
+          "total_views": 30613456,
+          "total_replies": 63866,
+          "total_retweet": 0,
+          "avg_likes": 61,
+          "avg_views": 4336
+        },
+        {
+          "platform": "Twitter",
+          "post_count": 5865,
+          "total_likes": 86017,
+          "total_views": 0,
+          "total_replies": 4183,
+          "total_retweet": 29964,
+          "avg_likes": 14.7,
+          "avg_views": 0
+        },
+        {
+          "platform": "Tiktok",
+          "post_count": 4464,
+          "total_likes": 4316325,
+          "total_views": 118057680,
+          "total_replies": 98465,
+          "total_retweet": 0,
+          "avg_likes": 966.9,
+          "avg_views": 26447
+        },
+        {
+          "platform": "Threads",
+          "post_count": 8,
+          "total_likes": 3,
+          "total_views": 0,
+          "total_replies": 2,
+          "total_retweet": 0,
+          "avg_likes": 0.4,
+          "avg_views": 0
+        }
+      ],
+      "platform_engagement_rate": {
+        "Instagram": 262.5,
+        "Youtube": 70,
+        "Twitter": 15.4,
+        "Tiktok": 989,
+        "Threads": 0.6
+      },
+      "posts_sentiment": {
+        "Netral": 12360,
+        "Positif": 12972,
+        "Negatif": 1291
+      },
+      "comments_sentiment": {
+        "Positif": 702,
+        "Netral": 2627,
+        "Negatif": 73
+      },
+      "avg_response_time_minutes": 386.63461538461536,
+      "response_time": {
+        "within_1h": 91,
+        "within_6h": 56,
+        "within_24h": 45,
+        "over_24h": 16,
+        "avg_minutes": 386.63461538461536,
+        "total_with_rt": 208
+      },
+      "comments_by_hour": {
+        "0": 58,
+        "1": 20,
+        "2": 15,
+        "3": 18,
+        "4": 26,
+        "5": 72,
+        "6": 131,
+        "7": 152,
+        "8": 151,
+        "9": 161,
+        "10": 165,
+        "11": 139,
+        "12": 215,
+        "13": 183,
+        "14": 191,
+        "15": 156,
+        "16": 162,
+        "17": 169,
+        "18": 224,
+        "19": 260,
+        "20": 241,
+        "21": 184,
+        "22": 156,
+        "23": 153
+      },
+      "brand_vs_public": {
+        "brand_responses": 108,
+        "public_comments": 3294
+      },
+      "monthly_comment_sentiment": {
+        "2025-10": {
+          "Netral": 2546,
+          "Positif": 677,
+          "Negatif": 72
+        },
+        "2025-11": {
+          "Netral": 81,
+          "Positif": 25,
+          "Negatif": 1
+        }
+      },
+      "monthly_sentiment_trend": {
+        "2025-01": {
+          "Positif": 62,
+          "Netral": 21,
+          "Negatif": 0
+        },
+        "2025-02": {
+          "Positif": 54,
+          "Netral": 21,
+          "Negatif": 3
+        },
+        "2025-03": {
+          "Positif": 105,
+          "Netral": 22,
+          "Negatif": 5
+        },
+        "2025-04": {
+          "Positif": 67,
+          "Netral": 11,
+          "Negatif": 6
+        },
+        "2025-05": {
+          "Positif": 34,
+          "Netral": 25,
+          "Negatif": 6
+        },
+        "2025-06": {
+          "Positif": 275,
+          "Netral": 51,
+          "Negatif": 2
+        },
+        "2025-07": {
+          "Positif": 282,
+          "Netral": 214,
+          "Negatif": 14
+        },
+        "2025-08": {
+          "Positif": 654,
+          "Netral": 387,
+          "Negatif": 0
+        },
+        "2025-09": {
+          "Positif": 464,
+          "Netral": 350,
+          "Negatif": 4
+        },
+        "2025-10": {
+          "Positif": 1017,
+          "Netral": 1748,
+          "Negatif": 33
+        },
+        "2025-11": {
+          "Positif": 130,
+          "Netral": 125,
+          "Negatif": 10
+        },
+        "2025-12": {
+          "Positif": 208,
+          "Netral": 175,
+          "Negatif": 38
+        },
+        "2026-01": {
+          "Positif": 288,
+          "Netral": 251,
+          "Negatif": 44
+        },
+        "2026-02": {
+          "Positif": 679,
+          "Netral": 1277,
+          "Negatif": 158
+        },
+        "2026-03": {
+          "Positif": 803,
+          "Netral": 1313,
+          "Negatif": 174
+        },
+        "2026-04": {
+          "Positif": 842,
+          "Netral": 1421,
+          "Negatif": 140
+        },
+        "2026-05": {
+          "Positif": 1453,
+          "Netral": 1904,
+          "Negatif": 226
+        },
+        "2026-06": {
+          "Positif": 1049,
+          "Netral": 1366,
+          "Negatif": 117
+        },
+        "2026-07": {
+          "Positif": 1294,
+          "Netral": 1237,
+          "Negatif": 121
+        },
+        "2026-08": {
+          "Positif": 24,
+          "Netral": 14,
+          "Negatif": 2
+        }
+      },
+      "monthly_platform_trend": {
+        "2025-01": {
+          "Twitter": 18,
+          "Instagram": 32,
+          "Youtube": 33,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-02": {
+          "Twitter": 26,
+          "Instagram": 41,
+          "Youtube": 11,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-03": {
+          "Twitter": 34,
+          "Instagram": 74,
+          "Youtube": 24,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-04": {
+          "Twitter": 18,
+          "Instagram": 52,
+          "Youtube": 14,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-05": {
+          "Twitter": 10,
+          "Instagram": 47,
+          "Youtube": 7,
+          "Tiktok": 1,
+          "Threads": 0
+        },
+        "2025-06": {
+          "Twitter": 61,
+          "Instagram": 72,
+          "Youtube": 183,
+          "Tiktok": 12,
+          "Threads": 0
+        },
+        "2025-07": {
+          "Twitter": 204,
+          "Instagram": 114,
+          "Youtube": 51,
+          "Tiktok": 141,
+          "Threads": 0
+        },
+        "2025-08": {
+          "Twitter": 279,
+          "Instagram": 320,
+          "Youtube": 33,
+          "Tiktok": 409,
+          "Threads": 0
+        },
+        "2025-09": {
+          "Twitter": 96,
+          "Instagram": 248,
+          "Youtube": 196,
+          "Tiktok": 278,
+          "Threads": 0
+        },
+        "2025-10": {
+          "Twitter": 1281,
+          "Instagram": 337,
+          "Youtube": 625,
+          "Tiktok": 555,
+          "Threads": 0
+        },
+        "2025-11": {
+          "Twitter": 41,
+          "Instagram": 54,
+          "Youtube": 68,
+          "Tiktok": 102,
+          "Threads": 0
+        },
+        "2025-12": {
+          "Twitter": 42,
+          "Instagram": 94,
+          "Youtube": 40,
+          "Tiktok": 245,
+          "Threads": 0
+        },
+        "2026-01": {
+          "Twitter": 95,
+          "Instagram": 129,
+          "Youtube": 76,
+          "Tiktok": 283,
+          "Threads": 0
+        },
+        "2026-02": {
+          "Twitter": 636,
+          "Instagram": 261,
+          "Youtube": 844,
+          "Tiktok": 373,
+          "Threads": 0
+        },
+        "2026-03": {
+          "Twitter": 738,
+          "Instagram": 171,
+          "Youtube": 950,
+          "Tiktok": 431,
+          "Threads": 0
+        },
+        "2026-04": {
+          "Twitter": 476,
+          "Instagram": 284,
+          "Youtube": 945,
+          "Tiktok": 698,
+          "Threads": 0
+        },
+        "2026-05": {
+          "Twitter": 718,
+          "Instagram": 1306,
+          "Youtube": 1096,
+          "Tiktok": 463,
+          "Threads": 0
+        },
+        "2026-06": {
+          "Twitter": 519,
+          "Instagram": 819,
+          "Youtube": 987,
+          "Tiktok": 199,
+          "Threads": 8
+        },
+        "2026-07": {
+          "Twitter": 543,
+          "Instagram": 1105,
+          "Youtube": 732,
+          "Tiktok": 272,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 7,
+          "Instagram": 27,
+          "Youtube": 4,
+          "Tiktok": 2,
+          "Threads": 0
+        }
+      },
+      "keyword_engagement": [
+        {
+          "keyword": "MGPA Mandalika",
+          "post_count": 3348,
+          "total_likes": 2241365,
+          "total_views": 70850471,
+          "total_comments": 71616,
+          "avg_likes": 669.5,
+          "avg_views": 21162
+        },
+        {
+          "keyword": "KEK Sanur",
+          "post_count": 4453,
+          "total_likes": 1990525,
+          "total_views": 66250866,
+          "total_comments": 68557,
+          "avg_likes": 447,
+          "avg_views": 14878
+        },
+        {
+          "keyword": "Mandalika",
+          "post_count": 12466,
+          "total_likes": 1795696,
+          "total_views": 45945768,
+          "total_comments": 58072,
+          "avg_likes": 144,
+          "avg_views": 3686
+        },
+        {
+          "keyword": "ITDC",
+          "post_count": 5285,
+          "total_likes": 890075,
+          "total_views": 8574561,
+          "total_comments": 30082,
+          "avg_likes": 168.4,
+          "avg_views": 1622
+        },
+        {
+          "keyword": "Aquabike dan F1 Powerboat",
+          "post_count": 744,
+          "total_likes": 215102,
+          "total_views": 3601764,
+          "total_comments": 3620,
+          "avg_likes": 289.1,
+          "avg_views": 4841
+        },
+        {
+          "keyword": "Pocari Sweat Run Lombok 2025",
+          "post_count": 327,
+          "total_likes": 53721,
+          "total_views": 949961,
+          "total_comments": 2596,
+          "avg_likes": 164.3,
+          "avg_views": 2905
+        }
+      ],
+      "top_keywords_volume": {
+        "Mandalika": 12466,
+        "ITDC": 5285,
+        "KEK Sanur": 4453,
+        "MGPA Mandalika": 3348,
+        "Aquabike dan F1 Powerboat": 744,
+        "Pocari Sweat Run Lombok 2025": 327
+      },
+      "keyword_sentiment": {
+        "Mandalika": {
+          "Positif": 4338,
+          "Netral": 7401,
+          "Negatif": 727
+        },
+        "ITDC": {
+          "Positif": 3690,
+          "Netral": 1298,
+          "Negatif": 297
+        },
+        "KEK Sanur": {
+          "Positif": 2914,
+          "Netral": 1341,
+          "Negatif": 198
+        },
+        "MGPA Mandalika": {
+          "Positif": 1397,
+          "Netral": 1891,
+          "Negatif": 60
+        },
+        "Aquabike dan F1 Powerboat": {
+          "Positif": 472,
+          "Netral": 263,
+          "Negatif": 9
+        },
+        "Pocari Sweat Run Lombok 2025": {
+          "Positif": 161,
+          "Netral": 166,
+          "Negatif": 0
+        }
+      },
+      "keyword_nss": {
+        "Mandalika": 29,
+        "ITDC": 64.2,
+        "KEK Sanur": 61,
+        "MGPA Mandalika": 39.9,
+        "Aquabike dan F1 Powerboat": 62.2,
+        "Pocari Sweat Run Lombok 2025": 49.2
+      },
+      "top_viral_posts": [
+        {
+          "platform": "Tiktok",
+          "title": "pojokseleb",
+          "likes": 208816,
+          "views": 4932813,
+          "replies": 1113,
+          "sentiment": "Positif",
+          "date": "2025-12-28"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "ukiyy18",
+          "likes": 202779,
+          "views": 10082121,
+          "replies": 9531,
+          "sentiment": "Negatif",
+          "date": "2025-12-30"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "jakartaviral_",
+          "likes": 185629,
+          "views": 4944358,
+          "replies": 1504,
+          "sentiment": "Negatif",
+          "date": "2026-03-12"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "motogp.lombok",
+          "likes": 167212,
+          "views": 3506332,
+          "replies": 810,
+          "sentiment": "Positif",
+          "date": "2025-09-30"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "pecco63edit",
+          "likes": 106009,
+          "views": 1113585,
+          "replies": 411,
+          "sentiment": "Netral",
+          "date": "2025-09-16"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "beritasatuofficial",
+          "likes": 100881,
+          "views": 2189684,
+          "replies": 5046,
+          "sentiment": "Negatif",
+          "date": "2026-02-03"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Australia minta MotoGP Mandalika dihapus dari kalender MotoGP efek cedera Marc M",
+          "likes": 99334,
+          "views": 3241599,
+          "replies": 3907,
+          "sentiment": "Negatif",
+          "date": "2025-10-10"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "bolacom",
+          "likes": 77648,
+          "views": 1595929,
+          "replies": 1333,
+          "sentiment": "Positif",
+          "date": "2025-10-01"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Some Mandalika madness and a rookie making history ✨ 🤯\n\n#IndonesianGP 🇮🇩 #Mot",
+          "likes": 76224,
+          "views": 1064620,
+          "replies": 329,
+          "sentiment": "Positif",
+          "date": "2025-10-06"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "joseshev",
+          "likes": 67112,
+          "views": 719830,
+          "replies": 243,
+          "sentiment": "Netral",
+          "date": "2025-07-21"
+        }
+      ]
+    },
+    "InJourney": {
+      "total_posts": 11471,
+      "total_comments": 2282,
+      "total_likes": 907618,
+      "total_views": 17227525,
+      "total_replies": 25222,
+      "platform_stats": [
+        {
+          "platform": "Twitter",
+          "post_count": 6554,
+          "total_likes": 1277,
+          "total_views": 0,
+          "total_replies": 1563,
+          "total_retweet": 284,
+          "avg_likes": 0.2,
+          "avg_views": 0
+        },
+        {
+          "platform": "Instagram",
+          "post_count": 3987,
+          "total_likes": 826060,
+          "total_views": 14328926,
+          "total_replies": 20678,
+          "total_retweet": 0,
+          "avg_likes": 207.2,
+          "avg_views": 3594
+        },
+        {
+          "platform": "Youtube",
+          "post_count": 834,
+          "total_likes": 10998,
+          "total_views": 775286,
+          "total_replies": 1613,
+          "total_retweet": 0,
+          "avg_likes": 13.2,
+          "avg_views": 930
+        },
+        {
+          "platform": "Tiktok",
+          "post_count": 96,
+          "total_likes": 69283,
+          "total_views": 2123313,
+          "total_replies": 1368,
+          "total_retweet": 0,
+          "avg_likes": 721.7,
+          "avg_views": 22118
+        }
+      ],
+      "platform_engagement_rate": {
+        "Twitter": 0.4,
+        "Instagram": 212.4,
+        "Youtube": 15.1,
+        "Tiktok": 735.9
+      },
+      "posts_sentiment": {
+        "Positif": 9935,
+        "Netral": 1342,
+        "Negatif": 194
+      },
+      "comments_sentiment": {
+        "Netral": 1509,
+        "Positif": 739,
+        "Negatif": 34
+      },
+      "avg_response_time_minutes": 1179.4660194174758,
+      "response_time": {
+        "within_1h": 4,
+        "within_6h": 18,
+        "within_24h": 58,
+        "over_24h": 23,
+        "avg_minutes": 1179.4660194174758,
+        "total_with_rt": 103
+      },
+      "comments_by_hour": {
+        "0": 33,
+        "1": 18,
+        "2": 8,
+        "3": 21,
+        "4": 21,
+        "5": 66,
+        "6": 97,
+        "7": 111,
+        "8": 94,
+        "9": 135,
+        "10": 68,
+        "11": 102,
+        "12": 98,
+        "13": 92,
+        "14": 147,
+        "15": 103,
+        "16": 137,
+        "17": 184,
+        "18": 202,
+        "19": 186,
+        "20": 129,
+        "21": 72,
+        "22": 104,
+        "23": 54
+      },
+      "brand_vs_public": {
+        "brand_responses": 53,
+        "public_comments": 2229
+      },
+      "monthly_comment_sentiment": {
+        "2025-10": {
+          "Netral": 1091,
+          "Positif": 491,
+          "Negatif": 34
+        },
+        "2025-11": {
+          "Netral": 418,
+          "Positif": 248,
+          "Negatif": 0
+        }
+      },
+      "monthly_sentiment_trend": {
+        "2025-01": {
+          "Positif": 964,
+          "Netral": 34,
+          "Negatif": 1
+        },
+        "2025-02": {
+          "Positif": 1113,
+          "Netral": 19,
+          "Negatif": 1
+        },
+        "2025-03": {
+          "Positif": 1479,
+          "Netral": 33,
+          "Negatif": 2
+        },
+        "2025-04": {
+          "Positif": 792,
+          "Netral": 58,
+          "Negatif": 1
+        },
+        "2025-05": {
+          "Positif": 987,
+          "Netral": 63,
+          "Negatif": 14
+        },
+        "2025-06": {
+          "Positif": 331,
+          "Netral": 53,
+          "Negatif": 2
+        },
+        "2025-07": {
+          "Positif": 375,
+          "Netral": 53,
+          "Negatif": 0
+        },
+        "2025-08": {
+          "Positif": 595,
+          "Netral": 28,
+          "Negatif": 0
+        },
+        "2025-09": {
+          "Positif": 313,
+          "Netral": 37,
+          "Negatif": 0
+        },
+        "2025-10": {
+          "Positif": 179,
+          "Netral": 66,
+          "Negatif": 1
+        },
+        "2025-11": {
+          "Positif": 111,
+          "Netral": 49,
+          "Negatif": 12
+        },
+        "2025-12": {
+          "Positif": 275,
+          "Netral": 85,
+          "Negatif": 31
+        },
+        "2026-01": {
+          "Positif": 278,
+          "Netral": 71,
+          "Negatif": 15
+        },
+        "2026-02": {
+          "Positif": 177,
+          "Netral": 66,
+          "Negatif": 21
+        },
+        "2026-03": {
+          "Positif": 217,
+          "Netral": 74,
+          "Negatif": 20
+        },
+        "2026-04": {
+          "Positif": 189,
+          "Netral": 52,
+          "Negatif": 9
+        },
+        "2026-05": {
+          "Positif": 292,
+          "Netral": 75,
+          "Negatif": 29
+        },
+        "2026-06": {
+          "Positif": 268,
+          "Netral": 78,
+          "Negatif": 12
+        },
+        "2026-07": {
+          "Positif": 305,
+          "Netral": 71,
+          "Negatif": 9
+        },
+        "2026-08": {
+          "Positif": 5,
+          "Netral": 0,
+          "Negatif": 0
+        }
+      },
+      "monthly_platform_trend": {
+        "2025-01": {
+          "Twitter": 858,
+          "Instagram": 88,
+          "Youtube": 53,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-02": {
+          "Twitter": 967,
+          "Instagram": 161,
+          "Youtube": 5,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-03": {
+          "Twitter": 838,
+          "Instagram": 642,
+          "Youtube": 34,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-04": {
+          "Twitter": 757,
+          "Instagram": 81,
+          "Youtube": 11,
+          "Tiktok": 2,
+          "Threads": 0
+        },
+        "2025-05": {
+          "Twitter": 665,
+          "Instagram": 387,
+          "Youtube": 5,
+          "Tiktok": 7,
+          "Threads": 0
+        },
+        "2025-06": {
+          "Twitter": 306,
+          "Instagram": 66,
+          "Youtube": 12,
+          "Tiktok": 2,
+          "Threads": 0
+        },
+        "2025-07": {
+          "Twitter": 374,
+          "Instagram": 39,
+          "Youtube": 15,
+          "Tiktok": 0,
+          "Threads": 0
+        },
+        "2025-08": {
+          "Twitter": 508,
+          "Instagram": 93,
+          "Youtube": 18,
+          "Tiktok": 4,
+          "Threads": 0
+        },
+        "2025-09": {
+          "Twitter": 213,
+          "Instagram": 59,
+          "Youtube": 68,
+          "Tiktok": 10,
+          "Threads": 0
+        },
+        "2025-10": {
+          "Twitter": 94,
+          "Instagram": 75,
+          "Youtube": 68,
+          "Tiktok": 9,
+          "Threads": 0
+        },
+        "2025-11": {
+          "Twitter": 71,
+          "Instagram": 42,
+          "Youtube": 56,
+          "Tiktok": 3,
+          "Threads": 0
+        },
+        "2025-12": {
+          "Twitter": 140,
+          "Instagram": 163,
+          "Youtube": 81,
+          "Tiktok": 7,
+          "Threads": 0
+        },
+        "2026-01": {
+          "Twitter": 112,
+          "Instagram": 161,
+          "Youtube": 81,
+          "Tiktok": 10,
+          "Threads": 0
+        },
+        "2026-02": {
+          "Twitter": 96,
+          "Instagram": 119,
+          "Youtube": 40,
+          "Tiktok": 9,
+          "Threads": 0
+        },
+        "2026-03": {
+          "Twitter": 126,
+          "Instagram": 88,
+          "Youtube": 82,
+          "Tiktok": 15,
+          "Threads": 0
+        },
+        "2026-04": {
+          "Twitter": 82,
+          "Instagram": 105,
+          "Youtube": 56,
+          "Tiktok": 7,
+          "Threads": 0
+        },
+        "2026-05": {
+          "Twitter": 118,
+          "Instagram": 222,
+          "Youtube": 49,
+          "Tiktok": 7,
+          "Threads": 0
+        },
+        "2026-06": {
+          "Twitter": 114,
+          "Instagram": 194,
+          "Youtube": 49,
+          "Tiktok": 1,
+          "Threads": 0
+        },
+        "2026-07": {
+          "Twitter": 115,
+          "Instagram": 224,
+          "Youtube": 43,
+          "Tiktok": 3,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 0,
+          "Instagram": 4,
+          "Youtube": 1,
+          "Tiktok": 0,
+          "Threads": 0
+        }
+      },
+      "keyword_engagement": [
+        {
+          "keyword": "InJourney",
+          "post_count": 11471,
+          "total_likes": 907618,
+          "total_views": 17227525,
+          "total_comments": 25222,
+          "avg_likes": 79.1,
+          "avg_views": 1502
+        }
+      ],
+      "top_keywords_volume": {
+        "InJourney": 11471
+      },
+      "keyword_sentiment": {
+        "InJourney": {
+          "Positif": 9935,
+          "Netral": 1342,
+          "Negatif": 194
+        }
+      },
+      "keyword_nss": {
+        "InJourney": 84.9
+      },
+      "top_viral_posts": [
+        {
+          "platform": "Instagram",
+          "title": "Hari ini saya bersama Direktur Utama @injourneyairports Bapak @mohammad_r_pahlev",
+          "likes": 122407,
+          "views": 0,
+          "replies": 52,
+          "sentiment": "Positif",
+          "date": "2026-03-04"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Luaaar biasaaaa banget buat @itdc_id @injourney.id karena kita jadi tau kalau La",
+          "likes": 61163,
+          "views": 0,
+          "replies": 42,
+          "sentiment": "Positif",
+          "date": "2025-02-18"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Melanjutkan pertemuan sebelumnya, hari ini saya berdiskusi dengan Menteri @kemen",
+          "likes": 32935,
+          "views": 0,
+          "replies": 47,
+          "sentiment": "Positif",
+          "date": "2025-02-11"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Sebuah video yang memperlihatkan momen penumpang menerima hampers Lebaran saat m",
+          "likes": 25862,
+          "views": 730067,
+          "replies": 272,
+          "sentiment": "Positif",
+          "date": "2026-03-15"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Setelah absen selama 30 tahun, World Rally Championship (WRC) akan kembali ke In",
+          "likes": 24493,
+          "views": 0,
+          "replies": 199,
+          "sentiment": "Positif",
+          "date": "2025-02-13"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Valentino Rossi, Legenda MotoGP, Pertama Kali Menjajal Sirkuit Mandalika 🏁\n\nLeg",
+          "likes": 18698,
+          "views": 206166,
+          "replies": 475,
+          "sentiment": "Positif",
+          "date": "2026-01-29"
+        },
+        {
+          "platform": "Tiktok",
+          "title": "rakyatnewsofficial",
+          "likes": 16659,
+          "views": 576439,
+          "replies": 305,
+          "sentiment": "Positif",
+          "date": "2025-09-16"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Langkah pelan penuh arti, menjemput panggilan suci yang telah lama dinanti.\n\nDii",
+          "likes": 14388,
+          "views": 174208,
+          "replies": 427,
+          "sentiment": "Positif",
+          "date": "2026-04-22"
+        },
+        {
+          "platform": "Instagram",
+          "title": "Bandara biasanya cuma jadi tempat nunggu boarding.\n\nTapi di momen Nataru ini, ad",
+          "likes": 12619,
+          "views": 0,
+          "replies": 150,
+          "sentiment": "Positif",
+          "date": "2025-12-26"
+        },
+        {
+          "platform": "Instagram",
+          "title": "History made in Brazil! 🇮🇩🔥\n\nVeda Ega Pratama (@veda_54) secures an incredibl",
+          "likes": 11151,
+          "views": 0,
+          "replies": 308,
+          "sentiment": "Netral",
+          "date": "2026-03-22"
         }
       ]
     },
     "HIN": {
-      "total_posts": 3766,
+      "total_posts": 3773,
       "total_comments": 54,
-      "total_likes": 41033,
-      "total_views": 813547,
-      "total_replies": 2066,
+      "total_likes": 44311,
+      "total_views": 900329,
+      "total_replies": 2087,
       "platform_stats": [
         {
           "platform": "Instagram",
-          "post_count": 2646,
-          "total_likes": 35681.0,
-          "total_views": 531435.0,
-          "total_replies": 1486.0,
-          "total_retweet": 0.0,
-          "avg_likes": 13.5,
-          "avg_views": 201.0
+          "post_count": 2660,
+          "total_likes": 39291,
+          "total_views": 633703,
+          "total_replies": 1529,
+          "total_retweet": 0,
+          "avg_likes": 14.8,
+          "avg_views": 238
         },
         {
           "platform": "Twitter",
-          "post_count": 936,
-          "total_likes": 131.0,
-          "total_views": 0.0,
-          "total_replies": 177.0,
-          "total_retweet": 45.0,
+          "post_count": 937,
+          "total_likes": 131,
+          "total_views": 0,
+          "total_replies": 177,
+          "total_retweet": 45,
           "avg_likes": 0.1,
-          "avg_views": 0.0
+          "avg_views": 0
         },
         {
           "platform": "Youtube",
           "post_count": 145,
-          "total_likes": 618.0,
-          "total_views": 137493.0,
-          "total_replies": 170.0,
-          "total_retweet": 0.0,
+          "total_likes": 618,
+          "total_views": 137493,
+          "total_replies": 170,
+          "total_retweet": 0,
           "avg_likes": 4.3,
-          "avg_views": 948.0
+          "avg_views": 948
         },
         {
           "platform": "Tiktok",
-          "post_count": 39,
-          "total_likes": 4603.0,
-          "total_views": 144619.0,
-          "total_replies": 233.0,
-          "total_retweet": 0.0,
-          "avg_likes": 118.0,
-          "avg_views": 3708.0
+          "post_count": 31,
+          "total_likes": 4271,
+          "total_views": 129133,
+          "total_replies": 211,
+          "total_retweet": 0,
+          "avg_likes": 137.8,
+          "avg_views": 4166
         }
       ],
       "platform_engagement_rate": {
-        "Instagram": 14.0,
+        "Instagram": 15.3,
         "Twitter": 0.3,
         "Youtube": 5.4,
-        "Tiktok": 124.0
+        "Tiktok": 144.6
       },
       "posts_sentiment": {
-        "Positif": 3286,
-        "Netral": 449,
+        "Positif": 3294,
+        "Netral": 448,
         "Negatif": 31
       },
       "comments_sentiment": {
@@ -2889,8 +4058,8 @@
           "Negatif": 0
         },
         "2025-11": {
-          "Positif": 25,
-          "Netral": 9,
+          "Positif": 23,
+          "Netral": 6,
           "Negatif": 3
         },
         "2025-12": {
@@ -2909,13 +4078,13 @@
           "Negatif": 0
         },
         "2026-03": {
-          "Positif": 20,
+          "Positif": 18,
           "Netral": 9,
           "Negatif": 0
         },
         "2026-04": {
-          "Positif": 24,
-          "Netral": 16,
+          "Positif": 20,
+          "Netral": 12,
           "Negatif": 1
         },
         "2026-05": {
@@ -2929,8 +4098,13 @@
           "Negatif": 1
         },
         "2026-07": {
-          "Positif": 43,
-          "Netral": 16,
+          "Positif": 55,
+          "Netral": 21,
+          "Negatif": 0
+        },
+        "2026-08": {
+          "Positif": 4,
+          "Netral": 1,
           "Negatif": 0
         }
       },
@@ -3009,7 +4183,7 @@
           "Twitter": 7,
           "Instagram": 14,
           "Youtube": 7,
-          "Tiktok": 9,
+          "Tiktok": 4,
           "Threads": 0
         },
         "2025-12": {
@@ -3035,14 +4209,14 @@
         },
         "2026-03": {
           "Twitter": 9,
-          "Instagram": 16,
+          "Instagram": 14,
           "Youtube": 3,
           "Tiktok": 1,
           "Threads": 0
         },
         "2026-04": {
           "Twitter": 3,
-          "Instagram": 35,
+          "Instagram": 27,
           "Youtube": 1,
           "Tiktok": 2,
           "Threads": 0
@@ -3063,56 +4237,63 @@
         },
         "2026-07": {
           "Twitter": 11,
-          "Instagram": 41,
+          "Instagram": 61,
           "Youtube": 1,
-          "Tiktok": 6,
+          "Tiktok": 3,
+          "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 1,
+          "Instagram": 4,
+          "Youtube": 0,
+          "Tiktok": 0,
           "Threads": 0
         }
       },
       "keyword_engagement": [
         {
           "keyword": "InJourney Hospitality",
-          "post_count": 3021,
-          "total_likes": 30260.0,
-          "total_views": 716519.0,
-          "total_comments": 1485.0,
-          "avg_likes": 10.0,
-          "avg_views": 237.0
+          "post_count": 3022,
+          "total_likes": 30229,
+          "total_views": 711507,
+          "total_comments": 1471,
+          "avg_likes": 10,
+          "avg_views": 235
         },
         {
           "keyword": "Hotel Indonesia Natour",
-          "post_count": 745,
-          "total_likes": 10773.0,
-          "total_views": 97028.0,
-          "total_comments": 581.0,
-          "avg_likes": 14.5,
-          "avg_views": 130.0
+          "post_count": 751,
+          "total_likes": 14082,
+          "total_views": 188822,
+          "total_comments": 616,
+          "avg_likes": 18.8,
+          "avg_views": 251
         }
       ],
       "top_keywords_volume": {
-        "InJourney Hospitality": 3021,
-        "Hotel Indonesia Natour": 745
+        "InJourney Hospitality": 3022,
+        "Hotel Indonesia Natour": 751
       },
       "keyword_sentiment": {
         "Hotel Indonesia Natour": {
-          "Positif": 698,
-          "Netral": 31,
+          "Positif": 701,
+          "Netral": 34,
           "Negatif": 16
         },
         "InJourney Hospitality": {
-          "Positif": 2588,
-          "Netral": 418,
+          "Positif": 2593,
+          "Netral": 414,
           "Negatif": 15
         }
       },
       "keyword_nss": {
-        "Hotel Indonesia Natour": 91.5,
-        "InJourney Hospitality": 85.2
+        "Hotel Indonesia Natour": 91.2,
+        "InJourney Hospitality": 85.3
       },
       "top_viral_posts": [
         {
           "platform": "Instagram",
-          "title": "Gokil! MotoGP Mandalika 2025 udah di depan mata🔥🔥\nTanggal 3-5 Oktober kita bakal",
+          "title": "Gokil! MotoGP Mandalika 2025 udah di depan mata🔥🔥\nTanggal 3-5 Oktober kita bak",
           "likes": 8744,
           "views": 261282,
           "replies": 111,
@@ -3139,6 +4320,15 @@
         },
         {
           "platform": "Instagram",
+          "title": "Transformasi besar sedang terjadi di industri perhotelan nasional.\n\nInJourney re",
+          "likes": 1898,
+          "views": 0,
+          "replies": 0,
+          "sentiment": "Positif",
+          "date": "2026-07-27"
+        },
+        {
+          "platform": "Instagram",
           "title": "InJourney terus memperkuat transformasi ekosistem pariwisata nasional melalui pe",
           "likes": 1643,
           "views": 0,
@@ -3154,6 +4344,15 @@
           "replies": 4,
           "sentiment": "Positif",
           "date": "2025-05-06"
+        },
+        {
+          "platform": "Instagram",
+          "title": "​Pasca konsolidasi seluruh hotel BUMN di bawah naungan InJourney Hospitality, se",
+          "likes": 1187,
+          "views": 96219,
+          "replies": 34,
+          "sentiment": "Positif",
+          "date": "2026-07-23"
         },
         {
           "platform": "Instagram",
@@ -3181,85 +4380,67 @@
           "replies": 6,
           "sentiment": "Positif",
           "date": "2025-01-04"
-        },
-        {
-          "platform": "Instagram",
-          "title": "#SobatBUMN, menyambut Era Normal Baru, HIN @innahotels mengutamakan aspek kebers",
-          "likes": 906,
-          "views": 0,
-          "replies": 7,
-          "sentiment": "Positif",
-          "date": "2020-06-16"
-        },
-        {
-          "platform": "Instagram",
-          "title": "September 2025, InJourney Airports tepat berusia satu tahun. InJourney Airports ",
-          "likes": 784,
-          "views": 9276,
-          "replies": 23,
-          "sentiment": "Positif",
-          "date": "2025-09-18"
         }
       ]
     },
     "IAS": {
-      "total_posts": 1358,
+      "total_posts": 1340,
       "total_comments": 851,
-      "total_likes": 503390,
-      "total_views": 9091229,
-      "total_replies": 11924,
+      "total_likes": 500919,
+      "total_views": 9053192,
+      "total_replies": 11709,
       "platform_stats": [
         {
           "platform": "Instagram",
-          "post_count": 596,
-          "total_likes": 103522.0,
-          "total_views": 889477.0,
-          "total_replies": 3570.0,
-          "total_retweet": 0.0,
-          "avg_likes": 173.7,
-          "avg_views": 1492.0
+          "post_count": 589,
+          "total_likes": 102494,
+          "total_views": 875467,
+          "total_replies": 3400,
+          "total_retweet": 0,
+          "avg_likes": 174,
+          "avg_views": 1486
         },
         {
           "platform": "Twitter",
           "post_count": 374,
-          "total_likes": 305.0,
-          "total_views": 0.0,
-          "total_replies": 120.0,
-          "total_retweet": 95.0,
+          "total_likes": 305,
+          "total_views": 0,
+          "total_replies": 120,
+          "total_retweet": 95,
           "avg_likes": 0.8,
-          "avg_views": 0.0
+          "avg_views": 0
         },
         {
           "platform": "Tiktok",
-          "post_count": 278,
-          "total_likes": 398684.0,
-          "total_views": 8151561.0,
-          "total_replies": 8055.0,
-          "total_retweet": 0.0,
-          "avg_likes": 1434.1,
-          "avg_views": 29322.0
+          "post_count": 267,
+          "total_likes": 397241,
+          "total_views": 8127534,
+          "total_replies": 8010,
+          "total_retweet": 0,
+          "avg_likes": 1487.8,
+          "avg_views": 30440
         },
         {
           "platform": "Youtube",
           "post_count": 110,
-          "total_likes": 879.0,
-          "total_views": 50191.0,
-          "total_replies": 179.0,
-          "total_retweet": 0.0,
-          "avg_likes": 8.0,
-          "avg_views": 456.0
+          "total_likes": 879,
+          "total_views": 50191,
+          "total_replies": 179,
+          "total_retweet": 0,
+          "avg_likes": 8,
+          "avg_views": 456
         }
       ],
       "platform_engagement_rate": {
-        "Instagram": 179.7,
+        "Instagram": 179.8,
         "Twitter": 1.1,
-        "Tiktok": 1463.1,
+        "Tiktok": 1517.8,
         "Youtube": 9.6
       },
       "posts_sentiment": {
-        "Netral": 209,
-        "Positif": 1108,
-        "Negatif": 41
+        "Netral": 203,
+        "Positif": 1097,
+        "Negatif": 40
       },
       "comments_sentiment": {
         "Positif": 315,
@@ -3374,14 +4555,14 @@
           "Negatif": 0
         },
         "2025-11": {
-          "Positif": 41,
-          "Netral": 11,
+          "Positif": 40,
+          "Netral": 7,
           "Negatif": 0
         },
         "2025-12": {
-          "Positif": 94,
+          "Positif": 93,
           "Netral": 8,
-          "Negatif": 4
+          "Negatif": 3
         },
         "2026-01": {
           "Positif": 37,
@@ -3394,12 +4575,12 @@
           "Negatif": 2
         },
         "2026-03": {
-          "Positif": 55,
+          "Positif": 51,
           "Netral": 8,
           "Negatif": 0
         },
         "2026-04": {
-          "Positif": 55,
+          "Positif": 52,
           "Netral": 5,
           "Negatif": 0
         },
@@ -3409,13 +4590,18 @@
           "Negatif": 4
         },
         "2026-06": {
-          "Positif": 72,
-          "Netral": 8,
+          "Positif": 70,
+          "Netral": 6,
           "Negatif": 0
         },
         "2026-07": {
           "Positif": 13,
           "Netral": 1,
+          "Negatif": 0
+        },
+        "2026-08": {
+          "Positif": 0,
+          "Netral": 0,
           "Negatif": 0
         }
       },
@@ -3494,14 +4680,14 @@
           "Twitter": 9,
           "Instagram": 16,
           "Youtube": 8,
-          "Tiktok": 19,
+          "Tiktok": 14,
           "Threads": 0
         },
         "2025-12": {
           "Twitter": 3,
           "Instagram": 39,
           "Youtube": 16,
-          "Tiktok": 48,
+          "Tiktok": 46,
           "Threads": 0
         },
         "2026-01": {
@@ -3520,14 +4706,14 @@
         },
         "2026-03": {
           "Twitter": 0,
-          "Instagram": 28,
+          "Instagram": 24,
           "Youtube": 7,
           "Tiktok": 28,
           "Threads": 0
         },
         "2026-04": {
           "Twitter": 0,
-          "Instagram": 42,
+          "Instagram": 39,
           "Youtube": 7,
           "Tiktok": 11,
           "Threads": 0
@@ -3543,7 +4729,7 @@
           "Twitter": 0,
           "Instagram": 64,
           "Youtube": 7,
-          "Tiktok": 9,
+          "Tiktok": 5,
           "Threads": 0
         },
         "2026-07": {
@@ -3552,47 +4738,54 @@
           "Youtube": 2,
           "Tiktok": 1,
           "Threads": 0
+        },
+        "2026-08": {
+          "Twitter": 0,
+          "Instagram": 0,
+          "Youtube": 0,
+          "Tiktok": 0,
+          "Threads": 0
         }
       },
       "keyword_engagement": [
         {
           "keyword": "Injourney Aviation Services",
-          "post_count": 1095,
-          "total_likes": 483503.0,
-          "total_views": 8846727.0,
-          "total_comments": 11328.0,
-          "avg_likes": 441.6,
-          "avg_views": 8079.0
+          "post_count": 1080,
+          "total_likes": 481569,
+          "total_views": 8812568,
+          "total_comments": 11198,
+          "avg_likes": 445.9,
+          "avg_views": 8160
         },
         {
           "keyword": "Joumpa",
-          "post_count": 263,
-          "total_likes": 19887.0,
-          "total_views": 244502.0,
-          "total_comments": 596.0,
-          "avg_likes": 75.6,
-          "avg_views": 930.0
+          "post_count": 260,
+          "total_likes": 19350,
+          "total_views": 240624,
+          "total_comments": 511,
+          "avg_likes": 74.4,
+          "avg_views": 925
         }
       ],
       "top_keywords_volume": {
-        "Injourney Aviation Services": 1095,
-        "Joumpa": 263
+        "Injourney Aviation Services": 1080,
+        "Joumpa": 260
       },
       "keyword_sentiment": {
         "Injourney Aviation Services": {
-          "Positif": 922,
-          "Netral": 159,
-          "Negatif": 14
+          "Positif": 913,
+          "Netral": 154,
+          "Negatif": 13
         },
         "Joumpa": {
-          "Positif": 186,
-          "Netral": 50,
+          "Positif": 184,
+          "Netral": 49,
           "Negatif": 27
         }
       },
       "keyword_nss": {
-        "Injourney Aviation Services": 82.9,
-        "Joumpa": 60.5
+        "Injourney Aviation Services": 83.3,
+        "Joumpa": 60.4
       },
       "top_viral_posts": [
         {
@@ -3678,1031 +4871,12 @@
         },
         {
           "platform": "Instagram",
-          "title": "📜 KEWAJIBAN SELURUH TENAGA KERJA CANDI AGUNG MAJAPAHIT - Sebagai bagian dari ins",
+          "title": "📜 KEWAJIBAN SELURUH TENAGA KERJA CANDI AGUNG MAJAPAHIT - Sebagai bagian dari in",
           "likes": 8523,
           "views": 0,
           "replies": 43,
           "sentiment": "Netral",
           "date": "2025-05-31"
-        }
-      ]
-    },
-    "ITDC": {
-      "total_posts": 26478,
-      "total_comments": 3402,
-      "total_likes": 7234062,
-      "total_views": 198432107,
-      "total_replies": 234745,
-      "platform_stats": [
-        {
-          "platform": "Instagram",
-          "post_count": 8945,
-          "total_likes": 2244662.0,
-          "total_views": 45264039.0,
-          "total_replies": 65581.0,
-          "total_retweet": 0.0,
-          "avg_likes": 250.9,
-          "avg_views": 5060.0
-        },
-        {
-          "platform": "Youtube",
-          "post_count": 6977,
-          "total_likes": 426741.0,
-          "total_views": 30484490.0,
-          "total_replies": 63587.0,
-          "total_retweet": 0.0,
-          "avg_likes": 61.2,
-          "avg_views": 4369.0
-        },
-        {
-          "platform": "Twitter",
-          "post_count": 5812,
-          "total_likes": 85721.0,
-          "total_views": 0.0,
-          "total_replies": 4165.0,
-          "total_retweet": 29948.0,
-          "avg_likes": 14.7,
-          "avg_views": 0.0
-        },
-        {
-          "platform": "Tiktok",
-          "post_count": 4736,
-          "total_likes": 4476935.0,
-          "total_views": 122683578.0,
-          "total_replies": 101410.0,
-          "total_retweet": 0.0,
-          "avg_likes": 945.3,
-          "avg_views": 25904.0
-        },
-        {
-          "platform": "Threads",
-          "post_count": 8,
-          "total_likes": 3.0,
-          "total_views": 0.0,
-          "total_replies": 2.0,
-          "total_retweet": 0.0,
-          "avg_likes": 0.4,
-          "avg_views": 0.0
-        }
-      ],
-      "platform_engagement_rate": {
-        "Instagram": 258.3,
-        "Youtube": 70.3,
-        "Twitter": 15.5,
-        "Tiktok": 966.7,
-        "Threads": 0.6
-      },
-      "posts_sentiment": {
-        "Netral": 12390,
-        "Positif": 12806,
-        "Negatif": 1282
-      },
-      "comments_sentiment": {
-        "Positif": 702,
-        "Netral": 2627,
-        "Negatif": 73
-      },
-      "avg_response_time_minutes": 386.63461538461536,
-      "response_time": {
-        "within_1h": 91,
-        "within_6h": 56,
-        "within_24h": 45,
-        "over_24h": 16,
-        "avg_minutes": 386.63461538461536,
-        "total_with_rt": 208
-      },
-      "comments_by_hour": {
-        "0": 58,
-        "1": 20,
-        "2": 15,
-        "3": 18,
-        "4": 26,
-        "5": 72,
-        "6": 131,
-        "7": 152,
-        "8": 151,
-        "9": 161,
-        "10": 165,
-        "11": 139,
-        "12": 215,
-        "13": 183,
-        "14": 191,
-        "15": 156,
-        "16": 162,
-        "17": 169,
-        "18": 224,
-        "19": 260,
-        "20": 241,
-        "21": 184,
-        "22": 156,
-        "23": 153
-      },
-      "brand_vs_public": {
-        "brand_responses": 108,
-        "public_comments": 3294
-      },
-      "monthly_comment_sentiment": {
-        "2025-10": {
-          "Netral": 2546,
-          "Positif": 677,
-          "Negatif": 72
-        },
-        "2025-11": {
-          "Netral": 81,
-          "Positif": 25,
-          "Negatif": 1
-        }
-      },
-      "monthly_sentiment_trend": {
-        "2025-01": {
-          "Positif": 62,
-          "Netral": 21,
-          "Negatif": 0
-        },
-        "2025-02": {
-          "Positif": 54,
-          "Netral": 21,
-          "Negatif": 3
-        },
-        "2025-03": {
-          "Positif": 105,
-          "Netral": 22,
-          "Negatif": 5
-        },
-        "2025-04": {
-          "Positif": 67,
-          "Netral": 11,
-          "Negatif": 6
-        },
-        "2025-05": {
-          "Positif": 34,
-          "Netral": 25,
-          "Negatif": 6
-        },
-        "2025-06": {
-          "Positif": 275,
-          "Netral": 51,
-          "Negatif": 2
-        },
-        "2025-07": {
-          "Positif": 282,
-          "Netral": 214,
-          "Negatif": 14
-        },
-        "2025-08": {
-          "Positif": 654,
-          "Netral": 387,
-          "Negatif": 0
-        },
-        "2025-09": {
-          "Positif": 464,
-          "Netral": 350,
-          "Negatif": 4
-        },
-        "2025-10": {
-          "Positif": 1017,
-          "Netral": 1748,
-          "Negatif": 33
-        },
-        "2025-11": {
-          "Positif": 152,
-          "Netral": 163,
-          "Negatif": 13
-        },
-        "2025-12": {
-          "Positif": 231,
-          "Netral": 204,
-          "Negatif": 42
-        },
-        "2026-01": {
-          "Positif": 288,
-          "Netral": 251,
-          "Negatif": 44
-        },
-        "2026-02": {
-          "Positif": 679,
-          "Netral": 1277,
-          "Negatif": 158
-        },
-        "2026-03": {
-          "Positif": 830,
-          "Netral": 1332,
-          "Negatif": 176
-        },
-        "2026-04": {
-          "Positif": 865,
-          "Netral": 1438,
-          "Negatif": 142
-        },
-        "2026-05": {
-          "Positif": 1453,
-          "Netral": 1904,
-          "Negatif": 226
-        },
-        "2026-06": {
-          "Positif": 1081,
-          "Netral": 1461,
-          "Negatif": 118
-        },
-        "2026-07": {
-          "Positif": 1025,
-          "Netral": 1083,
-          "Negatif": 102
-        }
-      },
-      "monthly_platform_trend": {
-        "2025-01": {
-          "Twitter": 18,
-          "Instagram": 32,
-          "Youtube": 33,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-02": {
-          "Twitter": 26,
-          "Instagram": 41,
-          "Youtube": 11,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-03": {
-          "Twitter": 34,
-          "Instagram": 74,
-          "Youtube": 24,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-04": {
-          "Twitter": 18,
-          "Instagram": 52,
-          "Youtube": 14,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-05": {
-          "Twitter": 10,
-          "Instagram": 47,
-          "Youtube": 7,
-          "Tiktok": 1,
-          "Threads": 0
-        },
-        "2025-06": {
-          "Twitter": 61,
-          "Instagram": 72,
-          "Youtube": 183,
-          "Tiktok": 12,
-          "Threads": 0
-        },
-        "2025-07": {
-          "Twitter": 204,
-          "Instagram": 114,
-          "Youtube": 51,
-          "Tiktok": 141,
-          "Threads": 0
-        },
-        "2025-08": {
-          "Twitter": 279,
-          "Instagram": 320,
-          "Youtube": 33,
-          "Tiktok": 409,
-          "Threads": 0
-        },
-        "2025-09": {
-          "Twitter": 96,
-          "Instagram": 248,
-          "Youtube": 196,
-          "Tiktok": 278,
-          "Threads": 0
-        },
-        "2025-10": {
-          "Twitter": 1281,
-          "Instagram": 337,
-          "Youtube": 625,
-          "Tiktok": 555,
-          "Threads": 0
-        },
-        "2025-11": {
-          "Twitter": 41,
-          "Instagram": 54,
-          "Youtube": 68,
-          "Tiktok": 165,
-          "Threads": 0
-        },
-        "2025-12": {
-          "Twitter": 42,
-          "Instagram": 94,
-          "Youtube": 40,
-          "Tiktok": 301,
-          "Threads": 0
-        },
-        "2026-01": {
-          "Twitter": 95,
-          "Instagram": 129,
-          "Youtube": 76,
-          "Tiktok": 283,
-          "Threads": 0
-        },
-        "2026-02": {
-          "Twitter": 636,
-          "Instagram": 261,
-          "Youtube": 844,
-          "Tiktok": 373,
-          "Threads": 0
-        },
-        "2026-03": {
-          "Twitter": 738,
-          "Instagram": 219,
-          "Youtube": 950,
-          "Tiktok": 431,
-          "Threads": 0
-        },
-        "2026-04": {
-          "Twitter": 476,
-          "Instagram": 326,
-          "Youtube": 945,
-          "Tiktok": 698,
-          "Threads": 0
-        },
-        "2026-05": {
-          "Twitter": 718,
-          "Instagram": 1306,
-          "Youtube": 1096,
-          "Tiktok": 463,
-          "Threads": 0
-        },
-        "2026-06": {
-          "Twitter": 519,
-          "Instagram": 819,
-          "Youtube": 987,
-          "Tiktok": 327,
-          "Threads": 8
-        },
-        "2026-07": {
-          "Twitter": 497,
-          "Instagram": 762,
-          "Youtube": 652,
-          "Tiktok": 299,
-          "Threads": 0
-        }
-      },
-      "keyword_engagement": [
-        {
-          "keyword": "MGPA Mandalika",
-          "post_count": 3403,
-          "total_likes": 2250241.0,
-          "total_views": 71505673.0,
-          "total_comments": 71945.0,
-          "avg_likes": 661.3,
-          "avg_views": 21013.0
-        },
-        {
-          "keyword": "KEK Sanur",
-          "post_count": 4405,
-          "total_likes": 2014248.0,
-          "total_views": 69727158.0,
-          "total_comments": 69279.0,
-          "avg_likes": 457.3,
-          "avg_views": 15829.0
-        },
-        {
-          "keyword": "Mandalika",
-          "post_count": 12532,
-          "total_likes": 1848304.0,
-          "total_views": 45421881.0,
-          "total_comments": 57684.0,
-          "avg_likes": 147.5,
-          "avg_views": 3624.0
-        },
-        {
-          "keyword": "ITDC",
-          "post_count": 5067,
-          "total_likes": 852446.0,
-          "total_views": 7225670.0,
-          "total_comments": 29621.0,
-          "avg_likes": 168.2,
-          "avg_views": 1426.0
-        },
-        {
-          "keyword": "Aquabike dan F1 Powerboat",
-          "post_count": 744,
-          "total_likes": 215102.0,
-          "total_views": 3601764.0,
-          "total_comments": 3620.0,
-          "avg_likes": 289.1,
-          "avg_views": 4841.0
-        },
-        {
-          "keyword": "Pocari Sweat Run Lombok 2025",
-          "post_count": 327,
-          "total_likes": 53721.0,
-          "total_views": 949961.0,
-          "total_comments": 2596.0,
-          "avg_likes": 164.3,
-          "avg_views": 2905.0
-        }
-      ],
-      "top_keywords_volume": {
-        "Mandalika": 12532,
-        "ITDC": 5067,
-        "KEK Sanur": 4405,
-        "MGPA Mandalika": 3403,
-        "Aquabike dan F1 Powerboat": 744,
-        "Pocari Sweat Run Lombok 2025": 327
-      },
-      "keyword_sentiment": {
-        "Mandalika": {
-          "Positif": 4326,
-          "Netral": 7481,
-          "Negatif": 725
-        },
-        "ITDC": {
-          "Positif": 3554,
-          "Netral": 1226,
-          "Negatif": 287
-        },
-        "KEK Sanur": {
-          "Positif": 2879,
-          "Netral": 1329,
-          "Negatif": 197
-        },
-        "MGPA Mandalika": {
-          "Positif": 1414,
-          "Netral": 1925,
-          "Negatif": 64
-        },
-        "Aquabike dan F1 Powerboat": {
-          "Positif": 472,
-          "Netral": 263,
-          "Negatif": 9
-        },
-        "Pocari Sweat Run Lombok 2025": {
-          "Positif": 161,
-          "Netral": 166,
-          "Negatif": 0
-        }
-      },
-      "keyword_nss": {
-        "Mandalika": 28.7,
-        "ITDC": 64.5,
-        "KEK Sanur": 60.9,
-        "MGPA Mandalika": 39.7,
-        "Aquabike dan F1 Powerboat": 62.2,
-        "Pocari Sweat Run Lombok 2025": 49.2
-      },
-      "top_viral_posts": [
-        {
-          "platform": "Tiktok",
-          "title": "pojokseleb",
-          "likes": 208816,
-          "views": 4932813,
-          "replies": 1113,
-          "sentiment": "Positif",
-          "date": "2025-12-28"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "ukiyy18",
-          "likes": 202779,
-          "views": 10082121,
-          "replies": 9531,
-          "sentiment": "Negatif",
-          "date": "2025-12-30"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "jakartaviral_",
-          "likes": 185629,
-          "views": 4944358,
-          "replies": 1504,
-          "sentiment": "Negatif",
-          "date": "2026-03-12"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "motogp.lombok",
-          "likes": 167212,
-          "views": 3506332,
-          "replies": 810,
-          "sentiment": "Positif",
-          "date": "2025-09-30"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "pecco63edit",
-          "likes": 106009,
-          "views": 1113585,
-          "replies": 411,
-          "sentiment": "Netral",
-          "date": "2025-09-16"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "beritasatuofficial",
-          "likes": 100881,
-          "views": 2189684,
-          "replies": 5046,
-          "sentiment": "Negatif",
-          "date": "2026-02-03"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Australia minta MotoGP Mandalika dihapus dari kalender MotoGP efek cedera Marc M",
-          "likes": 99334,
-          "views": 3241599,
-          "replies": 3907,
-          "sentiment": "Negatif",
-          "date": "2025-10-10"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "bolacom",
-          "likes": 77648,
-          "views": 1595929,
-          "replies": 1333,
-          "sentiment": "Positif",
-          "date": "2025-10-01"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Some Mandalika madness and a rookie making history ✨ 🤯\n\n#IndonesianGP 🇮🇩 #MotoGP",
-          "likes": 76224,
-          "views": 1064620,
-          "replies": 329,
-          "sentiment": "Positif",
-          "date": "2025-10-06"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "joseshev",
-          "likes": 67112,
-          "views": 719830,
-          "replies": 243,
-          "sentiment": "Netral",
-          "date": "2025-07-21"
-        }
-      ]
-    },
-    "InJourney": {
-      "total_posts": 11390,
-      "total_comments": 2282,
-      "total_likes": 902370,
-      "total_views": 17190299,
-      "total_replies": 25195,
-      "platform_stats": [
-        {
-          "platform": "Twitter",
-          "post_count": 6532,
-          "total_likes": 1273.0,
-          "total_views": 0.0,
-          "total_replies": 1554.0,
-          "total_retweet": 283.0,
-          "avg_likes": 0.2,
-          "avg_views": 0.0
-        },
-        {
-          "platform": "Instagram",
-          "post_count": 3937,
-          "total_likes": 820026.0,
-          "total_views": 14260242.0,
-          "total_replies": 20630.0,
-          "total_retweet": 0.0,
-          "avg_likes": 208.3,
-          "avg_views": 3622.0
-        },
-        {
-          "platform": "Youtube",
-          "post_count": 821,
-          "total_likes": 10980.0,
-          "total_views": 774517.0,
-          "total_replies": 1612.0,
-          "total_retweet": 0.0,
-          "avg_likes": 13.4,
-          "avg_views": 943.0
-        },
-        {
-          "platform": "Tiktok",
-          "post_count": 100,
-          "total_likes": 70091.0,
-          "total_views": 2155540.0,
-          "total_replies": 1399.0,
-          "total_retweet": 0.0,
-          "avg_likes": 700.9,
-          "avg_views": 21555.0
-        }
-      ],
-      "platform_engagement_rate": {
-        "Twitter": 0.4,
-        "Instagram": 213.5,
-        "Youtube": 15.3,
-        "Tiktok": 714.9
-      },
-      "posts_sentiment": {
-        "Positif": 9877,
-        "Netral": 1318,
-        "Negatif": 195
-      },
-      "comments_sentiment": {
-        "Netral": 1509,
-        "Positif": 739,
-        "Negatif": 34
-      },
-      "avg_response_time_minutes": 1179.4660194174758,
-      "response_time": {
-        "within_1h": 4,
-        "within_6h": 18,
-        "within_24h": 58,
-        "over_24h": 23,
-        "avg_minutes": 1179.4660194174758,
-        "total_with_rt": 103
-      },
-      "comments_by_hour": {
-        "0": 33,
-        "1": 18,
-        "2": 8,
-        "3": 21,
-        "4": 21,
-        "5": 66,
-        "6": 97,
-        "7": 111,
-        "8": 94,
-        "9": 135,
-        "10": 68,
-        "11": 102,
-        "12": 98,
-        "13": 92,
-        "14": 147,
-        "15": 103,
-        "16": 137,
-        "17": 184,
-        "18": 202,
-        "19": 186,
-        "20": 129,
-        "21": 72,
-        "22": 104,
-        "23": 54
-      },
-      "brand_vs_public": {
-        "brand_responses": 53,
-        "public_comments": 2229
-      },
-      "monthly_comment_sentiment": {
-        "2025-10": {
-          "Netral": 1091,
-          "Positif": 491,
-          "Negatif": 34
-        },
-        "2025-11": {
-          "Netral": 418,
-          "Positif": 248,
-          "Negatif": 0
-        }
-      },
-      "monthly_sentiment_trend": {
-        "2025-01": {
-          "Positif": 964,
-          "Netral": 34,
-          "Negatif": 1
-        },
-        "2025-02": {
-          "Positif": 1113,
-          "Netral": 19,
-          "Negatif": 1
-        },
-        "2025-03": {
-          "Positif": 1479,
-          "Netral": 33,
-          "Negatif": 2
-        },
-        "2025-04": {
-          "Positif": 792,
-          "Netral": 58,
-          "Negatif": 1
-        },
-        "2025-05": {
-          "Positif": 987,
-          "Netral": 63,
-          "Negatif": 14
-        },
-        "2025-06": {
-          "Positif": 331,
-          "Netral": 53,
-          "Negatif": 2
-        },
-        "2025-07": {
-          "Positif": 375,
-          "Netral": 53,
-          "Negatif": 0
-        },
-        "2025-08": {
-          "Positif": 595,
-          "Netral": 28,
-          "Negatif": 0
-        },
-        "2025-09": {
-          "Positif": 313,
-          "Netral": 37,
-          "Negatif": 0
-        },
-        "2025-10": {
-          "Positif": 179,
-          "Netral": 66,
-          "Negatif": 1
-        },
-        "2025-11": {
-          "Positif": 112,
-          "Netral": 50,
-          "Negatif": 12
-        },
-        "2025-12": {
-          "Positif": 275,
-          "Netral": 85,
-          "Negatif": 31
-        },
-        "2026-01": {
-          "Positif": 278,
-          "Netral": 71,
-          "Negatif": 15
-        },
-        "2026-02": {
-          "Positif": 177,
-          "Netral": 66,
-          "Negatif": 21
-        },
-        "2026-03": {
-          "Positif": 226,
-          "Netral": 74,
-          "Negatif": 21
-        },
-        "2026-04": {
-          "Positif": 199,
-          "Netral": 52,
-          "Negatif": 9
-        },
-        "2026-05": {
-          "Positif": 292,
-          "Netral": 75,
-          "Negatif": 29
-        },
-        "2026-06": {
-          "Positif": 271,
-          "Netral": 79,
-          "Negatif": 12
-        },
-        "2026-07": {
-          "Positif": 229,
-          "Netral": 45,
-          "Negatif": 9
-        }
-      },
-      "monthly_platform_trend": {
-        "2025-01": {
-          "Twitter": 858,
-          "Instagram": 88,
-          "Youtube": 53,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-02": {
-          "Twitter": 967,
-          "Instagram": 161,
-          "Youtube": 5,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-03": {
-          "Twitter": 838,
-          "Instagram": 642,
-          "Youtube": 34,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-04": {
-          "Twitter": 757,
-          "Instagram": 81,
-          "Youtube": 11,
-          "Tiktok": 2,
-          "Threads": 0
-        },
-        "2025-05": {
-          "Twitter": 665,
-          "Instagram": 387,
-          "Youtube": 5,
-          "Tiktok": 7,
-          "Threads": 0
-        },
-        "2025-06": {
-          "Twitter": 306,
-          "Instagram": 66,
-          "Youtube": 12,
-          "Tiktok": 2,
-          "Threads": 0
-        },
-        "2025-07": {
-          "Twitter": 374,
-          "Instagram": 39,
-          "Youtube": 15,
-          "Tiktok": 0,
-          "Threads": 0
-        },
-        "2025-08": {
-          "Twitter": 508,
-          "Instagram": 93,
-          "Youtube": 18,
-          "Tiktok": 4,
-          "Threads": 0
-        },
-        "2025-09": {
-          "Twitter": 213,
-          "Instagram": 59,
-          "Youtube": 68,
-          "Tiktok": 10,
-          "Threads": 0
-        },
-        "2025-10": {
-          "Twitter": 94,
-          "Instagram": 75,
-          "Youtube": 68,
-          "Tiktok": 9,
-          "Threads": 0
-        },
-        "2025-11": {
-          "Twitter": 71,
-          "Instagram": 42,
-          "Youtube": 56,
-          "Tiktok": 5,
-          "Threads": 0
-        },
-        "2025-12": {
-          "Twitter": 140,
-          "Instagram": 163,
-          "Youtube": 81,
-          "Tiktok": 7,
-          "Threads": 0
-        },
-        "2026-01": {
-          "Twitter": 112,
-          "Instagram": 161,
-          "Youtube": 81,
-          "Tiktok": 10,
-          "Threads": 0
-        },
-        "2026-02": {
-          "Twitter": 96,
-          "Instagram": 119,
-          "Youtube": 40,
-          "Tiktok": 9,
-          "Threads": 0
-        },
-        "2026-03": {
-          "Twitter": 126,
-          "Instagram": 98,
-          "Youtube": 82,
-          "Tiktok": 15,
-          "Threads": 0
-        },
-        "2026-04": {
-          "Twitter": 82,
-          "Instagram": 115,
-          "Youtube": 56,
-          "Tiktok": 7,
-          "Threads": 0
-        },
-        "2026-05": {
-          "Twitter": 118,
-          "Instagram": 222,
-          "Youtube": 49,
-          "Tiktok": 7,
-          "Threads": 0
-        },
-        "2026-06": {
-          "Twitter": 114,
-          "Instagram": 194,
-          "Youtube": 49,
-          "Tiktok": 5,
-          "Threads": 0
-        },
-        "2026-07": {
-          "Twitter": 93,
-          "Instagram": 158,
-          "Youtube": 31,
-          "Tiktok": 1,
-          "Threads": 0
-        }
-      },
-      "keyword_engagement": [
-        {
-          "keyword": "InJourney",
-          "post_count": 11390,
-          "total_likes": 902370.0,
-          "total_views": 17190299.0,
-          "total_comments": 25195.0,
-          "avg_likes": 79.2,
-          "avg_views": 1509.0
-        }
-      ],
-      "top_keywords_volume": {
-        "InJourney": 11390
-      },
-      "keyword_sentiment": {
-        "InJourney": {
-          "Positif": 9877,
-          "Netral": 1318,
-          "Negatif": 195
-        }
-      },
-      "keyword_nss": {
-        "InJourney": 85.0
-      },
-      "top_viral_posts": [
-        {
-          "platform": "Instagram",
-          "title": "Hari ini saya bersama Direktur Utama @injourneyairports Bapak @mohammad_r_pahlev",
-          "likes": 122407,
-          "views": 0,
-          "replies": 52,
-          "sentiment": "Positif",
-          "date": "2026-03-04"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Luaaar biasaaaa banget buat @itdc_id @injourney.id karena kita jadi tau kalau La",
-          "likes": 61163,
-          "views": 0,
-          "replies": 42,
-          "sentiment": "Positif",
-          "date": "2025-02-18"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Melanjutkan pertemuan sebelumnya, hari ini saya berdiskusi dengan Menteri @kemen",
-          "likes": 32935,
-          "views": 0,
-          "replies": 47,
-          "sentiment": "Positif",
-          "date": "2025-02-11"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Sebuah video yang memperlihatkan momen penumpang menerima hampers Lebaran saat m",
-          "likes": 25862,
-          "views": 730067,
-          "replies": 272,
-          "sentiment": "Positif",
-          "date": "2026-03-15"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Setelah absen selama 30 tahun, World Rally Championship (WRC) akan kembali ke In",
-          "likes": 24493,
-          "views": 0,
-          "replies": 199,
-          "sentiment": "Positif",
-          "date": "2025-02-13"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Valentino Rossi, Legenda MotoGP, Pertama Kali Menjajal Sirkuit Mandalika 🏁\n\nLege",
-          "likes": 18698,
-          "views": 206166,
-          "replies": 475,
-          "sentiment": "Positif",
-          "date": "2026-01-29"
-        },
-        {
-          "platform": "Tiktok",
-          "title": "rakyatnewsofficial",
-          "likes": 16659,
-          "views": 576439,
-          "replies": 305,
-          "sentiment": "Positif",
-          "date": "2025-09-16"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Langkah pelan penuh arti, menjemput panggilan suci yang telah lama dinanti.\n\nDii",
-          "likes": 14388,
-          "views": 174208,
-          "replies": 427,
-          "sentiment": "Positif",
-          "date": "2026-04-22"
-        },
-        {
-          "platform": "Instagram",
-          "title": "Bandara biasanya cuma jadi tempat nunggu boarding.\n\nTapi di momen Nataru ini, ad",
-          "likes": 12619,
-          "views": 0,
-          "replies": 150,
-          "sentiment": "Positif",
-          "date": "2025-12-26"
-        },
-        {
-          "platform": "Instagram",
-          "title": "History made in Brazil! 🇮🇩🔥\n\nVeda Ega Pratama (@veda_54) secures an incredible P",
-          "likes": 11151,
-          "views": 0,
-          "replies": 308,
-          "sentiment": "Netral",
-          "date": "2026-03-22"
         }
       ]
     }

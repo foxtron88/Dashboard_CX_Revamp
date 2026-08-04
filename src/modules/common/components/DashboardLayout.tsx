@@ -24,6 +24,7 @@ const navItems = [
     subItems: [
       { href: '/data-management', label: 'Question Management' },
       { href: '/data-management/csat-target', label: 'CSAT Target Score' },
+      { href: '/data-management/socmed-sync', label: 'Socmed Data Sync' },
       { href: '/data-management/menu-config', label: 'Menu Management' }
     ]
   },
