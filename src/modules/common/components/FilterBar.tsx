@@ -16,18 +16,18 @@ export default function FilterBar({ records }: FilterBarProps) {
   } = useFilterStore();
 
   const businessUnits = useMemo(
-    () => [...new Set(records.map(r => r.source).filter(Boolean))].sort(),
+    () => [...new Set(records.map(r => r.bu).filter(Boolean))].sort(),
     [records]
   );
 
   const locations = useMemo(() => {
-    const subset = businessUnit === 'all' ? records : records.filter(r => r.source === businessUnit);
+    const subset = businessUnit === 'all' ? records : records.filter(r => r.bu === businessUnit);
     return [...new Set(subset.map(r => r.location).filter(Boolean))].sort();
   }, [records, businessUnit]);
 
   const facilities = useMemo(() => {
     let subset = records;
-    if (businessUnit !== 'all') subset = subset.filter(r => r.source === businessUnit);
+    if (businessUnit !== 'all') subset = subset.filter(r => r.bu === businessUnit);
     if (location !== 'all') subset = subset.filter(r => r.location === location);
     return [...new Set(subset.map(r => r.facility_type).filter(Boolean))].sort();
   }, [records, businessUnit, location]);

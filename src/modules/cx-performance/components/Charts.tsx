@@ -84,7 +84,7 @@ export function SentimentDonut({ records }: Props) {
             ))}
           </Pie>
           <Tooltip itemStyle={{ color: "#ffffff", fontSize: 12, fontWeight: 600 }} labelStyle={{ color: "#94a3b8", fontSize: 11 }}
-            formatter={(value: number, name: string) => [`${value.toLocaleString()} (${total > 0 ? ((value / total) * 100).toFixed(1) : 0}%)`, name]}
+            formatter={(value: any, name: any) => [`${Number(value || 0).toLocaleString()} (${total > 0 ? ((Number(value || 0) / total) * 100).toFixed(1) : 0}%)`, name]}
             contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }}
           />
           <Legend
