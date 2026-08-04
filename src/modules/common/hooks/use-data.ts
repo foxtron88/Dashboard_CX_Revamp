@@ -10,6 +10,14 @@ function parseScore(val: string): number | null {
   return !isNaN(n) && n >= 1 && n <= 5 ? n : null;
 }
 
+function deriveSentiment(score: number | null): string {
+  if (score === null) return '';
+  if (score >= 4) return 'Positive';
+  if (score === 3) return 'Neutral';
+  if (score <= 2) return 'Negative';
+  return '';
+}
+
 function deriveMonth(synced_at: string): string {
   if (!synced_at) return '';
   // supports DD-MM-YYYY HH:MM:SS and YYYY-MM-DD HH:MM:SS
@@ -53,6 +61,7 @@ export function useCSATData() {
           const obj: Record<string, string> = {};
           headers.forEach((h, idx) => { obj[h] = vals[idx] ?? ''; });
 
+          const overallScore = parseScore(obj.overall_score);
           records.push({
             respondent_id: obj.respondent_id,
             synced_at:     obj.synced_at,
@@ -63,7 +72,7 @@ export function useCSATData() {
             region:        obj.region || '',
             facility_type: obj.facility_type,
             facility_id:   obj.facility_id,
-            overall_score: parseScore(obj.overall_score),
+            overall_score: overallScore,
             overall_group: obj.overall_group,
             people_score:  parseScore(obj.people_score),
             process_score: parseScore(obj.process_score),
@@ -71,7 +80,7 @@ export function useCSATData() {
             nps_score:     parseScore(obj.nps_score),
             feedback:      obj.feedback,
             tags:          obj.tags,
-            sentiment:     obj.sentiment,
+            sentiment:     deriveSentiment(overallScore),
             channel:       obj.channel,
             language:      obj.language,
             month:         deriveMonth(obj.synced_at),
