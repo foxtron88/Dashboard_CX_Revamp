@@ -6,7 +6,7 @@ import type { SocmedStats } from '@/modules/common/hooks/use-socmed-data';
 
 interface Props {
   socmedStats: SocmedStats | null;
-  opsStats: any | null;
+  opsStats: { overall?: { visitors: number; interactions: number } } | null;
 }
 
 const COLORS = {

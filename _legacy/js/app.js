@@ -203,13 +203,15 @@
     const tabPerf = $('tabPerformance');
     const tabPerfAnalysis = $('tabPerfAnalysis');
     const tabSocmed = $('tabSocmed');
+    const tabFibagLabag = $('tabFibagLabag');
     const viewRaw = $('viewRaw');
     const viewPerf = $('viewPerformance');
     const viewPerfAnalysis = $('viewPerfAnalysis');
     const viewSocmed = $('viewSocmed');
+    const viewFibagLabag = $('viewFibagLabag');
 
-    const allTabs = [tabRaw, tabPerf, tabPerfAnalysis, tabSocmed].filter(Boolean);
-    const allViews = [viewRaw, viewPerf, viewPerfAnalysis, viewSocmed].filter(Boolean);
+    const allTabs = [tabRaw, tabPerf, tabPerfAnalysis, tabSocmed, tabFibagLabag].filter(Boolean);
+    const allViews = [viewRaw, viewPerf, viewPerfAnalysis, viewSocmed, viewFibagLabag].filter(Boolean);
 
     function switchTab(activeTab, activeView) {
       allTabs.forEach(t => t && t.classList.remove('active'));
@@ -267,6 +269,13 @@
              window.renderSocmedCharts();
              window.socmedRendered = true;
           }
+        });
+      }
+
+      if (tabFibagLabag && viewFibagLabag) {
+        tabFibagLabag.addEventListener('click', () => {
+          switchTab(tabFibagLabag, viewFibagLabag);
+          $('filterBar').style.display = 'none';
         });
       }
 
