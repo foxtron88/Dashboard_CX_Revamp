@@ -158,7 +158,7 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             {/* BU Deep Dive Charts */}
             <div className="mt-8">
               <div className="flex flex-col gap-4">
-                <DriverSatisfactionBars records={csatStats.filtered} hideDimensionToggle={true} />
+                <DriverSatisfactionBars records={csatStats.filtered} />
               </div>
             </div>
           </>

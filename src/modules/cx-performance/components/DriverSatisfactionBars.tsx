@@ -5,11 +5,9 @@ import type { CSATRecord } from '@/modules/common/types';
 
 interface Props {
   records: CSATRecord[];
-  hideDimensionToggle?: boolean;
 }
 
 type Driver = 'overall_score' | 'people_score' | 'process_score' | 'premises_score';
-type Dimension = 'bu' | 'facility_type';
 
 const DRIVERS: { key: Driver; label: string; icon: string; color: string }[] = [
   { key: 'overall_score',  label: 'Overall CSAT',   icon: '🌟', color: '#eab308' },
@@ -27,9 +25,8 @@ interface RowStat {
   avg: number;
 }
 
-export default function DriverSatisfactionBars({ records, hideDimensionToggle }: Props) {
+export default function DriverSatisfactionBars({ records }: Props) {
   const [driver, setDriver] = useState<Driver>('people_score');
-  const [dimension, setDimension] = useState<Dimension>('bu');
   const [topN, setTopN] = useState(10);
   const [sortBy, setSortBy] = useState<'volume' | 'dissatisfied'>('volume');
 
@@ -42,7 +39,7 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
       const raw = r[driver];
       if (raw === null) return;
       const score = raw as number;
-      const label = (dimension === 'bu' ? r.bu : r.facility_type) || 'Unknown';
+      const label = r.facility_type || 'Unknown';
       if (!map.has(label)) map.set(label, { scores: [] });
       map.get(label)!.scores.push(score);
     });
@@ -55,7 +52,7 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
         const avg  = scores.reduce((a, b) => a + b, 0) / scores.length;
         return { label, n: scores.length, satisfied: sat, neutral: neu, dissatisfied: dis, avg };
       })
-      .filter(r => r.n >= (dimension === 'facility_type' ? 5 : 1))
+      .filter(r => r.n >= 5)
       .sort((a, b) => {
         if (sortBy === 'dissatisfied') {
           const pctA = a.dissatisfied / a.n;
@@ -66,7 +63,7 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
         return b.n - a.n;
       })
       .slice(0, topN);
-  }, [records, driver, dimension, topN, sortBy]);
+  }, [records, driver, topN, sortBy]);
 
   const maxN = Math.max(...rows.map(r => r.n), 1);
 
@@ -110,48 +107,22 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
           </div>
         </div>
 
-        {/* Dimension Toggle */}
-        {!hideDimensionToggle && (
-          <div>
-            <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
-              Group By
-            </p>
-            <div className="flex gap-1">
-              {([['bu', '🏢 Business Unit'], ['facility_type', '📍 Facility Type']] as const).map(([val, label]) => (
-                <button
-                  key={val}
-                  onClick={() => setDimension(val)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                    dimension === val
-                      ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary-light)] border-[var(--accent-primary)]/30'
-                      : 'border-[var(--glass-border)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)]/30'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Top N */}
-        {dimension === 'facility_type' && (
-          <div>
-            <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
-              Show Top
-            </p>
-            <select
-              value={topN}
-              onChange={e => setTopN(Number(e.target.value))}
-              className="text-xs rounded-lg px-3 py-1.5"
-              style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
-            >
-              {[10, 15, 20, 30].map(n => (
-                <option key={n} value={n}>Top {n}</option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div>
+          <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1.5">
+            Show Top
+          </p>
+          <select
+            value={topN}
+            onChange={e => setTopN(Number(e.target.value))}
+            className="text-xs rounded-lg px-3 py-1.5"
+            style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
+          >
+            {[10, 15, 20, 30].map(n => (
+              <option key={n} value={n}>Top {n}</option>
+            ))}
+          </select>
+        </div>
 
         {/* Sort By */}
         <div>
@@ -204,7 +175,7 @@ export default function DriverSatisfactionBars({ records, hideDimensionToggle }:
         {/* Table Header */}
         <div className="grid grid-cols-[1fr_120px] px-5 py-2 border-b border-[var(--glass-border)] bg-[var(--bg-secondary)]">
           <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
-            {dimension === 'bu' ? 'Business Unit' : 'Facility Type'}
+            Facility Type
           </span>
           <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider text-right">
             Responses
