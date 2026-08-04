@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMenuConfig } from '@/modules/common/hooks/use-menu-config';
 import {
   BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star, Menu
 } from 'lucide-react';
@@ -22,13 +23,15 @@ const navItems = [
     gradient: 'linear-gradient(135deg, #64748b, #94a3b8)',
     subItems: [
       { href: '/data-management', label: 'Question Management' },
-      { href: '/data-management/csat-target', label: 'CSAT Target Score' }
+      { href: '/data-management/csat-target', label: 'CSAT Target Score' },
+      { href: '/data-management/menu-config', label: 'Menu Management' }
     ]
   },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { enabledMenus, isLoaded } = useMenuConfig();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
   const [expandedMenus, setExpandedMenus] = React.useState<string[]>(['/data-management']);
 
@@ -59,6 +62,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <nav className="flex-1 p-3 space-y-1">
           <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest px-3 pt-3 pb-2">Analytics</p>
           {navItems.map(item => {
+            if (item.href !== '/data-management' && (!isLoaded || !enabledMenus.includes(item.href))) {
+              return null;
+            }
+
             const hasSub = !!item.subItems;
             const isExpanded = expandedMenus.includes(item.href);
             const isActive = pathname === item.href || (hasSub && item.subItems!.some(sub => pathname === sub.href));
