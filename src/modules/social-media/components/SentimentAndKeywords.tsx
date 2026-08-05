@@ -108,7 +108,7 @@ export default function SentimentAndKeywords({ stats }: Props) {
             <RechartsTooltip
               cursor={{ strokeDasharray: '3 3' }}
               contentStyle={{ background: '#1a2235', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f1f5f9' }}
-              formatter={(value: any, name: string) => [value.toLocaleString(), name]}
+              formatter={(value: any, name: any) => [typeof value === 'number' ? value.toLocaleString() : value, name]}
             />
             <Scatter name="Keywords" data={keywordData} fill="var(--accent-secondary)">
               {keywordData.map((entry, index) => (
