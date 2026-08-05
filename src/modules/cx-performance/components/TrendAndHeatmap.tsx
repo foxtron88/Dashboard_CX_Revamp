@@ -45,7 +45,7 @@ export function CSATTrendChart({ records }: Props) {
 
   return (
     <div className="glass-card mb-6">
-      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">CSAT Trend by Business Unit</h3>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">CSAT Trend</h3>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
