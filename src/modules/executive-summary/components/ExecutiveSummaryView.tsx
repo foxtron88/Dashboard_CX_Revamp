@@ -138,40 +138,7 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
               </div>
             </div>
 
-            {/* Operations & Visitor Traffic Table */}
-            {opsStats && (
-              <div className="mt-8 glass-card overflow-hidden !p-0">
-                <div className="flex items-center gap-3 p-5 border-b border-[var(--glass-border)]">
-                  <span className="text-xl">👥</span>
-                  <div>
-                    <h2 className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-                      Visitor Traffic & Interactions
-                    </h2>
-                    <p className="text-xs text-[var(--text-muted)]">Operational volume per Member</p>
-                  </div>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                    <thead>
-                      <tr className="border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] text-[var(--text-muted)] text-[10px] uppercase tracking-widest font-semibold">
-                        <th className="px-5 py-3">Member</th>
-                        <th className="px-5 py-3 text-right">Total Visitors</th>
-                        <th className="px-5 py-3 text-right">Total Interactions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(opsStats.byBU).map(([bu, stats], idx) => (
-                        <tr key={bu} className={`transition-colors hover:bg-[var(--glass-bg)] ${idx !== Object.keys(opsStats.byBU).length - 1 ? 'border-b border-[var(--glass-border)]' : ''}`}>
-                          <td className="px-5 py-3.5 font-semibold text-[var(--text-primary)]">{bu}</td>
-                          <td className="px-5 py-3.5 text-right text-[var(--accent-primary-light)] font-bold">{stats.visitors.toLocaleString()}</td>
-                          <td className="px-5 py-3.5 text-right text-[var(--text-secondary)] font-medium">{stats.interactions.toLocaleString()}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
+
           </>
         ) : (
           <div className="glass-card text-center py-8 text-[var(--text-muted)]">No CSAT data loaded</div>
