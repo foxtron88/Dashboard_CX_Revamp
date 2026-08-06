@@ -148,9 +148,9 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
         {csatStats ? (
           <>
             <ExecutiveSummaryTopMetrics socmedStats={socmedData?.global || null} opsStats={opsStats || null} />
-            {/* Individual Business Units */}
+            {/* Individual Members */}
             <div className="mt-2">
-              <BUGroupLabel label="Individual Business Units" />
+              <BUGroupLabel label="Individual Members" />
               <MemberCSATGrid 
                 records={csatStats.filtered} 
                 hideHeader 
@@ -176,14 +176,14 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
                     <h2 className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
                       Visitor Traffic & Interactions
                     </h2>
-                    <p className="text-xs text-[var(--text-muted)]">Operational volume per Business Unit</p>
+                    <p className="text-xs text-[var(--text-muted)]">Operational volume per Member</p>
                   </div>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm">
                     <thead>
                       <tr className="border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] text-[var(--text-muted)] text-[10px] uppercase tracking-widest font-semibold">
-                        <th className="px-5 py-3">Business Unit</th>
+                        <th className="px-5 py-3">Member</th>
                         <th className="px-5 py-3 text-right">Total Visitors</th>
                         <th className="px-5 py-3 text-right">Total Interactions</th>
                       </tr>

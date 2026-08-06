@@ -1436,7 +1436,7 @@ export default function DriverClassificationManager() {
               onChange={e => setBuFilter(e.target.value)}
               className="text-xs font-semibold rounded-lg px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]"
             >
-              <option value="ALL">All Business Units</option>
+              <option value="ALL">All Members</option>
               <option value="API">API</option>
               <option value="IDM">IDM</option>
               <option value="IJH">IJH</option>
@@ -1542,7 +1542,7 @@ export default function DriverClassificationManager() {
               </th>
               <th className="p-3 w-12">#</th>
               <th className="p-3">Survey Question Header</th>
-              <th className="p-3 w-28">Business Unit</th>
+              <th className="p-3 w-28">Member</th>
               <th className="p-3 w-36">Default Class</th>
               <th className="p-3 w-48">Active Pillar Assignment</th>
               <th className="p-3 w-20 text-center">Action</th>

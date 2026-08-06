@@ -284,13 +284,13 @@ export default function OperationsView({ data, months, initialFrom, initialTo }:
         {/* Global BU & Month Filters */}
         <div className="flex flex-wrap items-center gap-3">
           <div>
-            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
+            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Member</p>
             <select
               value={selectedBU}
               onChange={e => setSelectedBU(e.target.value)}
               className="text-xs rounded-lg px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)] font-semibold"
             >
-              <option value="ALL">All Business Units</option>
+              <option value="ALL">All Members</option>
               {BU_LIST.map(bu => <option key={bu} value={bu}>{bu}</option>)}
             </select>
           </div>

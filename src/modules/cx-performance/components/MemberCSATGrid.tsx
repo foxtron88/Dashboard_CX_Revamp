@@ -117,7 +117,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
           <span className="text-2xl">🏆</span>
           <div>
             <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-              CSAT per Business Unit
+              CSAT per Member
             </h2>
             <p className="text-xs text-[var(--text-muted)]">
               3P Driver breakdown: People (PPL) · Process (PRC) · Premises (PRM)

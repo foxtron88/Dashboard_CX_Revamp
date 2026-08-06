@@ -112,7 +112,7 @@ function SocialMediaContent() {
       <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
         <div className="flex flex-col">
           <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
-            Business Unit
+            Member
           </label>
           <select
             className={selectClass}

@@ -65,7 +65,7 @@ function CXPerformanceContent() {
       {/* Filters */}
       <div className="glass-card flex flex-wrap items-end gap-4">
         <div>
-          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</p>
+          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Member</p>
           <div className="flex flex-wrap gap-1">
             {BUS.map(b => (
               <button key={b} onClick={() => handleSelectBU(b)}

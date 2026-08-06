@@ -4,7 +4,7 @@ export interface CSATRecord {
   _id?: number;
   respondent_id: string;
   synced_at: string;
-  bu: string;               // Business Unit (API, IDM, IAS, ITDC, Sarinah)
+  bu: string;               // Member (API, IDM, IAS, ITDC, Sarinah)
   survey_type: string;       // Baggage Claim, Toilet, etc.
   subholding: string;
   location: string;

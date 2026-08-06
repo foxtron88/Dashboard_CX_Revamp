@@ -112,7 +112,7 @@ export function SentimentByBUChart({ records }: Props) {
 
   return (
     <div className="glass-card">
-      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Sentiment by Business Unit</h3>
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Sentiment by Member</h3>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />

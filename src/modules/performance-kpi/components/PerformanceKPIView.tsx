@@ -36,9 +36,9 @@ export default function PerformanceKPIView({ data, months, initialFrom, initialT
       {/* Filters */}
       <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
         <div className="flex flex-col">
-          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">Business Unit</label>
+          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">Member</label>
           <select className={selectClass} value={selectedBU} onChange={e => setSelectedBU(e.target.value)}>
-            <option value="ALL">All Business Units</option>
+            <option value="ALL">All Members</option>
             {BU_LIST.map(bu => <option key={bu} value={bu}>{bu}</option>)}
           </select>
         </div>

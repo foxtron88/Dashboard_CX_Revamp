@@ -43,9 +43,9 @@ export default function FilterBar({ records }: FilterBarProps) {
 
   return (
     <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
-      {/* Business Unit */}
+      {/* Member */}
       <div className="flex flex-col">
-        <label className={labelClass}>Business Unit</label>
+        <label className={labelClass}>Member</label>
         <select className={selectClass} value={businessUnit} onChange={e => setBusinessUnit(e.target.value)}>
           <option value="all">All Units</option>
           {businessUnits.map(bu => <option key={bu} value={bu}>{bu}</option>)}

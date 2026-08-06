@@ -190,7 +190,7 @@ export default function SensumCharts({ records }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="glass-card">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Score by Business Unit</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Score by Member</h3>
             <div className="flex gap-1 bg-black/20 p-0.5 rounded-lg border border-[var(--glass-border)]">
               {metricButtons.map(m => (
                 <button
