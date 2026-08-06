@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMenuConfig } from '@/modules/common/hooks/use-menu-config';
 import {
-  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star, Menu
+  BarChart3, Users, TrendingUp, Share2, Database, LayoutDashboard, Star, Menu, Plane
 } from 'lucide-react';
 
 const navItems = [
@@ -14,6 +14,7 @@ const navItems = [
   { href: '/operations', label: 'Operations', icon: Users, emoji: '👥', description: 'Interaksi & Pengunjung', gradient: 'linear-gradient(135deg, #0ea5e9, #10b981)' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, emoji: '📈', description: 'SLA & Operational', gradient: 'linear-gradient(135deg, #ec4899, #f43f5e)' },
   { href: '/social-media', label: 'Social Media', icon: Share2, emoji: '📱', description: 'Sentiment & Platform', gradient: 'linear-gradient(135deg, #8b5cf6, #d946ef)' },
+  { href: '/angkasa-pura-indonesia', label: 'Angkasa Pura Indonesia', icon: Plane, emoji: '✈️', description: 'Dashboard & Report', gradient: 'linear-gradient(135deg, #10b981, #06b6d4)' },
   { 
     href: '/data-management', 
     label: 'Data Management', 

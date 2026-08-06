@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useMenuConfig } from '@/modules/common/hooks/use-menu-config';
-import { Settings2, BarChart3, Users, TrendingUp, Share2, Star } from 'lucide-react';
+import { Settings2, BarChart3, Users, TrendingUp, Share2, Star, Plane } from 'lucide-react';
 
 const MENU_OPTIONS = [
   { href: '/executive-summary', label: 'Executive Summary', icon: Star, desc: 'Landing overview — key scorecards from all modules' },
@@ -10,6 +10,7 @@ const MENU_OPTIONS = [
   { href: '/operations', label: 'Operations', icon: Users, desc: 'Interaksi & Pengunjung' },
   { href: '/performance-kpi', label: 'Performance KPI', icon: TrendingUp, desc: 'SLA & Operational' },
   { href: '/social-media', label: 'Social Media', icon: Share2, desc: 'Sentiment & Platform' },
+  { href: '/angkasa-pura-indonesia', label: 'Angkasa Pura Indonesia', icon: Plane, desc: 'Dashboard & Report' },
 ];
 
 export default function MenuConfigPage() {

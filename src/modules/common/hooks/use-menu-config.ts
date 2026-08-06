@@ -10,7 +10,8 @@ const DEFAULT_ENABLED = [
   '/cx-performance',
   '/operations',
   '/performance-kpi',
-  '/social-media'
+  '/social-media',
+  '/angkasa-pura-indonesia'
   // Note: /data-management is always enabled by logic, not state.
 ];
 
