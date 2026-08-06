@@ -135,14 +135,32 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               style={{ borderColor: `${accent}40` }}
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white shadow-sm shrink-0"
-                  style={{ background: accent }}>
-                  {s.bu.substring(0, 2)}
+              <div className="flex items-center gap-3 mb-4 h-12">
+                <div className="h-10 flex-1 relative flex items-center">
+                  {/* Attempt to load logo from public folder */}
+                  <img 
+                    src={`/images/logos/${s.bu}.png`} 
+                    alt={s.bu} 
+                    className="h-full w-auto object-contain drop-shadow-sm brightness-0 invert opacity-90"
+                    onError={(e) => {
+                      // Fallback to text if logo not found
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  {/* Fallback Text Header */}
+                  <div className="hidden flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm shrink-0"
+                      style={{ background: accent }}>
+                      {s.bu.substring(0, 2)}
+                    </div>
+                    <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
-                  <p className="text-xs text-[var(--text-muted)]">{s.total.toLocaleString()} responses</p>
+                <div className="shrink-0">
+                  <p className="text-[10px] font-medium text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded border border-[var(--glass-border)] shadow-sm">
+                    {s.total.toLocaleString()} responses
+                  </p>
                 </div>
               </div>
 
@@ -194,7 +212,10 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
                       <div className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
                     </div>
-                    <div className="flex items-center justify-end gap-1 w-10">
+                    <div className="flex items-center justify-end gap-1 w-12">
+                      {d.val > 0 && d.val < target && (
+                        <span className="text-[10px] text-red-500 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>⚠️</span>
+                      )}
                       <span className="text-sm font-bold text-right" style={{ color: getScoreColor(d.val) }}>
                         {d.val > 0 ? d.val.toFixed(2) : '—'}
                       </span>
