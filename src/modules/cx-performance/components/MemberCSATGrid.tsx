@@ -135,13 +135,13 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               style={{ borderColor: `${accent}40` }}
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-4 h-12">
-                <div className="h-10 flex-1 relative flex items-center">
+              <div className="flex items-center justify-between mb-4 min-h-[3rem]">
+                <div className="flex-1 relative flex items-center justify-start h-12">
                   {/* Attempt to load logo from public folder */}
                   <img 
                     src={`/images/logos/${s.bu}.png`} 
                     alt={s.bu} 
-                    className="h-full w-auto object-contain drop-shadow-sm brightness-0 invert opacity-90"
+                    className="w-auto h-full max-w-[140px] object-contain object-left drop-shadow-sm"
                     onError={(e) => {
                       // Fallback to text if logo not found
                       e.currentTarget.style.display = 'none';
