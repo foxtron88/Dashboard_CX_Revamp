@@ -7,6 +7,7 @@ import type { SocmedStats } from '@/modules/common/hooks/use-socmed-data';
 interface Props {
   socmedStats: SocmedStats | null;
   opsStats: { overall?: { visitors: number; interactions: number } } | null;
+  averageCsat?: number;
 }
 
 const COLORS = {
@@ -15,7 +16,7 @@ const COLORS = {
   Negatif: '#ef4444'
 };
 
-export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Props) {
+export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats, averageCsat }: Props) {
   const pos = (socmedStats?.posts_sentiment?.['Positif'] || 0) + (socmedStats?.comments_sentiment?.['Positif'] || 0);
   const neg = (socmedStats?.posts_sentiment?.['Negatif'] || 0) + (socmedStats?.comments_sentiment?.['Negatif'] || 0);
   const neu = (socmedStats?.posts_sentiment?.['Netral'] || 0) + (socmedStats?.comments_sentiment?.['Netral'] || 0);
@@ -40,8 +41,30 @@ export default function ExecutiveSummaryTopMetrics({ socmedStats, opsStats }: Pr
       .slice(0, 8); 
   }, [socmedStats]);
 
+  function getScoreColor(score: number) {
+    if (score >= 4.0) return 'var(--accent-success)';
+    if (score >= 3.0) return 'var(--accent-warning)';
+    return 'var(--accent-danger)';
+  }
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mb-6 animate-in">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-6 animate-in">
+      {/* 0. Average CSAT Score */}
+      {averageCsat !== undefined && (
+        <div className="glass-card flex flex-col justify-center items-center text-center border-t-2 border-t-[var(--accent-success)] p-4">
+          <p className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1">
+            Average CSAT Score
+          </p>
+          <div className="text-2xl font-bold flex items-baseline justify-center gap-1" style={{ color: getScoreColor(averageCsat), fontFamily: 'var(--font-display)' }}>
+            <span>{averageCsat > 0 ? averageCsat.toFixed(2) : '—'}</span>
+            {averageCsat > 0 && <span className="text-xs font-bold text-[var(--text-muted)]">/5</span>}
+          </div>
+          <p className="text-[9px] text-[var(--text-secondary)] mt-1">
+            Average of all members
+          </p>
+        </div>
+      )}
+
       {/* 1. Total Visitor Traffic */}
       <div className="glass-card flex flex-col justify-center border-t-2 border-t-indigo-500 p-4">
         <p className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1">

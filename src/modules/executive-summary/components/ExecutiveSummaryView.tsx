@@ -83,10 +83,20 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
     const filtered = filterMonth(csatRecords);
     const overall = compute(filtered);
     const byBU: Record<string, ReturnType<typeof compute>> = {};
+    let totalMemberCsat = 0;
+    let memberCount = 0;
     for (const bu of CX_BUS) {
-      byBU[bu] = compute(filtered.filter(r => r.bu === bu));
+      const bStats = compute(filtered.filter(r => r.bu === bu));
+      byBU[bu] = bStats;
+      if (bStats.count > 0) {
+        const buCsat = (bStats.overall + bStats.people + bStats.process + bStats.premises) / 4;
+        totalMemberCsat += buCsat;
+        memberCount++;
+      }
     }
-    return { overall, byBU, filtered };
+    const averageCsat = memberCount > 0 ? totalMemberCsat / memberCount : 0;
+    
+    return { overall, byBU, filtered, averageCsat };
   }, [csatRecords, fromMonth, toMonth]);
 
   const opsStats = useMemo(() => {
@@ -120,7 +130,11 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
       <section className="animate-in">
         {csatStats ? (
           <>
-            <ExecutiveSummaryTopMetrics socmedStats={socmedData?.global || null} opsStats={opsStats || null} />
+            <ExecutiveSummaryTopMetrics 
+              socmedStats={socmedData?.global || null} 
+              opsStats={opsStats || null} 
+              averageCsat={csatStats.averageCsat}
+            />
             <div className="mt-2">
               <MemberCSATGrid 
                 records={csatStats.filtered} 
