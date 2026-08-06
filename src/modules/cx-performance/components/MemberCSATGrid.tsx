@@ -171,8 +171,9 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
                   </div>
                 )}
                 <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold mb-1">CSAT Score</p>
-                <p className="text-4xl font-extrabold mb-1" style={{ color: getScoreColor(s.csatScore), fontFamily: 'var(--font-display)' }}>
-                  {s.csatScore > 0 ? s.csatScore.toFixed(2) : '—'}
+                <p className="text-4xl font-extrabold mb-1 flex items-baseline justify-center gap-1" style={{ color: getScoreColor(s.csatScore), fontFamily: 'var(--font-display)' }}>
+                  <span>{s.csatScore > 0 ? s.csatScore.toFixed(2) : '—'}</span>
+                  {s.csatScore > 0 && <span className="text-sm font-bold text-[var(--text-muted)]">/5</span>}
                 </p>
                 <div className="flex items-center justify-center gap-2">
                   <p className="text-[10px] font-medium text-[var(--text-muted)]">
