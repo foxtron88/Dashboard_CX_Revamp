@@ -22,8 +22,7 @@ const BU_COLORS: Record<string, string> = {
 };
 
 function getScoreColor(score: number) {
-  if (score >= 4.5) return 'var(--accent-success)';
-  if (score >= 4.0) return 'var(--accent-info)';
+  if (score >= 4.0) return 'var(--accent-success)';
   if (score >= 3.0) return 'var(--accent-warning)';
   return 'var(--accent-danger)';
 }

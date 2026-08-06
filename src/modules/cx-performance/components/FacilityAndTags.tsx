@@ -7,8 +7,7 @@ import type { CSATRecord } from '@/modules/common/types';
 interface Props { records: CSATRecord[]; }
 
 function getScoreColor(s: number): string {
-  if (s >= 4.5) return '#10b981';
-  if (s >= 4.0) return '#3b82f6';
+  if (s >= 4.0) return '#10b981';
   if (s >= 3.0) return '#f59e0b';
   return '#ef4444';
 }
