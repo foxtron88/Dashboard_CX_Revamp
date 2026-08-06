@@ -201,7 +201,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               {/* Bars Inline */}
               <div className="space-y-4 px-1">
                 {[
-                  { label: 'Overall', val: s.rawOverall, color: getScoreColor(s.rawOverall) },
+                  { label: 'Overall', val: s.rawOverall, color: '#10b981' },
                   { label: 'People', val: s.people, color: '#6366f1' },
                   { label: 'Process', val: s.process, color: '#06b6d4' },
                   { label: 'Premises', val: s.premises, color: '#ec4899' },
