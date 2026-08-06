@@ -135,13 +135,13 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               style={{ borderColor: `${accent}40` }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between mb-4 min-h-[3rem]">
-                <div className="flex-1 relative flex items-center justify-start h-12">
+              <div className="flex flex-col items-center justify-center text-center gap-2 mb-5 min-h-[4.5rem]">
+                <div className="h-10 w-full relative flex items-center justify-center">
                   {/* Attempt to load logo from public folder */}
                   <img 
                     src={`/images/logos/${s.bu}.png`} 
                     alt={s.bu} 
-                    className="w-auto h-full max-w-[140px] object-contain object-left drop-shadow-sm"
+                    className="h-full w-auto max-w-[140px] object-contain object-center drop-shadow-sm"
                     onError={(e) => {
                       // Fallback to text if logo not found
                       e.currentTarget.style.display = 'none';
@@ -149,7 +149,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
                     }}
                   />
                   {/* Fallback Text Header */}
-                  <div className="hidden flex items-center gap-3">
+                  <div className="hidden flex items-center justify-center gap-3 w-full">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm shrink-0"
                       style={{ background: accent }}>
                       {s.bu.substring(0, 2)}
@@ -157,8 +157,8 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
                     <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
                   </div>
                 </div>
-                <div className="shrink-0">
-                  <p className="text-[10px] font-medium text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded border border-[var(--glass-border)] shadow-sm">
+                <div className="shrink-0 mt-1">
+                  <p className="text-[10px] font-medium text-[var(--text-muted)] bg-[var(--bg-secondary)] px-3 py-1 rounded-full border border-[var(--glass-border)] shadow-sm">
                     {s.total.toLocaleString()} responses
                   </p>
                 </div>
