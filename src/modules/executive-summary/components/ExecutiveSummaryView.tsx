@@ -116,41 +116,12 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
 
   return (
     <div className="space-y-8">
-      {/* Date Range Filter */}
-      <div className="glass-card !p-4 flex flex-wrap items-end gap-4 animate-in">
-        <div className="flex flex-col">
-          <p className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">From Month</p>
-          <input type="month" value={fromMonth} onChange={e => setFromMonth(e.target.value)}
-            className={selectClass} style={{ colorScheme: 'dark' }} />
-        </div>
-        <div className="flex flex-col">
-          <p className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">To Month</p>
-          <input type="month" value={toMonth} onChange={e => setToMonth(e.target.value)}
-            className={selectClass} style={{ colorScheme: 'dark' }} />
-        </div>
-        {(fromMonth || toMonth) && (
-          <button
-            onClick={() => { setFromMonth(''); setToMonth(''); }}
-            className="text-xs px-3 py-2 rounded-lg text-[var(--accent-danger)] border border-[var(--accent-danger)]/30 hover:bg-[var(--accent-danger)]/10 transition-all"
-          >
-            ✕ Reset
-          </button>
-        )}
-        <p className="text-xs text-[var(--text-muted)] ml-auto">
-          {fromMonth || toMonth
-            ? `${fromMonth || 'start'} → ${toMonth || 'now'}`
-            : 'All dates'}
-        </p>
-      </div>
-
       {/* ── 1. CSAT HOLDING PERFORMANCE ─────────────────────────────────────────────── */}
       <section className="animate-in">
         {csatStats ? (
           <>
             <ExecutiveSummaryTopMetrics socmedStats={socmedData?.global || null} opsStats={opsStats || null} />
-            {/* Individual Members */}
             <div className="mt-2">
-              <BUGroupLabel label="Individual Members" />
               <MemberCSATGrid 
                 records={csatStats.filtered} 
                 hideHeader 
