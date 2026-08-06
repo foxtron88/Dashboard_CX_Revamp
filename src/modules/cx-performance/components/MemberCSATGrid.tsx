@@ -44,7 +44,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
       const process = calcAvg(buRecs, 'process_score');
       const premises = calcAvg(buRecs, 'premises_score');
       
-      const calcNewOverall = (recs: CSATRecord[]) => {
+      const calcNewCsat = (recs: CSATRecord[]) => {
         const o = calcAvg(recs, 'overall_score');
         const p = calcAvg(recs, 'people_score');
         const pr = calcAvg(recs, 'process_score');
@@ -53,7 +53,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
         return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
       };
 
-      const overall = calcNewOverall(buRecs);
+      const csatScore = calcNewCsat(buRecs);
       
       const ratedTotal = buRecs.filter(r => r.overall_score !== null).length;
       const satisfied = buRecs.filter(r => r.overall_group === 'Satisfied').length;
@@ -75,7 +75,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
         
         if (fMonth && tMonth) {
           const curRecs = allRecords.filter(r => r.bu === bu && r.month >= fMonth! && r.month <= tMonth!);
-          const curAvg = calcNewOverall(curRecs);
+          const curAvg = calcNewCsat(curRecs);
 
           const shiftMonth = (ym: string) => {
             if (!ym) return ym;
@@ -95,18 +95,18 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
           const pmF = shiftMonth(fMonth);
           const pmT = shiftMonth(tMonth);
           const prevMoMRecs = allRecords.filter(r => r.bu === bu && r.month >= pmF && r.month <= pmT);
-          const prevMoMAvg = calcNewOverall(prevMoMRecs);
+          const prevMoMAvg = calcNewCsat(prevMoMRecs);
           if (prevMoMRecs.length > 0 && prevMoMAvg > 0) momDiff = curAvg - prevMoMAvg;
 
           const pyF = shiftYear(fMonth);
           const pyT = shiftYear(tMonth);
           const prevYoYRecs = allRecords.filter(r => r.bu === bu && r.month >= pyF && r.month <= pyT);
-          const prevYoYAvg = calcNewOverall(prevYoYRecs);
+          const prevYoYAvg = calcNewCsat(prevYoYRecs);
           if (prevYoYRecs.length > 0 && prevYoYAvg > 0) yoyDiff = curAvg - prevYoYAvg;
         }
       }
 
-      return { bu, total: buRecs.length, overall, people, process, premises, csatPct, ratedTotal, momDiff, yoyDiff };
+      return { bu, total: buRecs.length, rawOverall, csatScore, people, process, premises, csatPct, ratedTotal, momDiff, yoyDiff };
     });
   }, [records, allRecords, fromMonth, toMonth]);
 
@@ -135,32 +135,37 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               style={{ borderColor: `${accent}40` }}
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white shadow-sm shrink-0"
-                    style={{ background: accent }}>
-                    {s.bu.substring(0, 2)}
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
-                    <p className="text-xs text-[var(--text-muted)]">{s.total.toLocaleString()} responses</p>
-                  </div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white shadow-sm shrink-0"
+                  style={{ background: accent }}>
+                  {s.bu.substring(0, 2)}
                 </div>
-                {s.overall > 0 && s.overall < target && (
-                  <div className="bg-red-500/20 text-red-500 text-[10px] font-bold px-2 py-1 rounded border border-red-500/30" title={`Below Target (${target.toFixed(2)})`}>
-                    ⚠️ Below Target
-                  </div>
-                )}
+                <div>
+                  <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
+                  <p className="text-xs text-[var(--text-muted)]">{s.total.toLocaleString()} responses</p>
+                </div>
               </div>
 
-              {/* Status Row (Target & Trend) */}
-              <div className="flex items-center justify-between mb-5 pb-4 border-b border-[var(--glass-border)]">
-                <div className="text-[11px] font-medium text-[var(--text-muted)]">
-                  Target: <span className="text-[var(--text-primary)] font-bold">{target.toFixed(2)}</span>
+              {/* Big Score (CSAT Average) */}
+              <div className="text-center mb-5 py-4 rounded-xl relative" style={{ background: 'var(--bg-tertiary)' }}>
+                {s.csatScore > 0 && s.csatScore < target && (
+                  <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>
+                    <span>⚠️</span> Below Target
+                  </div>
+                )}
+                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold mb-1">CSAT Score</p>
+                <p className="text-4xl font-extrabold mb-1" style={{ color: getScoreColor(s.csatScore), fontFamily: 'var(--font-display)' }}>
+                  {s.csatScore > 0 ? s.csatScore.toFixed(2) : '—'}
+                </p>
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-[10px] font-medium text-[var(--text-muted)]">
+                    Target: {target.toFixed(2)}
+                  </p>
                 </div>
+                
                 {/* Trend Indicators */}
                 {(s.momDiff !== null || s.yoyDiff !== null) && (
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center gap-3 mt-2">
                     {s.momDiff !== null && (
                       <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.momDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
                         {s.momDiff >= 0 ? '▲' : '▼'} {Math.abs(s.momDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">MoM</span>
@@ -178,7 +183,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
               {/* Bars Inline */}
               <div className="space-y-4 px-1">
                 {[
-                  { label: 'Overall', val: s.overall, color: getScoreColor(s.overall) },
+                  { label: 'Overall', val: s.rawOverall, color: getScoreColor(s.rawOverall) },
                   { label: 'People', val: s.people, color: '#6366f1' },
                   { label: 'Process', val: s.process, color: '#06b6d4' },
                   { label: 'Premises', val: s.premises, color: '#ec4899' },
