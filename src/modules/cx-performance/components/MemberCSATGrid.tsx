@@ -122,11 +122,110 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
         momDiff: stats.reduce((sum, s) => sum + (s.momDiff || 0), 0) / stats.length,
         yoyDiff: stats.reduce((sum, s) => sum + (s.yoyDiff || 0), 0) / stats.length,
       };
-      return [avgStats, ...stats];
+      return { allMembers: avgStats, members: stats };
     }
     
-    return stats;
+    return { allMembers: null, members: stats };
   }, [records, allRecords, fromMonth, toMonth]);
+
+  const allMembersCard = buStats.allMembers;
+  const memberCards = buStats.members;
+
+  function renderCard(s: (typeof memberCards)[0], isAllMembers = false) {
+    const accent = isAllMembers ? '#10b981' : (BU_COLORS[s.bu] || '#64748b');
+    return (
+      <div key={s.bu}
+        className="glass-card relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+        style={{ borderColor: `${accent}40` }}
+      >
+        {/* Header */}
+        <div className="flex flex-col items-center justify-center text-center gap-2 mb-5 min-h-[5rem]">
+          <div className="h-12 w-full relative flex items-center justify-center">
+            {isAllMembers ? (
+              <p className="text-[18px] font-bold text-white leading-tight">All Members</p>
+            ) : (
+              <>
+                <img 
+                  src={`/images/logos/${s.bu}.png`} 
+                  alt={s.bu} 
+                  className="w-[120px] h-[48px] object-contain object-center drop-shadow-sm"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden flex flex-col items-center justify-center w-full">
+                  <p className="text-[14px] font-bold text-white leading-tight">{s.bu}</p>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="shrink-0 mt-1">
+            <p className="text-[10px] font-medium text-[var(--text-muted)] bg-[var(--bg-secondary)] px-3 py-1 rounded-full border border-[var(--glass-border)] shadow-sm">
+              {s.total.toLocaleString()} responses
+            </p>
+          </div>
+        </div>
+
+        {/* Big Score (CSAT Average) */}
+        <div className="text-center mb-5 py-4 rounded-xl relative" style={{ background: 'var(--bg-tertiary)' }}>
+          {s.csatScore > 0 && s.csatScore < target && (
+            <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>
+              <span>⚠️</span> Below Target
+            </div>
+          )}
+          <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold mb-1">CSAT Score</p>
+          <p className="text-4xl font-extrabold mb-1 flex items-baseline justify-center gap-1" style={{ color: getScoreColor(s.csatScore), fontFamily: 'var(--font-display)' }}>
+            <span>{s.csatScore > 0 ? s.csatScore.toFixed(2) : '—'}</span>
+            {s.csatScore > 0 && <span className="text-sm font-bold text-[var(--text-muted)]">/5</span>}
+          </p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="text-[10px] font-medium text-[var(--text-muted)]">Target: {target.toFixed(2)}</p>
+          </div>
+          {(s.momDiff !== null || s.yoyDiff !== null) && (
+            <div className="flex items-center justify-center gap-3 mt-2">
+              {s.momDiff !== null && (
+                <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.momDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
+                  {s.momDiff >= 0 ? '▲' : '▼'} {Math.abs(s.momDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">MoM</span>
+                </div>
+              )}
+              {s.yoyDiff !== null && (
+                <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.yoyDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
+                  {s.yoyDiff >= 0 ? '▲' : '▼'} {Math.abs(s.yoyDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">YoY</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Bars Inline */}
+        <div className="space-y-4 px-1">
+          {[
+            { label: 'Overall', val: s.rawOverall, color: '#10b981' },
+            { label: 'People', val: s.people, color: '#6366f1' },
+            { label: 'Process', val: s.process, color: '#06b6d4' },
+            { label: 'Premises', val: s.premises, color: '#ec4899' },
+          ].map(d => (
+            <div key={d.label} className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[var(--text-muted)] w-16">{d.label}</span>
+              <div className="flex-1 mx-3 bg-[var(--bg-secondary)] rounded-full h-2 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
+              </div>
+              <div className="flex items-center justify-end gap-1 w-12">
+                {d.val > 0 && d.val < target && (
+                  <span className="text-[10px] text-red-500 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>⚠️</span>
+                )}
+                <span className="text-sm font-bold text-right" style={{ color: getScoreColor(d.val) }}>
+                  {d.val > 0 ? d.val.toFixed(2) : '—'}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="mt-10 animate-in">
@@ -137,110 +236,23 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
             <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
               CSAT per Member
             </h2>
-            <p className="text-xs text-[var(--text-muted)]">
-              3P Driver breakdown: People (PPL) · Process (PRC) · Premises (PRM)
-            </p>
+            <p className="text-xs text-[var(--text-muted)]">3P Driver breakdown: People · Process · Premises</p>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {buStats.map(s => {
-          const accent = s.bu === 'All Members' ? '#10b981' : (BU_COLORS[s.bu] || '#64748b');
-          return (
-            <div key={s.bu}
-              className="glass-card relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
-              style={{ borderColor: `${accent}40` }}
-            >
-              {/* Header */}
-              <div className="flex flex-col items-center justify-center text-center gap-2 mb-5 min-h-[5rem]">
-                <div className="h-12 w-full relative flex items-center justify-center">
-                  {/* Attempt to load logo from public folder */}
-                  <img 
-                    src={`/images/logos/${s.bu}.png`} 
-                    alt={s.bu} 
-                    className="w-[120px] h-[48px] object-contain object-center drop-shadow-sm"
-                    onError={(e) => {
-                      // Fallback to text if logo not found
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                    }}
-                  />
-                  {/* Fallback Text Header */}
-                  <div className="hidden flex flex-col items-center justify-center w-full">
-                    <p className="text-[14px] font-bold text-white leading-tight">{s.bu}</p>
-                  </div>
-                </div>
-                <div className="shrink-0 mt-1">
-                  <p className="text-[10px] font-medium text-[var(--text-muted)] bg-[var(--bg-secondary)] px-3 py-1 rounded-full border border-[var(--glass-border)] shadow-sm">
-                    {s.total.toLocaleString()} responses
-                  </p>
-                </div>
-              </div>
+      {/* All Members Summary Card */}
+      {allMembersCard && (
+        <div className="mb-6">
+          <div className="max-w-xs mx-auto">
+            {renderCard(allMembersCard, true)}
+          </div>
+        </div>
+      )}
 
-              {/* Big Score (CSAT Average) */}
-              <div className="text-center mb-5 py-4 rounded-xl relative" style={{ background: 'var(--bg-tertiary)' }}>
-                {s.csatScore > 0 && s.csatScore < target && (
-                  <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>
-                    <span>⚠️</span> Below Target
-                  </div>
-                )}
-                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-semibold mb-1">CSAT Score</p>
-                <p className="text-4xl font-extrabold mb-1 flex items-baseline justify-center gap-1" style={{ color: getScoreColor(s.csatScore), fontFamily: 'var(--font-display)' }}>
-                  <span>{s.csatScore > 0 ? s.csatScore.toFixed(2) : '—'}</span>
-                  {s.csatScore > 0 && <span className="text-sm font-bold text-[var(--text-muted)]">/5</span>}
-                </p>
-                <div className="flex items-center justify-center gap-2">
-                  <p className="text-[10px] font-medium text-[var(--text-muted)]">
-                    Target: {target.toFixed(2)}
-                  </p>
-                </div>
-                
-                {/* Trend Indicators */}
-                {(s.momDiff !== null || s.yoyDiff !== null) && (
-                  <div className="flex items-center justify-center gap-3 mt-2">
-                    {s.momDiff !== null && (
-                      <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.momDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
-                        {s.momDiff >= 0 ? '▲' : '▼'} {Math.abs(s.momDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">MoM</span>
-                      </div>
-                    )}
-                    {s.yoyDiff !== null && (
-                      <div className={`flex items-center gap-0.5 text-[10px] font-bold ${s.yoyDiff >= 0 ? 'text-[var(--accent-success)]' : 'text-[var(--accent-danger)]'}`}>
-                        {s.yoyDiff >= 0 ? '▲' : '▼'} {Math.abs(s.yoyDiff).toFixed(2)} <span className="text-[var(--text-muted)] font-medium">YoY</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Bars Inline */}
-              <div className="space-y-4 px-1">
-                {[
-                  { label: 'Overall', val: s.rawOverall, color: '#10b981' },
-                  { label: 'People', val: s.people, color: '#6366f1' },
-                  { label: 'Process', val: s.process, color: '#06b6d4' },
-                  { label: 'Premises', val: s.premises, color: '#ec4899' },
-                ].map(d => (
-                  <div key={d.label} className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[var(--text-muted)] w-16">{d.label}</span>
-                    <div className="flex-1 mx-3 bg-[var(--bg-secondary)] rounded-full h-2 overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
-                    </div>
-                    <div className="flex items-center justify-end gap-1 w-12">
-                      {d.val > 0 && d.val < target && (
-                        <span className="text-[10px] text-red-500 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>⚠️</span>
-                      )}
-                      <span className="text-sm font-bold text-right" style={{ color: getScoreColor(d.val) }}>
-                        {d.val > 0 ? d.val.toFixed(2) : '—'}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+      {/* Per-Member Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {memberCards.map(s => renderCard(s, false))}
       </div>
     </section>
   );
