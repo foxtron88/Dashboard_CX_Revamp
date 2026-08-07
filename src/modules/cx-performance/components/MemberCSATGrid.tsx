@@ -31,7 +31,7 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
   const { target } = useCSATTarget();
   const buStats = useMemo(() => {
     const buNames = Array.from(new Set(records.map(r => r.bu))).sort();
-    return buNames.map(bu => {
+    const stats = buNames.map(bu => {
       const buRecs = records.filter(r => r.bu === bu);
       const calcAvg = (recs: CSATRecord[], key: 'overall_score' | 'people_score' | 'process_score' | 'premises_score') => {
         const vals = recs.map(r => r[key]).filter((v): v is number => v !== null);
@@ -107,6 +107,25 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
 
       return { bu, total: buRecs.length, rawOverall, csatScore, people, process, premises, csatPct, ratedTotal, momDiff, yoyDiff };
     });
+
+    if (stats.length > 0) {
+      const avgStats = {
+        bu: 'All Members',
+        total: stats.reduce((sum, s) => sum + s.total, 0),
+        rawOverall: stats.reduce((sum, s) => sum + s.rawOverall, 0) / stats.length,
+        people: stats.reduce((sum, s) => sum + s.people, 0) / stats.length,
+        process: stats.reduce((sum, s) => sum + s.process, 0) / stats.length,
+        premises: stats.reduce((sum, s) => sum + s.premises, 0) / stats.length,
+        csatScore: stats.reduce((sum, s) => sum + s.csatScore, 0) / stats.length,
+        csatPct: stats.reduce((sum, s) => sum + s.csatPct, 0) / stats.length,
+        ratedTotal: stats.reduce((sum, s) => sum + s.ratedTotal, 0),
+        momDiff: stats.reduce((sum, s) => sum + (s.momDiff || 0), 0) / stats.length,
+        yoyDiff: stats.reduce((sum, s) => sum + (s.yoyDiff || 0), 0) / stats.length,
+      };
+      return [avgStats, ...stats];
+    }
+    
+    return stats;
   }, [records, allRecords, fromMonth, toMonth]);
 
   return (
@@ -125,9 +144,9 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {buStats.map(s => {
-          const accent = BU_COLORS[s.bu] || '#64748b';
+          const accent = s.bu === 'All Members' ? '#10b981' : (BU_COLORS[s.bu] || '#64748b');
           return (
             <div key={s.bu}
               className="glass-card relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
@@ -148,12 +167,8 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
                     }}
                   />
                   {/* Fallback Text Header */}
-                  <div className="hidden flex items-center justify-center gap-3 w-full">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm shrink-0"
-                      style={{ background: accent }}>
-                      {s.bu.substring(0, 2)}
-                    </div>
-                    <p className="text-lg font-bold text-white leading-tight">{s.bu}</p>
+                  <div className="hidden flex flex-col items-center justify-center w-full">
+                    <p className="text-[14px] font-bold text-white leading-tight">{s.bu}</p>
                   </div>
                 </div>
                 <div className="shrink-0 mt-1">
