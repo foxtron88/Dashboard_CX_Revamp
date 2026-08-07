@@ -133,7 +133,6 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
             <ExecutiveSummaryTopMetrics 
               socmedStats={socmedData?.global || null} 
               opsStats={opsStats || null} 
-              averageCsat={csatStats.averageCsat}
             />
             <div className="mt-2">
               <MemberCSATGrid 
