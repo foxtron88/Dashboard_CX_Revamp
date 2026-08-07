@@ -10,20 +10,11 @@ import ExecutiveSummaryTopMetrics from './ExecutiveSummaryTopMetrics';
 
 interface Props {
   csatRecords: CSATRecord[] | null;
-  perfData: Record<string, unknown> | null;
+  statistikData: Record<string, any> | null;
   socmedData: SocmedData | null;
 }
 
 const CX_BUS = ['API', 'IDM', 'ITDC', 'Sarinah'] as const;
-const PERF_BUS = ['API', 'IAS', 'IDM', 'HIN', 'ITDC', 'SNH'] as const;
-const PERF_BU_MAP: Record<string, string[]> = {
-  API: ['API'],
-  IAS: ['IAS'],
-  IDM: ['IDM - TMII', 'IDM - TWC'],
-  HIN: ['HIN'],
-  ITDC: ['ITDC'],
-  SNH: ['Sarinah'],
-};
 
 function BUGroupLabel({ label }: { label: string }) {
   return (
@@ -34,20 +25,21 @@ function BUGroupLabel({ label }: { label: string }) {
   );
 }
 
-export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData }: Props) {
+export default function ExecutiveSummaryView({ csatRecords, statistikData, socmedData }: Props) {
   const [fromMonth, setFromMonth] = useState('');
   const [toMonth, setToMonth] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pd = perfData as Record<string, any> | null;
-  const months: string[] = (pd?._months as string[]) || [];
+  // Months array comes directly from statistikData (e.g. ["Jan-25", "Feb-25", ...])
+  const months: string[] = (statistikData?.months as string[]) || [];
 
+  // Convert YYYY-MM picker value to index in statistikData.months array
+  // statistikData uses "Jan-25" format, picker gives "2025-01"
   function monthLabelToIdx(ym: string, fallback: number): number {
     if (!ym || !months.length) return fallback;
     const [year, month] = ym.split('-').map(Number);
     const shortYear = String(year).slice(-2);
     const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const label = `${shortMonths[month - 1]} ${shortYear}`;
+    const label = `${shortMonths[month - 1]}-${shortYear}`; // e.g. "Jan-25"
     const idx = months.indexOf(label);
     return idx >= 0 ? idx : fallback;
   }
@@ -99,29 +91,28 @@ export default function ExecutiveSummaryView({ csatRecords, perfData, socmedData
     return { overall, byBU, filtered, averageCsat };
   }, [csatRecords, fromMonth, toMonth]);
 
+  // Compute visitor traffic and interactions from datasheet_statistik.json
+  // Uses IDENTICAL logic to OperationsView.statistikAnalytics (line 186-256)
   const opsStats = useMemo(() => {
-    if (!pd) return null;
-    const sumRange = (arr: number[] | undefined) => {
-      if (!arr) return 0;
-      const s = Math.max(0, fromIdx);
-      const e = Math.min(toIdx, arr.length - 1);
-      return arr.slice(s, e + 1).reduce((a, b) => a + (b || 0), 0);
-    };
-    const computeBUs = (buKeys: string[]) => {
-      let vis = 0, inter = 0;
-      buKeys.forEach(bk => {
-        vis += sumRange(pd[bk]?.statistik?.jumlah_pengunjung);
-        inter += sumRange(pd[bk]?.statistik?.total_interaksi);
+    if (!statistikData?.members || !months.length) return null;
+    const members = statistikData.members as Record<string, any[]>;
+    const filteredMonths = months.slice(fromIdx, toIdx + 1);
+
+    let visitors = 0;
+    let interactions = 0;
+
+    Object.values(members).forEach(items => {
+      items.forEach((it: any) => {
+        if (it.item === 'Jumlah Pengunjung') {
+          filteredMonths.forEach((m: string) => { visitors += it.monthly[m]?.val || 0; });
+        } else if (it.item?.startsWith('Interaksi Per Channel')) {
+          filteredMonths.forEach((m: string) => { interactions += it.monthly[m]?.val || 0; });
+        }
       });
-      return { visitors: vis, interactions: inter };
-    };
-    const overall = computeBUs(Object.keys(pd).filter(k => !k.startsWith('_')));
-    const byBU: Record<string, { visitors: number; interactions: number }> = {};
-    for (const bu of PERF_BUS) {
-      byBU[bu] = computeBUs(PERF_BU_MAP[bu]);
-    }
-    return { overall, byBU };
-  }, [pd, fromIdx, toIdx]);
+    });
+
+    return { overall: { visitors, interactions } };
+  }, [statistikData, fromIdx, toIdx, months]);
   const selectClass = `bg-[var(--bg-tertiary)] border border-[var(--glass-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-primary)] transition-all duration-200`;
 
   return (

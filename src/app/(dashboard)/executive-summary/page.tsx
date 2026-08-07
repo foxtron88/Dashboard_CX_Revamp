@@ -19,17 +19,24 @@ function LoadingSpinner({ label }: { label: string }) {
 
 function ExecutiveSummaryContent() {
   const { data: csatRecords, loading: csatLoading } = useCSATData();
-  const { data: perfData, loading: perfLoading } = useCXPerformanceData();
   const { data: socmedData, loading: socmedLoading } = useSocmedData();
+  const [statistikData, setStatistikData] = React.useState<Record<string, any> | null>(null);
 
-  if (csatLoading || perfLoading || socmedLoading) {
+  React.useEffect(() => {
+    fetch('/data/datasheet_statistik.json')
+      .then(r => r.json())
+      .then(d => setStatistikData(d))
+      .catch(e => console.error('Failed to load datasheet_statistik.json', e));
+  }, []);
+
+  if (csatLoading || socmedLoading) {
     return <LoadingSpinner label="Loading Executive Summary…" />;
   }
 
   return (
     <ExecutiveSummaryView
       csatRecords={csatRecords}
-      perfData={perfData as Record<string, unknown> | null}
+      statistikData={statistikData}
       socmedData={socmedData}
     />
   );
