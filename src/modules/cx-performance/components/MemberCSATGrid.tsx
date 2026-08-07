@@ -198,25 +198,23 @@ export default function MemberCSATGrid({ records, hideHeader, allRecords, fromMo
           )}
         </div>
 
-        {/* Bars Inline */}
-        <div className="space-y-4 px-1">
+        {/* Drivers Grid (No Bars, Colored Labels) */}
+        <div className="grid grid-cols-2 gap-2 px-1">
           {[
             { label: 'Overall', val: s.rawOverall, color: '#10b981' },
             { label: 'People', val: s.people, color: '#6366f1' },
             { label: 'Process', val: s.process, color: '#06b6d4' },
             { label: 'Premises', val: s.premises, color: '#ec4899' },
           ].map(d => (
-            <div key={d.label} className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[var(--text-muted)] w-16">{d.label}</span>
-              <div className="flex-1 mx-3 bg-[var(--bg-secondary)] rounded-full h-2 overflow-hidden">
-                <div className="h-full rounded-full transition-all duration-500"
-                  style={{ width: `${d.val > 0 ? (d.val / 5) * 100 : 0}%`, background: d.color }} />
-              </div>
-              <div className="flex items-center justify-end gap-1 w-12">
+            <div key={d.label} className="flex flex-col items-center justify-center bg-[var(--bg-secondary)] rounded-lg py-2 border border-[var(--glass-border)] transition-colors hover:bg-[var(--glass-bg)]">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: d.color }}>
+                {d.label}
+              </span>
+              <div className="flex items-center gap-1">
                 {d.val > 0 && d.val < target && (
                   <span className="text-[10px] text-red-500 animate-pulse" title={`Below Target (${target.toFixed(2)})`}>⚠️</span>
                 )}
-                <span className="text-sm font-bold text-right" style={{ color: getScoreColor(d.val) }}>
+                <span className="text-lg font-bold" style={{ color: getScoreColor(d.val), fontFamily: 'var(--font-display)' }}>
                   {d.val > 0 ? d.val.toFixed(2) : '—'}
                 </span>
               </div>
