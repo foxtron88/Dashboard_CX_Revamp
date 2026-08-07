@@ -1,26 +1,31 @@
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { unstable_cache } from 'next/cache';
 
 /**
  * GET /api/v1/csat
  *
- * Server-side CSAT data endpoint.
- * Reads the CSV once on the server, parses it, and returns pre-built JSON.
+ * Server-side CSAT data endpoint optimized for Vercel deployment.
  *
- * Benefits vs. client-side CSV parsing:
- *  - 2.5 MB CSV never hits the browser — only compact JSON is sent
- *  - Vercel Edge / CDN caches the response for s-maxage=300 (5 min)
- *  - 1,000 concurrent users share a single cached response
- *  - Zero CSV parsing cost in the browser
+ * Architecture for near-real-time data on Vercel:
+ * ┌─────────────────────────────────────────────────────────────────┐
+ * │  User Request → Vercel Edge Cache → This Function → CSV File   │
+ * │                                                                 │
+ * │  Cache-Control: s-maxage=60 → Edge serves cached for 60s       │
+ * │  stale-while-revalidate=300 → Serve stale while revalidating   │
+ * │  revalidateTag('csat-data') → Instant purge on sync            │
+ * └─────────────────────────────────────────────────────────────────┘
  *
- * Cache-Control set in next.config.mjs: public, s-maxage=300, stale-while-revalidate=60
+ * On explicit data sync (POST /api/v1/sync):
+ *   → revalidateTag('csat-data') is called
+ *   → Vercel Edge purges the cached response immediately
+ *   → Next request re-reads the CSV with fresh data
+ *
+ * Without sync (automatic TTL):
+ *   → Edge cache serves stale within 60s of any change
+ *   → Background revalidation happens automatically via SWR headers
  */
-
-// Module-level in-memory cache (lives as long as the serverless function is warm)
-let cachedJSON: string | null = null;
-let cacheBuiltAt = 0;
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 function parseScore(val: string): number | null {
   const n = parseFloat(val);
@@ -95,28 +100,29 @@ function parseCSV(text: string) {
   return records;
 }
 
-export async function GET() {
-  try {
-    const now = Date.now();
-
-    // Serve from in-memory cache if still fresh
-    if (cachedJSON && now - cacheBuiltAt < CACHE_TTL_MS) {
-      return new NextResponse(cachedJSON, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Read and parse CSV on the server
+/**
+ * unstable_cache wraps the CSV read+parse.
+ * Tagged with 'csat-data' so revalidateTag('csat-data') instantly purges it
+ * from Vercel's cache when a sync is triggered.
+ * revalidate: 60 → also auto-refreshes every 60 seconds as a safety net.
+ */
+const getCSATRecords = unstable_cache(
+  async () => {
     const csvPath = path.join(process.cwd(), 'public', 'data', 'sensum_csat.csv');
     const text = await readFile(csvPath, 'utf-8');
-    const records = parseCSV(text);
+    return parseCSV(text);
+  },
+  ['csat-records'],
+  {
+    tags: ['csat-data'],
+    revalidate: 60, // seconds — auto-refresh safety net
+  }
+);
 
-    cachedJSON = JSON.stringify(records);
-    cacheBuiltAt = now;
-
-    return new NextResponse(cachedJSON, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+export async function GET() {
+  try {
+    const records = await getCSATRecords();
+    return NextResponse.json(records);
   } catch (error) {
     console.error('[/api/v1/csat] Error:', error);
     return NextResponse.json({ error: 'Failed to load CSAT data' }, { status: 500 });

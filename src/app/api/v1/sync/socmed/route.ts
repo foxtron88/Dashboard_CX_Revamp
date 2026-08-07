@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import mysql from 'mysql2/promise';
 import fs from 'fs/promises';
 import path from 'path';
@@ -266,6 +267,9 @@ export async function POST() {
       error: null
     };
     await fs.writeFile(statusFilePath, JSON.stringify(status, null, 2), 'utf-8');
+
+    // Invalidate Vercel Edge cache so next request returns fresh socmed data
+    revalidateTag('socmed-data');
 
     return NextResponse.json({ success: true, timestamp: status.last_pull });
 

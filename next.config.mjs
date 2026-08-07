@@ -38,12 +38,13 @@ const nextConfig = {
         ],
       },
       {
-        // API CSAT endpoint: CDN caches for 5 min, stale-while-revalidate 1 min
+        // CSAT API: 60s edge cache (near real-time), 5min stale-while-revalidate
+        // On explicit sync: revalidateTag('csat-data') purges immediately
         source: '/api/v1/csat',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, s-maxage=300, stale-while-revalidate=60',
+            value: 'public, s-maxage=60, stale-while-revalidate=300',
           },
         ],
       },

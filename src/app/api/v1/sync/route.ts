@@ -1,13 +1,18 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { executeDataSync } from '@/modules/data-integration/push-engine/sync.service';
 
 /**
  * POST /api/v1/sync
- * 
+ *
  * Layer 2 API Intermediary endpoint.
  * Acts as a webhook receiver to trigger the Layer 3 Push Engine.
- * 
- * Security: Requires a secret token in the Authorization header to prevent unauthorized syncs.
+ *
+ * Security: Requires a secret token in the Authorization header.
+ *
+ * After a successful sync, calls revalidateTag('csat-data') to immediately
+ * purge the Vercel Edge cache — ensuring the next user request gets fresh data
+ * without waiting for the 60-second TTL to expire.
  */
 export async function POST(request: Request) {
   try {
@@ -23,7 +28,15 @@ export async function POST(request: Request) {
     const result = await executeDataSync();
 
     if (result.success) {
-      return NextResponse.json({ message: 'Sync successful', timestamp: result.timestamp }, { status: 200 });
+      // 3. Invalidate Vercel Edge Cache immediately
+      // This purges the cached CSAT response across ALL Vercel Edge nodes.
+      // The next user request will get fresh data from the updated CSV.
+      revalidateTag('csat-data');
+
+      return NextResponse.json(
+        { message: 'Sync successful', timestamp: result.timestamp, cache_invalidated: true },
+        { status: 200 }
+      );
     } else {
       return NextResponse.json({ error: 'Sync failed', details: result.error }, { status: 500 });
     }
