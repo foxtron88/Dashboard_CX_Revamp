@@ -1,17 +1,32 @@
 'use client';
 
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
 import { useCSATData, useFilteredCSAT } from '@/modules/common/hooks/use-data';
 import { useSearchParams } from 'next/navigation';
+
+// ─── Above-the-fold: loaded eagerly ─────────────────────────────────────────
 import ExecutiveSummary from '@/modules/cx-performance/components/ExecutiveSummary';
 import {
   CSATDistributionChart,
   SentimentDonut,
 } from '@/modules/cx-performance/components/Charts';
-import { CSATTrendChart, CSATHeatmap } from '@/modules/cx-performance/components/TrendAndHeatmap';
-import DriverSatisfactionBars from '@/modules/cx-performance/components/DriverSatisfactionBars';
-import { FacilityRankings, TagsCloud } from '@/modules/cx-performance/components/FacilityAndTags';
-import FeedbackExplorer from '@/modules/cx-performance/components/FeedbackExplorer';
+
+// ─── Below-the-fold: lazy-loaded to unblock First Contentful Paint ──────────
+const DriverSatisfactionBars = lazy(() => import('@/modules/cx-performance/components/DriverSatisfactionBars'));
+const CSATTrendChart = lazy(() => import('@/modules/cx-performance/components/TrendAndHeatmap').then(m => ({ default: m.CSATTrendChart })));
+const CSATHeatmap = lazy(() => import('@/modules/cx-performance/components/TrendAndHeatmap').then(m => ({ default: m.CSATHeatmap })));
+const FacilityRankings = lazy(() => import('@/modules/cx-performance/components/FacilityAndTags').then(m => ({ default: m.FacilityRankings })));
+const TagsCloud = lazy(() => import('@/modules/cx-performance/components/FacilityAndTags').then(m => ({ default: m.TagsCloud })));
+const FeedbackExplorer = lazy(() => import('@/modules/cx-performance/components/FeedbackExplorer'));
+
+// ─── Reusable skeleton for lazy-loaded sections ──────────────────────────────
+function ChartSkeleton({ label = 'Loading…' }: { label?: string }) {
+  return (
+    <div className="glass-card flex items-center justify-center h-48 animate-pulse">
+      <p className="text-[var(--text-muted)] text-sm">{label}</p>
+    </div>
+  );
+}
 
 const BUS = ['API', 'IDM', 'IJH', 'IAS', 'ITDC', 'Sarinah'];
 const SENTIMENTS = ['ALL', 'Positive', 'Neutral', 'Negative'];
@@ -129,15 +144,15 @@ function CXPerformanceContent() {
         </div>
       </div>
 
-      {/* Executive Summary & 3P Driver Cards */}
+      {/* Executive Summary & 3P Driver Cards — above-fold, no Suspense needed */}
       <ExecutiveSummary records={filtered} />
 
-      {/* Charts Row 1: Satisfaction & Sentiment */}
+      {/* Charts Row 1: Satisfaction & Sentiment — above-fold, eagerly loaded */}
       <section className="mt-10">
         <div className="flex items-center gap-3 mb-6">
           <span className="text-2xl">📈</span>
           <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            Satisfaction & Sentiment Analysis
+            Satisfaction &amp; Sentiment Analysis
           </h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -146,31 +161,41 @@ function CXPerformanceContent() {
         </div>
       </section>
 
+      {/* Driver Satisfaction Bars — lazy */}
+      <Suspense fallback={<ChartSkeleton label="Loading driver analysis…" />}>
+        <DriverSatisfactionBars records={filtered} />
+      </Suspense>
 
-
-      {/* Driver Satisfaction Bars */}
-      <DriverSatisfactionBars records={filtered} />
-
-      {/* CSAT Trend & Heatmap */}
+      {/* CSAT Trend & Heatmap — lazy */}
       <section className="mt-10">
         <div className="flex items-center gap-3 mb-6">
           <span className="text-2xl">📅</span>
           <h2 className="text-xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
-            Trends & Heatmap
+            Trends &amp; Heatmap
           </h2>
         </div>
-        <CSATTrendChart records={filtered} />
-        <CSATHeatmap records={filtered} />
+        <Suspense fallback={<ChartSkeleton label="Loading trend chart…" />}>
+          <CSATTrendChart records={filtered} />
+        </Suspense>
+        <Suspense fallback={<ChartSkeleton label="Loading heatmap…" />}>
+          <CSATHeatmap records={filtered} />
+        </Suspense>
       </section>
 
-      {/* Facility Rankings */}
-      <FacilityRankings records={filtered} />
+      {/* Facility Rankings — lazy */}
+      <Suspense fallback={<ChartSkeleton label="Loading facility rankings…" />}>
+        <FacilityRankings records={filtered} />
+      </Suspense>
 
-      {/* Tags Cloud */}
-      <TagsCloud records={filtered} />
+      {/* Tags Cloud — lazy */}
+      <Suspense fallback={<ChartSkeleton label="Loading tags…" />}>
+        <TagsCloud records={filtered} />
+      </Suspense>
 
-      {/* Feedback Explorer */}
-      <FeedbackExplorer records={filtered} />
+      {/* Feedback Explorer — lazy (heaviest component) */}
+      <Suspense fallback={<ChartSkeleton label="Loading feedback explorer…" />}>
+        <FeedbackExplorer records={filtered} />
+      </Suspense>
     </div>
   );
 }
